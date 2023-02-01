@@ -1,4 +1,3 @@
-import { useState } from "react";
 import MyError from "../Error/MyError";
 import classes from './MySizeSelector.module.css'
 const MySizeSelector = ({error, size, ...props}) => {
