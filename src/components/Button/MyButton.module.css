@@ -1,0 +1,19 @@
+.wrapper{
+    padding: 20px 0px;
+}
+.myButton{
+    width: 100%;
+    height: 35px;
+    color: white;
+	border: none;
+	border-radius: 20px;
+    background: lightsalmon;
+    font-weight: 400;
+    text-transform: uppercase;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.myButton:active{
+    background: rgb(124, 204, 124);
+}

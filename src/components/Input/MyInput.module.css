@@ -1,0 +1,13 @@
+.myInput{
+    color: rgba(255,255,255,.7);
+    width: 100%;
+    height: 35px;
+	padding-left: 15px;
+	border: none;
+	border-radius: 20px;
+    background: rgba(255,255,255,.2);
+}
+.myInput::placeholder{
+    color: black;
+    opacity: 0.5;
+}

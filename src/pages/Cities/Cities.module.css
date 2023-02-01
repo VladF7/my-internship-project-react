@@ -1,0 +1,33 @@
+.wrapper{
+    width: 100%;
+    height: 100%;
+    padding-top: 20px;
+}
+.cities{
+    height: 70%;   
+    overflow: scroll;
+    box-sizing: initial;
+}
+.form{
+    padding: 10px 20px;
+    height: 30%;
+}
+.list{
+    padding: 0 20px;
+}
+.listItem{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.button{
+    height: 20px;
+    width: 100px;
+    color: white;
+	border: none;
+	border-radius: 20px;
+    background: lightsalmon;
+    font-weight: 400;
+    font-size: 13px;
+    cursor: pointer;
+}
