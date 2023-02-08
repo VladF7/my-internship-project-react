@@ -1,13 +1,21 @@
-import { useState } from 'react';
-import MyButton from '../../components/Button/MyButton';
+import './UserPage.css'
+import { useEffect, useState } from 'react';
+import MyButton from '../../components/Buttons/BigButton/MyBigButton';
 import MyInputItem from '../../components/InputItem/MyInputItem';
 import MySizeSelector from '../../components/SizeSelector/MySizeSelector';
 import MyCitySelector from '../../components/CitySelector/MyCitySelector';
-import classes from './UserForm.module.css'
 import MyDatePicker from '../../components/DatePicker/MyDatePicker';
 import { useNavigate } from 'react-router-dom';
+import citiesAPI from '../../api/citiesAPI';
+import mastersAPI from '../../api/mastersAPI';
 
-const UserForm = ({cities}) => {
+const UserForm = () => {
+  const [cities, setCities] = useState([])
+
+  useEffect(()=>{
+    citiesAPI.getCities().then(cities => setCities(cities))
+},[])
+
   const navigate = useNavigate()
   const requiredField = 'Поле обязательное для заполнения'
 
@@ -23,15 +31,6 @@ const UserForm = ({cities}) => {
   const [cityError,setCityError] = useState('')
   const [dateError, setDateError] = useState('')
 
-  const getEmail = (e) => {
-    setEmail(e.target.value)
-  }
-  const getName = (e) => {
-    setName(e.target.value)
-  }
-  const getCity = (e) => {
-    setCity(e.target.value)
-  }
   const onBlurName = (e) => {
     if(e.target.value.length < 3){
       setNameError('Имя не должно быть меньше 3 символов') 
@@ -57,7 +56,7 @@ const UserForm = ({cities}) => {
     if(!e.target.value){
       return setCityError('')
     }
-    const cityArr = cities.map(c => c.city)
+    const cityArr = cities.map(c => c.name)
     cityArr.includes(e.target.value) ? setCityError('') : setCityError('Вашего города нету в списке')
   }
   const getSize = (e) => {
@@ -80,6 +79,7 @@ const UserForm = ({cities}) => {
     if(mm < 10) mm = '0' + mm;
     if(hours < 10) hours = '0' + hours;
     return date = yyyy + '-' + mm + '-' + dd + 'T' + hours + ':' + minutes;
+    
   }
   const getCurrDateValue = (e) => {
     let currDate = getDateValue(e.target.value)
@@ -89,76 +89,77 @@ const UserForm = ({cities}) => {
     }
     setDateError('')
   }
-  const getSubmit = (e) => {   
+  const getSubmit = async(e) => {  
+    e.preventDefault() 
     if(!name || !email || !size || !city || !date){
       if(!name){
-        e.preventDefault()
         setNameError(requiredField)
       }
       if(!email){
-        e.preventDefault()
         setEmailError(requiredField)
       }
       if(!size){
-        e.preventDefault()
         setSizeError(requiredField)
       }
       if(!city){
-        e.preventDefault()
         setCityError(requiredField)
       }
       if(!date){
-        e.preventDefault()
         setDateError(requiredField)
       }
       return
     }
-    if(emailError || nameError || sizeError || cityError || dateError){
-      e.preventDefault()
-    }
     else{
-      e.preventDefault()
+      // await mastersAPI.chooseMaster(e)
       navigate('/chooseMaster')
-      console.log({email, name, size, city, date});
     }
   }
 
     return (
-        <form className={classes.myForm}>
-        <MyInputItem 
+        <form id='userForm' className={'userPage'} onSubmit={e=>getSubmit(e)}>
+        <MyInputItem
+          name = 'name' 
           value = {name}
           error = {nameError}
-          onChange = {e => getName(e)}
+          onChange = {e => setName(e.target.value)}
           onBlur = {e => onBlurName(e)}
           item = {{id:'name',type:'text',placeholder:'Не менее 3 символов', discription:'Введите ваше имя',}}
         />
         <MyInputItem
+          name = 'email'
           value = {email}
           error = {emailError}
-          onChange = {e => getEmail(e)}
+          onChange = {e => setEmail(e.target.value)}
           onBlur = {e => onBlurEmail(e)}
           item={{id:'mail',type:'mail',placeholder:'example@example.com', discription:'Введите ваш email',}}
         />
         <MySizeSelector 
+          name='size'
           onChange = {e => getSize(e)}
           error = {sizeError}
           size = {size}
         />
         <MyCitySelector
+          name='city'
+          label = 'true'
           value = {city}
           cities = {cities}
           error = {cityError}
-          onChange = {e=> getCity(e)}
+          onChange = {e=> setCity(e.target.value)}
           onBlur = {e => onBlurCity(e)}
         />
         <MyDatePicker
+          name = 'date'
           value = {date}
           error = {dateError}
           min={getDateValue()}
           onChange={e=>getCurrDateValue(e)}
           onBlur = {()=>setDateError('')}
         />
-        <MyButton onClick={e=>getSubmit(e)}>Далее</MyButton>       
+        <div className='myButtonWrapper'>
+        <MyButton form='userForm'>Далее</MyButton>  
+        </div>
+            
       </form>
       );
 }

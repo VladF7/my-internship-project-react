@@ -1,10 +1,10 @@
-import classes from './MyInput.module.css'
+import './MyInput.css'
 
 const MyInput = ({...props}) => {
     
     return ( 
         <input 
-            className={classes.myInput} 
+            className={'myInput'} 
             {...props}
         />
      );

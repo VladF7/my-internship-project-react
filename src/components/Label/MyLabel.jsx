@@ -1,9 +1,9 @@
-import classes from './MyLabel.module.css'
+import './MyLabel.css'
 
 const MyLabel = ({discription, ...props}) => {
     return ( 
         <label 
-            className={classes.myLabel} 
+            className={'myLabel'} 
             {...props}
         >{discription}</label>
      );

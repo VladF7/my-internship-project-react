@@ -1,15 +1,15 @@
 import { NavLink } from 'react-router-dom';
-import classes from './NavBar.module.css'
+import './NavBar.css'
 
 
 
 const NavBar = ({items}) => {
     return ( 
         <nav>
-            <ul className={classes.ul}>
+            <ul className={'navList'}>
                 {items.map((item,index) => {
-                    return  <li className={classes.li} key={index}>
-                            <NavLink to={item.path} className={classes.link}>{item.name}</NavLink>
+                    return  <li key={index}>
+                            <NavLink to={item.path} className={'link'}>{item.name}</NavLink>
                             </li>
                 })}
             </ul>

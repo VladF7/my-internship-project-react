@@ -1,15 +1,15 @@
 import { Outlet } from "react-router-dom";
 import NavBar from "../../components/NavBar/NavBar";
-import classes from './AdminForm.module.css'
+import './AdminPage.css'
 
 const AdminForm = () => {
     const items = [{name:'Список мастеров',path:'masters'},{name:'Список городов',path:'cities'},{name:'Список заказов',path:'orders'}]
     return (    
-        <div className={classes.wrapper}>
-            <div className={classes.navBar}>
+        <div className={'adminPage'}>
+            <div className={'navBar'}>
                 <NavBar items={items}/>
             </div>
-            <div className={classes.adminItem}>
+            <div className={'adminItem'}>
                 <Outlet/>
             </div>
         </div>    

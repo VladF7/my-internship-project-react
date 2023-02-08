@@ -1,21 +1,24 @@
 import MyError from '../Error/MyError';
 import MyInput from '../Input/MyInput';
 import MyLabel from '../Label/MyLabel';
-import classes from './MyCitySelector.module.css'
+import './MyCitySelector.css'
 
 const MyCitySelector = ({...props}) => {
     return ( 
-        <div className={classes.wrapper} 
-        {...props}
+        <div className={'citySelector'} 
+        {...props} 
         >
-            <MyLabel htmlFor='city' discription='Выберите ваш город'></MyLabel>
+            <MyLabel htmlFor='city' discription='Выберите город'></MyLabel>
             <MyInput 
+                name='city'
                 id='city' 
                 list='cities' 
                 placeholder='Введите название города'
+                value = {props.value}
+                onChange = {props.onChange}
             />
             <datalist  id='cities'>
-            {props.cities.map((c) => <option value={c.city} key={c.id}></option>)}
+            {props.cities.map((city) => <option value={city.name} key={city.id}></option>)}
             </datalist>
 
             <MyError>{props.error}</MyError>

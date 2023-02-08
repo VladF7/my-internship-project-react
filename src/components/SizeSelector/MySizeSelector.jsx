@@ -1,30 +1,30 @@
 import MyError from "../Error/MyError";
-import classes from './MySizeSelector.module.css'
+import './MySizeSelector.css'
 const MySizeSelector = ({error, size, ...props}) => {
 
     return ( 
-        <div className={classes.wrapper}>
+        <div className={'sizeSelector'}>
             <MyError>{error}</MyError>
 
-            <fieldset className={classes.mySizeSelector} {...props} >  
-                <legend className={classes.legend}>Выберите размер часов</legend>
+            <fieldset className={'fieldset'} {...props} >  
+                <legend className={'legend'}>Выберите размер часов</legend>
 
-                <span className={classes.item}>
-                    <input className={classes.input} type="radio" id="clockChoice1"
-                    name="clock-size" value="small"/>
-                    <label className={classes.label} htmlFor="clockChoice1" >Маленькие</label>
+                <span className={'item'}>
+                    <input className={'input'} type="radio" id="clockChoice1"
+                    name="size" value="small"/>
+                    <label className={'label'} htmlFor="clockChoice1" >Маленькие</label>
                 </span>
 
-                <span className={classes.item}>
-                    <input className={classes.input} type="radio" id="clockChoice2"
-                    name="clock-size" value="middle"/>
-                    <label className={classes.label} htmlFor="clockChoice2">Средние</label>
+                <span className={'item'}>
+                    <input className={'input'} type="radio" id="clockChoice2"
+                    name="size" value="middle"/>
+                    <label className={'label'} htmlFor="clockChoice2">Средние</label>
                 </span>
 
-                <span className={classes.item}>
-                    <input className={classes.input} type="radio" id="clockChoice3"
-                    name="clock-size" value="big"/>
-                    <label className={classes.label} htmlFor="clockChoice3">Большие</label>
+                <span className={'item'}>
+                    <input className={'input'} type="radio" id="clockChoice3"
+                    name="size" value="big"/>
+                    <label className={'label'} htmlFor="clockChoice3">Большие</label>
                 </span>
             </fieldset>
 

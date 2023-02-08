@@ -1,8 +1,8 @@
-import classes from './MyError.module.css'
+import './MyError.css'
 
 const MyError = ({children}) => {
     return ( 
-        <div className={classes.myError}>
+        <div className={'myError'}>
             {children}
         </div>
      );

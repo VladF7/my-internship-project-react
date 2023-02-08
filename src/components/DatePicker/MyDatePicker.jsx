@@ -1,12 +1,12 @@
 import MyError from "../Error/MyError";
 import MyInput from "../Input/MyInput";
 import MyLabel from "../Label/MyLabel";
-import classes from './MyDatePicker.module.css'
+import './MyDatePicker.css'
 
 const MyDatePicker = ({...props}) => {
 
     return (  
-        <div className={classes.wrapper}>
+        <div className={'datePicker'}>
             <MyError>{props.error}</MyError>
             <MyLabel htmlFor="data" discription='Выберите время и дату'/>
             <MyInput 
