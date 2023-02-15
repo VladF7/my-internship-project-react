@@ -10,25 +10,34 @@
 }
 .adminItem{
     height: 90%;
-    padding-top: 20px;
-    
+    padding: 20px 20px;  
 }
 .itemContent{
     height: 100%;
+    
 }
 .form{
-    padding: 10px 20px;
+    padding: 10px 0px;
+    position: relative;
+    
 }
-.list{
-    padding: 0 20px;
-}
+/* .list{
+} */
 .listItem{
     display: flex;
     justify-content: space-between;
-    margin-bottom: 10px;
+    padding: 10px 15px;
     border-bottom: 1px solid lightsalmon;
+    position: relative;
+}
+.itemInfo{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
 }
 .buttons{
     display: flex;
     flex-wrap: nowrap;
+    align-items: center;
 }
+

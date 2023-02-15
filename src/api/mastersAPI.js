@@ -21,36 +21,18 @@ class MastersAPI {
     }
     async editMaster (e,id) {
       const formData = new FormData(e.target)
-      const newMaster = {
+      const editedMaster = {
           name: formData.get('name'),
           rating: formData.get('rating'),
           city: formData.get('city'),
       }
-      const response = await request(`/api/masters/${id}`, 'PUT', newMaster) 
+      const response = await request(`/api/masters/${id}`, 'PUT', editedMaster) 
       return response
     }
     async delMaster (id) {
         const response = await request(`/api/masters/${id}`, 'DELETE') 
         return response
     }
-
-
-    async getFilteredMastersList () {
-      const response = await request('/api/chooseMaster')
-      return response
-    }
-    async chooseMaster (e) {
-      const formData = new FormData(e.target)
-      const userForm = {
-        name: formData.get('name'),
-        email: formData.get('email'),
-        size: formData.get('size'),
-        city: formData.get('city'),
-        startOrderDate: formData.get('date'),
-    }
-      const response = await request('/api/chooseMaster', 'POST', userForm) 
-      return response
-    } 
 }
 
 const mastersAPI = new MastersAPI()

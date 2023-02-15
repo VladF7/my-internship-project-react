@@ -2,15 +2,3 @@
     height: 80%;   
     overflow: scroll;
 }
-
-.masterInfo{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-}
-.addMasterButton{
-    padding: 30px 20px;
-}
-.masterButton{
-    padding: 25px 0px;
-}

@@ -2,36 +2,46 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import citiesAPI from "../../../../api/citiesAPI";
 import mastersAPI from "../../../../api/mastersAPI";
+import ordersAPI from "../../../../api/ordersAPI";
 import MyBigButton from "../../../../components/Buttons/BigButton/MyBigButton";
 import MyCitySelector from "../../../../components/CitySelector/MyCitySelector";
 import MyInputItem from "../../../../components/InputItem/MyInputItem";
 import MySelect from "../../../../components/Select/MySelect";
 
-const EditMaster = () => {
+const EditOrder = () => {
     const [cities, setCities] = useState([])
+    const [masters, setMasters] = useState('')
+    const [sizes, setSizes] = useState('')
+
+
 
     const {id} = useParams()
     useEffect(()=>{
-        mastersAPI.getMasterById(id)
-        .then(master=>{
-            setName(master.name)
-            setRating(master.rating)
-            setCity(master.city)
+        ordersAPI.getOrderById(id)
+        .then(order=>{
+            setSize(order.size)
+            setMaster(order.master)
+            setCity(order.city)
+            setStartOrderDate(order.start)
         })
         citiesAPI.getCities()
         .then(cities => setCities(cities))
+        mastersAPI.getMasters()
+        .then(masters => setMasters(masters))
+        console.log(masters);
+
     },[id])
  
     const prevPage = useNavigate()
 
-
-    const [name, setName] = useState('')
-    const [rating, setRating] = useState('')
+    const [size, setSize] = useState('')
+    const [master, setMaster] = useState('')
     const [city, setCity] = useState('')
+    const [startOrderDate,setStartOrderDate] = useState('')
 
     const [nameError, setNameError] = useState('')
-    const [ratingError, setRatingError] = useState('')
     const [cityError, setCityError] = useState('')
+    const [sizeError, setSizeError] = useState('')
     const requiredField = 'Поле обязательное для заполнения'
 
     const onBlurName = (e) => {
@@ -51,47 +61,26 @@ const EditMaster = () => {
         const cityArr = cities.map(c => c.name)
         cityArr.includes(e.target.value) ? setCityError('') : setCityError('Вашего города нету в списке')
     }
-    const changeRating = (e) => {
-        setRating(e.target.value)
-        setRatingError('')
-    }
     const goBack = (e) => {
         e.preventDefault()
         prevPage(-1)
     }
-    const editMaster = async(e) => {
+    const editOrder = async(e) => {
         e.preventDefault()
-        if(!name || !city){
-            if(!name){
-                setNameError(requiredField)
-            } 
+        if(!size || !master || !city || !startOrderDate){
             if(!city){
                 setCityError(requiredField)
             } 
             return
         }
 
-        await mastersAPI.editMaster(e,id)
+        await ordersAPI.editOrder(e,id)
         prevPage(-1)
-        await mastersAPI.getMasters()
+        await ordersAPI.getOrders()
     }
 
     return ( 
-        <form onSubmit={e=>editMaster(e)} className={'form'} >
-            <MyInputItem
-                name = 'name' 
-                value = {name}
-                error = {nameError}
-                onChange = {e => setName(e.target.value)}
-                onBlur = {e => onBlurName(e)}
-                item = {{id:'name',type:'text',placeholder:'Не менее 3 символов', discription:'Введите имя мастера',}}
-            />
-            <MySelect
-                rating={rating}
-                error = {ratingError}
-                value = {rating}
-                onChange={e =>{changeRating(e)}}
-            />
+        <form onSubmit={e=>editOrder(e)} className={'form'} >
             <MyCitySelector
                 value={city}
                 cities={cities}
@@ -100,7 +89,7 @@ const EditMaster = () => {
                 onBlur = {e => onBlurCity(e)}
             />
             <div className="myButtonWrapper">
-                <MyBigButton>Изменить мастера</MyBigButton>
+                <MyBigButton>Изменить заказ</MyBigButton>
             </div>
             <div className="myButtonWrapper">
                 <MyBigButton onClick={(e)=>goBack(e)}>Отменить</MyBigButton>
@@ -109,6 +98,6 @@ const EditMaster = () => {
     );
 }
  
-export default EditMaster
+export default EditOrder
 ;
 

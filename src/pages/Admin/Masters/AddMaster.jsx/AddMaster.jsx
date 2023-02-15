@@ -100,10 +100,12 @@ const AddMaster = () => {
             onChange={e=> setCity(e.target.value)}
             onBlur = {e => onBlurCity(e)}
         />
-        <div className="masterButton">
+        <div className="myButtonWrapper">
             <MyBigButton>Добавить мастера</MyBigButton>
         </div>
-            <MyBigButton onClick={(e)=>goBack(e)}>Назад</MyBigButton>
+        <div className="myButtonWrapper">
+            <MyBigButton onClick={(e)=>goBack(e)}>Отменить</MyBigButton>
+        </div>
     </form>   
      );
 }

@@ -11,19 +11,19 @@ const MySizeSelector = ({error, size, ...props}) => {
 
                 <span className={'item'}>
                     <input className={'input'} type="radio" id="clockChoice1"
-                    name="size" value="small"/>
+                    name="size" value="Маленькие"/>
                     <label className={'label'} htmlFor="clockChoice1" >Маленькие</label>
                 </span>
 
                 <span className={'item'}>
                     <input className={'input'} type="radio" id="clockChoice2"
-                    name="size" value="middle"/>
+                    name="size" value="Средние"/>
                     <label className={'label'} htmlFor="clockChoice2">Средние</label>
                 </span>
 
                 <span className={'item'}>
                     <input className={'input'} type="radio" id="clockChoice3"
-                    name="size" value="big"/>
+                    name="size" value="Большие"/>
                     <label className={'label'} htmlFor="clockChoice3">Большие</label>
                 </span>
             </fieldset>

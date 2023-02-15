@@ -23,6 +23,7 @@
         rgba(35,43,85,0.95)),
         no-repeat center center;
     box-shadow: 0.3em 0.3em 1em rgba(0,0,0,0.3);
+    display: flex;
 }
 .active{
     padding-bottom: 10px;
@@ -31,4 +32,7 @@
 }
 .myButtonWrapper{
     padding: 20px 0px;
+}
+.addButtonWrapper{
+    padding: 30px 0px;
 }
