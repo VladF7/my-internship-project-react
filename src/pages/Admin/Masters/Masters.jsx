@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import mastersAPI from "../../../api/mastersAPI";
 import MyLinkButton from "../../../components/Buttons/BigButton/MyLinkButton";
 import MySmallButton from "../../../components/Buttons/SmalButton/MySmallButton";
-import MyLabel from "../../../components/Label/MyLabel";
 import MySpan from "../../../components/Span/MySpan";
 import './Masters.css'
 
@@ -28,10 +27,9 @@ const Masters = () => {
     return ( 
         <div className="itemContent">
             {!masters
-                ?   <MySpan>Список мастеров не доступен, нету ответа от сервера</MySpan>
+                ?   <MySpan>Список мастеров не доступен, нет ответа от сервера</MySpan>
                 :   masters.length
-                    ?   <>
-                            <div className="masters">
+                    ?   <div className="masters">
                                 <ul className="list">
                                             {masters.map(m => {
                                                 return  <li  id={m.id} key={m.id} className='listItem'>
@@ -47,13 +45,17 @@ const Masters = () => {
                                                         </li>  
                                             })}
                                 </ul>
+                        </div>
+                    :   <>
+                            <div className="masters">
+                                <MySpan>Здесь пока что нету мастеров</MySpan>
                             </div>
                             <div className="addButtonWrapper">
-                                    <MyLinkButton to='addMaster'>Добавить мастера</MyLinkButton>
+                                <MyLinkButton to='addMaster'>Добавить мастера</MyLinkButton>
                             </div>
-                        </>
-                    :   <MySpan>Здесь пока что нету мастеров</MySpan>
-            }      
+                        </>  
+            }  
+              
         </div> 
     );
 }

@@ -55,10 +55,9 @@ const Cities = () => {
     return ( 
         <div className={'itemContent'}>
             {!cities 
-                ?   <MySpan>Список городов не доступен, нету ответа от сервера</MySpan>  
+                ?   <MySpan>Список городов не доступен, нет ответа от сервера</MySpan>  
                 :   cities.length
-                    ?   <>
-                            <div className={'cities'}>
+                    ?   <div className={'cities'}>
                                 <ul className={'list'}>
                                     {cities.map(city => {
                                         return  <li  id={city.id} key={city.id} className={'listItem'} >
@@ -71,6 +70,10 @@ const Cities = () => {
                                                 </li>    
                                     })}
                                 </ul>
+                            </div>
+                    :   <>
+                            <div className="cities">
+                                <MySpan>Здесь пока что нету городов</MySpan>
                             </div>
                             <form onSubmit={e=>addCity(e)} className={'form'}>
                                 <MyLabel discription={'Добавить город в список'}/>
@@ -85,8 +88,8 @@ const Cities = () => {
                                 <MyButton>Добавить город</MyButton>
                             </form> 
                         </>
-                    :   <MySpan>Здесь пока что нету городов</MySpan>
             }
+            
         </div>
     );
 }

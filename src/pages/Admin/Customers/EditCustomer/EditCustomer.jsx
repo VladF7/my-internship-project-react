@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import customersAPI from "../../../../api/customersAPI";
-import mastersAPI from "../../../../api/mastersAPI";
 import MyBigButton from "../../../../components/Buttons/BigButton/MyBigButton";
 import MyInputItem from "../../../../components/InputItem/MyInputItem";
 
@@ -78,12 +77,12 @@ const EditCustomer = () => {
                 item = {{id:'name',type:'text',placeholder:'Не менее 3 символов', discription:'Введите имя клиента',}}
             />
             <MyInputItem
-            name = 'email' 
-            value = {email}
-            error = {emailError}
-            onChange = {e => setEmail(e.target.value)}
-            onBlur = {e => onBlurEmail(e)}
-            item = {{id:'email',type:'text',placeholder:'example@example.com', discription:'Введите email клиента',}}
+                name = 'email' 
+                value = {email}
+                error = {emailError}
+                onChange = {e => setEmail(e.target.value)}
+                onBlur = {e => onBlurEmail(e)}
+                item = {{id:'email',type:'text',placeholder:'example@example.com', discription:'Введите email клиента',}}
             />
             <div className="myButtonWrapper">
                 <MyBigButton>Изменить клиента</MyBigButton>

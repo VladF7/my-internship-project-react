@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
 import MySmallButton from "../../../components/Buttons/SmalButton/MySmallButton"
-import MyLabel from "../../../components/Label/MyLabel"
 import ordersAPI from "../../../api/ordersAPI";
 import './Orders.css'
 import MySpan from "../../../components/Span/MySpan";
@@ -32,7 +31,7 @@ const Orders = () => {
     return ( 
         <div className="itemContent">
             {!orders
-                ?   <MySpan>Список заказов не доступен, нету ответа от сервера</MySpan>
+                ?   <MySpan>Список заказов не доступен, нет ответа от сервера</MySpan>
                 :   orders.length 
                     ?   <div className="orders">
                             <ul className="list">

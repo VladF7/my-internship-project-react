@@ -3,7 +3,6 @@ import MySmallButton from "../../../components/Buttons/SmalButton/MySmallButton"
 import customersAPI from "../../../api/customersAPI";
 import './Customers.css'
 import MySpan from "../../../components/Span/MySpan";
-import MyError from "../../../components/Error/MyError"
 
 const Customers = () => {
     const [customers, setCustomers] = useState([])
@@ -26,7 +25,7 @@ const Customers = () => {
     return ( 
         <div className="itemContent">
             {!customers
-                ?   <MySpan>Список клиентов не доступен, нету ответа от сервера</MySpan>
+                ?   <MySpan>Список клиентов не доступен, нет ответа от сервера</MySpan>
                 :   customers.length 
                     ?   <div className="customers">
                             <ul className="list">
