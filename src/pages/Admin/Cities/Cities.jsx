@@ -56,25 +56,26 @@ const Cities = () => {
         <div className={'itemContent'}>
             {!cities 
                 ?   <MySpan>Список городов не доступен, нет ответа от сервера</MySpan>  
-                :   cities.length
-                    ?   <div className={'cities'}>
-                                <ul className={'list'}>
-                                    {cities.map(city => {
-                                        return  <li  id={city.id} key={city.id} className={'listItem'} >
-                                                    <div className="itemInfo">
-                                                        <MySpan>{city.name}</MySpan>
-                                                    </div>
-                                                    <div className="buttons">
-                                                        <MySmallButton onClick={()=>delCity(city.id)}>Удалить</MySmallButton>                                       
-                                                    </div>  
-                                                </li>    
-                                    })}
-                                </ul>
-                            </div>
-                    :   <>
-                            <div className="cities">
-                                <MySpan>Здесь пока что нету городов</MySpan>
-                            </div>
+                :   <>
+                        {cities.length
+                            ?   <div className='cities'>
+                                        <ul className={'list'}>
+                                            {cities.map(city => {
+                                                return  <li  id={city.id} key={city.id} className={'listItem'} >
+                                                            <div className="itemInfo">
+                                                                <MySpan>{city.name}</MySpan>
+                                                            </div>
+                                                            <div className="buttons">
+                                                                <MySmallButton onClick={()=>delCity(city.id)}>Удалить</MySmallButton>                                       
+                                                            </div>  
+                                                        </li>    
+                                            })}
+                                        </ul>
+                                    </div>
+                            :   <div className="cities">
+                                    <MySpan>Здесь пока что нету городов</MySpan>
+                                </div>
+                        }
                             <form onSubmit={e=>addCity(e)} className={'form'}>
                                 <MyLabel discription={'Добавить город в список'}/>
                                 <MyError>{cityError}</MyError>
@@ -87,9 +88,8 @@ const Cities = () => {
                                     onChange={e=>{setCity(e.target.value)}}/>
                                 <MyButton>Добавить город</MyButton>
                             </form> 
-                        </>
-            }
-            
+                    </>  
+            }                 
         </div>
     );
 }

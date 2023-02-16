@@ -28,34 +28,36 @@ const Masters = () => {
         <div className="itemContent">
             {!masters
                 ?   <MySpan>Список мастеров не доступен, нет ответа от сервера</MySpan>
-                :   masters.length
-                    ?   <div className="masters">
-                                <ul className="list">
-                                            {masters.map(m => {
-                                                return  <li  id={m.id} key={m.id} className='listItem'>
-                                                            <div className="itemInfo">
-                                                                <MySpan>Имя: {m.name},</MySpan>
-                                                                <MySpan>Рейтинг: {m.rating},</MySpan>
-                                                                <MySpan>Город: {m.city}</MySpan>
-                                                            </div>
-                                                            <div className="buttons">
-                                                                <MySmallButton to={`${m.id}`}>Изменить</MySmallButton>
-                                                                <MySmallButton onClick={()=>deleteMaster(m.id)} >Удалить</MySmallButton>    
-                                                            </div>                                  
-                                                        </li>  
-                                            })}
-                                </ul>
-                        </div>
-                    :   <>
-                            <div className="masters">
+                :   <> 
+                        {masters.length
+                        ?   <div className="masters">
+                                    <ul className="list">
+                                                {masters.map(m => {
+                                                    return  <li  id={m.id} key={m.id} className='listItem'>
+                                                                <div className="itemInfo">
+                                                                    <MySpan>Имя: {m.name},</MySpan>
+                                                                    <MySpan>Рейтинг: {m.rating},</MySpan>
+                                                                    <MySpan>Город: {m.city}</MySpan>
+                                                                </div>
+                                                                <div className="buttons">
+                                                                    <MySmallButton to={`${m.id}`}>Изменить</MySmallButton>
+                                                                    <MySmallButton onClick={()=>deleteMaster(m.id)} >Удалить</MySmallButton>    
+                                                                </div>                                  
+                                                            </li>  
+                                                })}
+                                    </ul>
+                            </div>
+                        :   <div className="masters">
                                 <MySpan>Здесь пока что нету мастеров</MySpan>
                             </div>
-                            <div className="addButtonWrapper">
-                                <MyLinkButton to='addMaster'>Добавить мастера</MyLinkButton>
-                            </div>
-                        </>  
+                        }   
+                        <div className="addButtonWrapper">
+                            <MyLinkButton to='addMaster'>Добавить мастера</MyLinkButton>
+                        </div> 
+                    </>
+                                      
             }  
-              
+                        
         </div> 
     );
 }
