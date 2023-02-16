@@ -93,6 +93,9 @@ const UserForm = () => {
   }
   const getSubmit = async(e) => {  
     e.preventDefault() 
+    if(nameError || emailError || sizeError || cityError || dateError){
+      return
+    }
     if(!name || !email || !size || !city || !date){
       if(!name){
         setNameError(requiredField)
