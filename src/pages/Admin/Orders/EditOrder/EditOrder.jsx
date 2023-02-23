@@ -93,8 +93,7 @@ const EditOrder = () => {
           date = new Date();
           date.setHours(date.getHours()+1)
         } else {
-          let time = new Date(d).getTime()
-          date = new Date(time)
+          date = new Date(d);
         }
         let dd = date.getDate();
         let mm = date.getMonth() + 1; 

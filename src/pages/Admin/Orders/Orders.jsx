@@ -18,8 +18,8 @@ const Orders = () => {
         setOrders(orders.filter((order) => order.id !== id))
     }
     const getDateString = (d) => {
-        let time = new Date(d).getTime()
-        let date = new Date(time)
+
+        let date = new Date(d)
         let dd = date.getDate();
         let mm = date.getMonth() + 1; 
         let yyyy = date.getFullYear();
