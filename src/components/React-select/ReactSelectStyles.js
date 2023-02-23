@@ -1,4 +1,4 @@
-module.exports = {
+const ReactSelectStyles = {
     control: (baseStyles, state) => ({
         ...baseStyles,
         border: state.isFocused ? 0 : 0,
@@ -35,3 +35,4 @@ module.exports = {
         backgroundColor: 'lightsalmon',
     }),
   }
+  export default ReactSelectStyles
