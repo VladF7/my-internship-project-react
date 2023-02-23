@@ -9,8 +9,19 @@ const Orders = () => {
     useEffect(()=>{
         ordersAPI.getOrders()
         .then(orders => {
-           return setOrders(orders)})
-        
+            setOrders(orders.map(order => {
+                return  {id: order.id, 
+                        name: order.name, 
+                        email: order.email, 
+                        size: order.size, 
+                        time: order.time,
+                        master: order.master,
+                        city: order.city,
+                        start: getDateString(order.start),
+                        end: getDateString(order.end)
+                }
+            }))
+        })
     },[])
 
     const delOrder = (id) => {
