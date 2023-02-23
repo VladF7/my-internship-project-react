@@ -19,7 +19,7 @@ const Orders = () => {
     }
     const getDateString = (d) => {
         let date = new Date((d))
-            date.setHours(date.getHours() - new Date(d).getTimezoneOffset())
+            date.setHours(date.getHours() - 2)
         let dd = date.getDate();
         let mm = date.getMonth() + 1; 
         let yyyy = date.getFullYear();
