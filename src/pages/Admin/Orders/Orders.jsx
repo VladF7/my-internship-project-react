@@ -17,19 +17,20 @@ const Orders = () => {
         ordersAPI.delOrder(id)
         setOrders(orders.filter((order) => order.id !== id))
     }
-    // const getDateString = (d) => {
+    const getDateString = (d) => {
 
-    //     let date = new Date(d)
-    //     let dd = date.getDate();
-    //     let mm = date.getMonth() + 1; 
-    //     let yyyy = date.getFullYear();
-    //     let minutes = '00' 
-    //     let hours = date.getHours()
-    //     if(dd < 10) dd = '0' + dd;
-    //     if(mm < 10) mm = '0' + mm;
-    //     if(hours < 10) hours = '0' + hours;
-    //     return date = yyyy + '-' + mm + '-' + dd + ', ' + hours + ':' + minutes;    
-    // }
+        let date = new Date((d))
+        console.log(date);
+        let dd = date.getDate();
+        let mm = date.getMonth() + 1; 
+        let yyyy = date.getFullYear();
+        let minutes = '00' 
+        let hours = date.getUTCHours()
+        if(dd < 10) dd = '0' + dd;
+        if(mm < 10) mm = '0' + mm;
+        if(hours < 10) hours = '0' + hours;
+        return date = yyyy + '-' + mm + '-' + dd + ', ' + hours + ':' + minutes;    
+    }
     
     return ( 
         <div className="itemContent">
@@ -47,8 +48,8 @@ const Orders = () => {
                                                     <MySpan>Время ремонта: {order.time},</MySpan>
                                                     <MySpan>Имя мастера: {order.master},</MySpan>
                                                     <MySpan>Город: {order.city},</MySpan>
-                                                    <MySpan>Начало заказа: {order.start},</MySpan>
-                                                    <MySpan>Конец заказа: {order.end}</MySpan>
+                                                    <MySpan>Начало заказа: {getDateString(order.start)},</MySpan>
+                                                    <MySpan>Конец заказа: {getDateString(order.end)}</MySpan>
                                                 </div>
                                                 <div className="buttons">
                                                     <MySmallButton to={`${order.id}`}>Изменить</MySmallButton>
