@@ -9,19 +9,8 @@ const Orders = () => {
     useEffect(()=>{
         ordersAPI.getOrders()
         .then(orders => {
-            setOrders(orders.map(order => {
-                return  {id: order.id, 
-                        name: order.name, 
-                        email: order.email, 
-                        size: order.size, 
-                        time: order.time,
-                        master: order.master,
-                        city: order.city,
-                        start: getDateString(order.start),
-                        end: getDateString(order.end)
-                }
-            }))
-        })
+           return setOrders(orders)})
+        
     },[])
 
     const delOrder = (id) => {
@@ -59,8 +48,8 @@ const Orders = () => {
                                                     <MySpan>Время ремонта: {order.time},</MySpan>
                                                     <MySpan>Имя мастера: {order.master},</MySpan>
                                                     <MySpan>Город: {order.city},</MySpan>
-                                                    <MySpan>Начало заказа: {order.start},</MySpan>
-                                                    <MySpan>Конец заказа: {order.end}</MySpan>
+                                                    <MySpan>Начало заказа: {getDateString(order.start)},</MySpan>
+                                                    <MySpan>Конец заказа: {getDateString(order.end)}</MySpan>
                                                 </div>
                                                 <div className="buttons">
                                                     <MySmallButton to={`${order.id}`}>Изменить</MySmallButton>
