@@ -31,7 +31,6 @@ const Orders = () => {
     const getDateString = (d) => {
 
         let date = new Date((d))
-        console.log(date);
         let dd = date.getDate();
         let mm = date.getMonth() + 1; 
         let yyyy = date.getFullYear();
@@ -59,8 +58,8 @@ const Orders = () => {
                                                     <MySpan>Время ремонта: {order.time},</MySpan>
                                                     <MySpan>Имя мастера: {order.master},</MySpan>
                                                     <MySpan>Город: {order.city},</MySpan>
-                                                    <MySpan>Начало заказа: {getDateString(order.start)},</MySpan>
-                                                    <MySpan>Конец заказа: {getDateString(order.end)}</MySpan>
+                                                    <MySpan>Начало заказа: {(order.start)},</MySpan>
+                                                    <MySpan>Конец заказа: {(order.end)}</MySpan>
                                                 </div>
                                                 <div className="buttons">
                                                     <MySmallButton to={`${order.id}`}>Изменить</MySmallButton>
