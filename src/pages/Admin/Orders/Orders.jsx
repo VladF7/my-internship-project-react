@@ -9,7 +9,19 @@ const Orders = () => {
     useEffect(()=>{
         ordersAPI.getOrders()
         .then(orders => {
-           return setOrders(orders)})
+            setOrders(orders.map(order => {
+                return  {id: order.id, 
+                        name: order.name, 
+                        email: order.email, 
+                        size: order.size, 
+                        time: order.time,
+                        master: order.master,
+                        city: order.city,
+                        start: getDateString(order.start),
+                        end: getDateString(order.end)
+                }
+            }))
+        })
         
     },[])
 
@@ -25,7 +37,7 @@ const Orders = () => {
         let mm = date.getMonth() + 1; 
         let yyyy = date.getFullYear();
         let minutes = '00' 
-        let hours = date.getUTCHours()
+        let hours = date.getHours()
         if(dd < 10) dd = '0' + dd;
         if(mm < 10) mm = '0' + mm;
         if(hours < 10) hours = '0' + hours;
@@ -48,8 +60,8 @@ const Orders = () => {
                                                     <MySpan>Время ремонта: {order.time},</MySpan>
                                                     <MySpan>Имя мастера: {order.master},</MySpan>
                                                     <MySpan>Город: {order.city},</MySpan>
-                                                    <MySpan>Начало заказа: {getDateString(order.start)},</MySpan>
-                                                    <MySpan>Конец заказа: {getDateString(order.end)}</MySpan>
+                                                    <MySpan>Начало заказа: {order.start},</MySpan>
+                                                    <MySpan>Конец заказа: {order.end}</MySpan>
                                                 </div>
                                                 <div className="buttons">
                                                     <MySmallButton to={`${order.id}`}>Изменить</MySmallButton>
