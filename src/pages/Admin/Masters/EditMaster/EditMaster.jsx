@@ -1,38 +1,51 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import ReactSelect from "../../../../components/React-select/React-select";
 import citiesAPI from "../../../../api/citiesAPI";
 import mastersAPI from "../../../../api/mastersAPI";
 import MyBigButton from "../../../../components/Buttons/BigButton/MyBigButton";
-import MyCitySelector from "../../../../components/CitySelector/MyCitySelector";
 import MyInputItem from "../../../../components/InputItem/MyInputItem";
 import MySelect from "../../../../components/Select/MySelect";
 
 const EditMaster = () => {
-    const [cities, setCities] = useState([])
 
     const {id} = useParams()
     useEffect(()=>{
         mastersAPI.getMasterById(id)
-        .then(master=>{
-            setName(master.name)
-            setRating(master.rating)
-            setCity(master.city)
+        .then(res=>{
+            setName(res.master.name)
+            setRating(res.master.rating)
+            setCities(res.cities.map(city => {
+                return {value:city.id,label:city.name}
+            }))
         })
-        citiesAPI.getCities()
-        .then(cities => setCities(cities))
     },[id])
- 
-    const prevPage = useNavigate()
 
+    const loadOptions = async() => {
+        const cities = await citiesAPI.getCities()
+        const options = await cities.map(city => {
+            return {value:city.id,label:city.name}
+        })
+        return options.filter(option => option.value !== cities.value)
+    }
+    
+    const prevPage = useNavigate()
 
     const [name, setName] = useState('')
     const [rating, setRating] = useState('')
-    const [city, setCity] = useState('')
+    const [cities, setCities] = useState([])
 
     const [nameError, setNameError] = useState('')
     const [ratingError, setRatingError] = useState('')
-    const [cityError, setCityError] = useState('')
+    const [citiesError, setCitiesError] = useState('')
     const requiredField = 'Поле обязательное для заполнения'
+    const ratingOptions = [
+        {value: 1, label: 1,},
+        {value: 2, label: 2,},
+        {value: 3, label: 3,},
+        {value: 4, label: 4,},
+        {value: 5, label: 5,},
+    ]
 
     const onBlurName = (e) => {
         if(e.target.value.length < 3){
@@ -46,10 +59,8 @@ const EditMaster = () => {
       }
     const onBlurCity = (e) => {
         if(!e.target.value){
-            return setCityError('')
+            return setCitiesError('')
         }
-        const cityArr = cities.map(c => c.name)
-        cityArr.includes(e.target.value) ? setCityError('') : setCityError('Вашего города нету в списке')
     }
     const changeRating = (e) => {
         setRating(e.target.value)
@@ -61,21 +72,19 @@ const EditMaster = () => {
     }
     const editMaster = async(e) => {
         e.preventDefault()
-        if(!name || !city){
+        if(!name || !cities.length){
             if(!name){
                 setNameError(requiredField)
             } 
-            if(!city){
-                setCityError(requiredField)
+            if(!cities.length){
+                setCitiesError(requiredField)
             } 
             return
         }
-
         await mastersAPI.editMaster(e,id)
         prevPage(-1)
         await mastersAPI.getMasters()
     }
-
     return ( 
         <form onSubmit={e=>editMaster(e)} className={'form'} >
             <MyInputItem
@@ -87,18 +96,23 @@ const EditMaster = () => {
                 item = {{id:'name',type:'text',placeholder:'Не менее 3 символов', discription:'Введите имя мастера',}}
             />
             <MySelect
-                rating={rating}
+                options = {ratingOptions}
+                placeholder= 'Кликните для выбора рейтинга'
+                name = 'rating'
+                discription = {'Выберите рейтинг'}
                 error = {ratingError}
                 value = {rating}
                 onChange={e =>{changeRating(e)}}
             />
-            <MyCitySelector
-                value={city}
-                cities={cities}
-                error = {cityError}
-                onChange={e=> setCity(e.target.value)}
+            <ReactSelect
+                value={cities}
+                error = {citiesError}
+                name = 'cities' 
+                loadOptions={loadOptions}
+                onChange={e=> setCities(e)}
                 onBlur = {e => onBlurCity(e)}
             />
+
             <div className="myButtonWrapper">
                 <MyBigButton>Изменить мастера</MyBigButton>
             </div>

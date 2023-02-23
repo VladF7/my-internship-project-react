@@ -13,10 +13,9 @@ const ChooseMasterForm = () => {
     const [masterIdError,setMasterIdError] = useState('')
 
     useEffect(()=>{
-        userAPI.getFreeMasters()
+        userAPI.getFreeMasters(sessionStorage)
         .then(masters=>setMasters(masters))
     },[])
-    
     function onSubmit(e) {
       e.preventDefault()
       if(!masterId){
@@ -50,7 +49,7 @@ const ChooseMasterForm = () => {
                         masters.map(master => {
                           return  <div className="masterItem" key={master.id}>
                                     <input className="input" onChange={e=>getMasterId(e)} type="radio" id={master.id} name="masterId" value={master.id}/>
-                                    <MyLabel htmlFor={master.id} discription={`имя: ${master.name}, рейтинг: ${master.rating},`}></MyLabel>
+                                    <MyLabel htmlFor={master.id} discription={`имя: ${master.name}, рейтинг: ${master.rating}`}></MyLabel>
                                   </div>
                         })
                       }
@@ -61,7 +60,12 @@ const ChooseMasterForm = () => {
                     </div>
                       <MyBigButton onClick={(e)=>goBack(e)}>Отменить</MyBigButton>
                 </form> 
-              : <MySpan>К сожалению сейчас нету свободных мастеров, выберите другое время</MySpan>
+              : <>
+                  <div className="mastersArea">
+                    <MySpan>К сожалению сейчас нету свободных мастеров, выберите другое время</MySpan>
+                  </div>
+                  <MyBigButton onClick={(e)=>goBack(e)}>Назад</MyBigButton>
+                </>
           }
         </div>
      )

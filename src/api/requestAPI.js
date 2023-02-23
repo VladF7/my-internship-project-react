@@ -1,3 +1,12 @@
+
+let baseURL
+
+if(process.env.NODE_ENV === 'development'){
+    baseURL = 'http://localhost:5000'
+} else {
+    baseURL = 'https://internship-backend.onrender.com'
+}
+
 export const request = async (url, method = 'GET', data = null) => {
     try {
         const headers = {}
@@ -7,7 +16,7 @@ export const request = async (url, method = 'GET', data = null) => {
             body = JSON.stringify(data)
         }
         const response = await fetch(
-            'https://internship-backend.onrender.com' + url, {
+            baseURL + url, {
             method,
             headers,
             body,

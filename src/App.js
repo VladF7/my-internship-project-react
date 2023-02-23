@@ -1,4 +1,4 @@
-import {Route, RouterProvider, createBrowserRouter, createRoutesFromElements} from 'react-router-dom';
+import {Route, RouterProvider, createBrowserRouter, createRoutesFromElements, Navigate} from 'react-router-dom';
 import './App.css';
 
 import Layout from './components/Layout/Layout';
@@ -24,15 +24,17 @@ function App() {
       <Route path='successOrder' element={<SuccessOrder/>}/>
       {/* <Route path='adminAuth' element={}></Route> */}
       <Route path='admin' element={<AdminPage/>}>
-          <Route path='orders' element={<Orders/>}></Route>
-          <Route path='orders/:id' element={<EditOrder/>}></Route>
-          <Route path='cities' element={<Cities/>}></Route>
+          <Route path="/admin" element={<Navigate to="masters" replace />}/>
           <Route path='masters' element={<Masters/>}></Route>
           <Route path='masters/:id' element={<EditMaster/>}></Route>
           <Route path='masters/addMaster' element={<AddMaster/>}></Route>
+          <Route path='cities' element={<Cities/>}></Route>
+          <Route path='orders' element={<Orders/>}></Route>
+          <Route path='orders/:id' element={<EditOrder/>}></Route>
           <Route path='customers' element={<Customers/>}></Route>
           <Route path='customers/:id' element={<EditCustomer/>}></Route>
       </Route>
+      <Route path="*" element={<Navigate to="/" replace />}/>
     </Route>
   ))
   

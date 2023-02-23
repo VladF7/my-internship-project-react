@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-const MyBigButton = ({children,to, ...props}) => {
+const MyLinkButton = ({children,to, ...props}) => {
 
     return ( 
         <Link to={to}>
@@ -12,4 +12,4 @@ const MyBigButton = ({children,to, ...props}) => {
      );
 }
  
-export default MyBigButton;
+export default MyLinkButton;

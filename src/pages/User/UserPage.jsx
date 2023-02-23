@@ -69,6 +69,7 @@ const UserForm = () => {
     let date;
     if(!d){
       date = new Date();
+      date.setHours(date.getHours()+1)
     } else {
       date = new Date(d);
     }

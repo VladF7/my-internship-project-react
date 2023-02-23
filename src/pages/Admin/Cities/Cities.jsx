@@ -13,6 +13,7 @@ const Cities = () => {
     const [cities, setCities] = useState([])
     const [cityError, setCityError] = useState('')
     const requiredField = 'Поле обязательное для заполнения'
+    const existingField = 'Такой город уже есть'
 
     useEffect(()=>{
       citiesAPI.getCities().then(cities => setCities(cities))
@@ -30,20 +31,26 @@ const Cities = () => {
         if(!city){
             return setCityError(requiredField)
           }
-       
-        citiesAPI.addCity(e).then(city => setCities([...cities, ...city]))
+        
+        citiesAPI.addCity(e).then(city => {
+            if(!city){
+                return setCityError(existingField)
+            }
+            setCities([...cities, ...city])
+        })
+
         setCity('')
         ordersAPI.getOrders()
     }
 
     const delCity = (id) => {
         citiesAPI.delCity(id)
-        .then(res => {
-            if(res === 'ERROR'){
-                setCityError('Не может быть удален')
+        .then(city => {
+            if(!city){
+                setCityError('Не может быть удален, город используется')
                 setTimeout(() => {
                     setCityError('')
-                }, 1000);
+                }, 1500);
             } else{
                 setCities(cities.filter((city) => city.id !== id))
             }
@@ -76,18 +83,22 @@ const Cities = () => {
                                     <MySpan>Здесь пока что нету городов</MySpan>
                                 </div>
                         }
-                            <form onSubmit={e=>addCity(e)} className={'form'}>
-                                <MyLabel discription={'Добавить город в список'}/>
-                                <MyError>{cityError}</MyError>
-                                <MyInput 
-                                    type="text" 
-                                    name='city'
-                                    placeholder={'Введите название города'} 
-                                    value={city} 
-                                    onBlur = {e=>onBlurCity(e)}
-                                    onChange={e=>{setCity(e.target.value)}}/>
-                                <MyButton>Добавить город</MyButton>
-                            </form> 
+                            
+                                <form onSubmit={e=>addCity(e)} className={'form'}>
+                                <div className="errorContainer">
+                                    <MyError>{cityError}</MyError>
+                                </div>
+                                    <MyLabel discription={'Добавить город в список'}/>
+                                    <MyInput 
+                                        type="text" 
+                                        name='city'
+                                        placeholder={'Введите название города'} 
+                                        value={city} 
+                                        onBlur = {e=>onBlurCity(e)}
+                                        onChange={e=>{setCity(e.target.value)}}/>
+                                    <MyButton>Добавить город</MyButton>
+                                </form> 
+                           
                     </>  
             }                 
         </div>

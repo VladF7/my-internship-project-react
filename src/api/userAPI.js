@@ -23,8 +23,8 @@ class UserAPI {
         
         return end
     } 
-    async getFreeMasters () {
-      const response = await request('/api/user/getMastersList', 'POST', sessionStorage)
+    async getFreeMasters (data) {
+      const response = await request('/api/user/getMastersList', 'POST', data)
       return response
     }
     async addOrder (e) {

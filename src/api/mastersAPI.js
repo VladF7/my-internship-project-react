@@ -14,8 +14,9 @@ class MastersAPI {
       const newMaster = {
           name: formData.get('name'),
           rating: formData.get('rating'),
-          city: formData.get('city'),
+          cities: formData.getAll('cities'),
       }
+
       const response = await request('/api/masters', 'POST', newMaster) 
       return response
     }
@@ -24,7 +25,7 @@ class MastersAPI {
       const editedMaster = {
           name: formData.get('name'),
           rating: formData.get('rating'),
-          city: formData.get('city'),
+          cities: formData.getAll('cities'),
       }
       const response = await request(`/api/masters/${id}`, 'PUT', editedMaster) 
       return response

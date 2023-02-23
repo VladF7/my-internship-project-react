@@ -13,13 +13,14 @@ import { request } from "../api/requestAPI";
         const response = await request('/api/orders', 'POST', date)
         return response
       }
-      async editOrder (e,id) {
+      async editOrder (e,id,endOrderDate) {
         const formData = new FormData(e.target)
         const editedOrder = {
             size: formData.get('size'),
             master: formData.get('master'),
             city: formData.get('city'),
-            start: formData.get('startOrderdate'),
+            start: formData.get('date'),
+            end: endOrderDate,
         }
         const response = await request(`/api/orders/${id}`, 'PUT', editedOrder) 
         return response

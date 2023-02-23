@@ -2,6 +2,7 @@
     width: 100%;
     height: 100%;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     padding: 20px 20px;
 }
@@ -12,7 +13,7 @@
     width: 100%;
 }
 .mastersArea{
-    height: 400px;
+    height: 382px;
     position: relative;
     overflow: scroll;
 }

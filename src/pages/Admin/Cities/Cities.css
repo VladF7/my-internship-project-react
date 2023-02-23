@@ -1,4 +1,5 @@
 .cities{
     height: 70%;   
     overflow: scroll;
+    margin-bottom: 20px;
 }
