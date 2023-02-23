@@ -1,8 +1,6 @@
-import { useEffect, useState } from "react";
-import citiesAPI from "../../api/citiesAPI";
 import AsyncSelect from 'react-select/async';
-import './React-select-styles.css'
-import styles from './React-select-styles'
+import './ReactSelectStyles.css'
+import ReactSelectJsStyles from './React-select-styles'
 import MyLabel from "../Label/MyLabel";
 import MyError from "../Error/MyError";
 
@@ -21,7 +19,7 @@ const ReactSelect = ({error, ...props}) => {
                 placeholder='Выберите город'
                 isSearchable = {false}
                 noOptionsMessage={() => 'Городов больше нету'}
-                styles={styles}
+                styles={ReactSelectJsStyles}
             />
         </div>
         
