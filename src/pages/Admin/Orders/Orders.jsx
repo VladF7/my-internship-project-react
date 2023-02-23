@@ -22,7 +22,6 @@ const Orders = () => {
                 }
             }))
         })
-        
     },[])
 
     const delOrder = (id) => {
