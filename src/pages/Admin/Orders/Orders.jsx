@@ -10,20 +10,11 @@ const Orders = () => {
         ordersAPI.getOrders()
         .then(orders => {
             setOrders(orders.map(order => {
-                return  {id: order.id, 
-                        name: order.name, 
-                        email: order.email, 
-                        size: order.size, 
-                        time: order.time,
-                        master: order.master,
-                        city: order.city,
-                        start: getDateString(order.start),
-                        end: getDateString(order.end)
-                }
+                return  {...order}                     
             }))
         })
+        // , start: getDateString(order.start), end: getDateString(order.end)
     },[])
-
     const delOrder = (id) => {
         ordersAPI.delOrder(id)
         setOrders(orders.filter((order) => order.id !== id))
@@ -31,6 +22,8 @@ const Orders = () => {
     const getDateString = (d) => {
 
         let date = new Date((d))
+       console.log( (new Date()).getTimezoneOffset()/60);
+    
         let dd = date.getDate();
         let mm = date.getMonth() + 1; 
         let yyyy = date.getFullYear();
@@ -58,8 +51,8 @@ const Orders = () => {
                                                     <MySpan>Время ремонта: {order.time},</MySpan>
                                                     <MySpan>Имя мастера: {order.master},</MySpan>
                                                     <MySpan>Город: {order.city},</MySpan>
-                                                    <MySpan>Начало заказа: {(order.start)},</MySpan>
-                                                    <MySpan>Конец заказа: {(order.end)}</MySpan>
+                                                    <MySpan>Начало заказа: {order.start},</MySpan>
+                                                    <MySpan>Конец заказа: {order.end}</MySpan>
                                                 </div>
                                                 <div className="buttons">
                                                     <MySmallButton to={`${order.id}`}>Изменить</MySmallButton>
