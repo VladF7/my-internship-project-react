@@ -1,6 +1,10 @@
 import { request } from "../api/requestAPI";
 
 class MastersAPI {
+    async getFreeMasters (data) {
+      const response = await request('/api/masters/getMastersList', 'POST', data)
+      return response
+    }
     async getMasters () {
       const response = await request('/api/masters')
       return response

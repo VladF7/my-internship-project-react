@@ -8,22 +8,20 @@
     height: 100vh;
 }
 .App{
+    min-width: 580px;
+    min-height: 615px;
+    height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
 }
 .App-content{
-    margin-top: 20px;
-    width: 600px;
-    height: 550px;
-    border-radius: 5px;
-    background:linear-gradient(
-        rgba(35,43,85,0.75),
-        rgba(35,43,85,0.95)),
-        no-repeat center center;
-    box-shadow: 0.3em 0.3em 1em rgba(0,0,0,0.3);
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: calc(100% - 70px);
 }
 .active{
     padding-bottom: 10px;

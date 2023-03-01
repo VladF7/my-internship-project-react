@@ -15,7 +15,7 @@ const EditMaster = () => {
         .then(res=>{
             setName(res.master.name)
             setRating(res.master.rating)
-            setCities(res.cities.map(city => {
+            setCities(res.master.cities.map(city => {
                 return {value:city.id,label:city.name}
             }))
         })

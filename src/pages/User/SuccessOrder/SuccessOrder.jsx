@@ -1,10 +1,13 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import MyLinkButton from "../../../components/Buttons/BigButton/MyLinkButton";
 import MySpan from "../../../components/Span/MySpan";
 
 const SuccessOrder = () => {
     const navigate = useNavigate()
-
+    useEffect(()=>{
+        sessionStorage.clear()
+    },[])
     const message = `Ваш заказ успешно создан. 
     Вам на почту будет отправленно письмо с дополнительной информацией.`
 

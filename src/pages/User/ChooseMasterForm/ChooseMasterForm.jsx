@@ -1,28 +1,34 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import userAPI from "../../../api/userAPI";
+import mastersAPI from "../../../api/mastersAPI";
+import ordersAPI from "../../../api/ordersAPI";
 import MyBigButton from "../../../components/Buttons/BigButton/MyBigButton";
 import MyError from "../../../components/Error/MyError";
 import MyLabel from "../../../components/Label/MyLabel";
 import MySpan from "../../../components/Span/MySpan";
 
 const ChooseMasterForm = () => {
+
     const navigate = useNavigate() 
-    const [masters, setMasters] = useState([])
+    const [freeMastersList, setFreeMastersList] = useState('')
     const [masterId,setMasterId] = useState('')
     const [masterIdError,setMasterIdError] = useState('')
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(()=>{
-        userAPI.getFreeMasters(sessionStorage)
-        .then(masters=>setMasters(masters))
+      mastersAPI.getFreeMasters(sessionStorage)
+      .then(res=>setFreeMastersList(res))
+      .then(()=> setIsLoading(false))
     },[])
+
     function onSubmit(e) {
       e.preventDefault()
       if(!masterId){
         setMasterIdError('Обязательно укажите мастера')
         return
       } else {
-        userAPI.addOrder(e)
+        ordersAPI.addOrder(e)
         navigate('/successOrder',{replace: true})
       }
     }
@@ -37,38 +43,39 @@ const ChooseMasterForm = () => {
 
     return ( 
         <div className="userPage">
-          {!masters 
-            ? <MySpan>Нет ответа от сервера</MySpan>
-            : masters.length
-              ? <form className="userForm" onSubmit={e=>onSubmit(e)}>
-                  <div className="mastersArea">
-                    <fieldset className="mastersFieldset">
-                      <MyError>{masterIdError}</MyError>
-                      <legend className="legend">Выберите мастера</legend>
-                      {
-                        masters.map(master => {
-                          return  <div className="masterItem" key={master.id}>
-                                    <input className="input" onChange={e=>getMasterId(e)} type="radio" id={master.id} name="masterId" value={master.id}/>
-                                    <MyLabel htmlFor={master.id} discription={`имя: ${master.name}, рейтинг: ${master.rating}`}></MyLabel>
-                                  </div>
-                        })
-                      }
-                    </fieldset>
-                  </div>
-                    <div className="myButtonWrapper">
-                      <MyBigButton>Сделать заказ</MyBigButton>
-                    </div>
-                      <MyBigButton onClick={(e)=>goBack(e)}>Отменить</MyBigButton>
-                </form> 
-              : <>
-                  <div className="mastersArea">
-                    <MySpan>К сожалению сейчас нету свободных мастеров, выберите другое время</MySpan>
-                  </div>
-                  <MyBigButton onClick={(e)=>goBack(e)}>Назад</MyBigButton>
-                </>
-          }
+          <form className="userForm" onSubmit={e=>onSubmit(e)}>
+            <div className="mastersArea">
+              <fieldset className="mastersFieldset">
+                <MyError>{masterIdError}</MyError>
+                <legend className="legend">Выберите мастера</legend>
+                  {isLoading ? <MySpan>Идет загрузка свободных мастеров, подождите...</MySpan> :
+                    freeMastersList.length === 0
+                    ? <MySpan>К сожалению сейчас нету свободных масеров, выберите другое время</MySpan>
+                    : freeMastersList.map(master => { 
+                      return  <div className="masterItem" key={master.id}>
+                                <input 
+                                  className="input" 
+                                  onChange={e=>getMasterId(e)} 
+                                  type="radio" 
+                                  id={master.id} 
+                                  name="masterId" 
+                                  value={master.id}
+                                />
+                                <MyLabel htmlFor={master.id}>
+                                  имя: {master.name}, рейтинг: {master.rating}
+                                </MyLabel>
+                              </div>
+                      })
+                  }
+              </fieldset>
+            </div>
+              <div className="myButtonWrapper">
+                <MyBigButton>Сделать заказ</MyBigButton>
+              </div>
+                <MyBigButton onClick={(e)=>goBack(e)}>Отменить</MyBigButton>
+          </form> 
         </div>
      )
 }
- 
-export default ChooseMasterForm;
+
+export default ChooseMasterForm

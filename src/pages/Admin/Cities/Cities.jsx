@@ -9,14 +9,20 @@ import './Cities.css';
 import ordersAPI from "../../../api/ordersAPI"
 import MySpan from "../../../components/Span/MySpan";
 const Cities = () => {
+    
     const [city,setCity] = useState('')
     const [cities, setCities] = useState([])
     const [cityError, setCityError] = useState('')
+    const [isLoading, setIsLoading] = useState(true);
+    
     const requiredField = 'Поле обязательное для заполнения'
     const existingField = 'Такой город уже есть'
 
     useEffect(()=>{
-      citiesAPI.getCities().then(cities => setCities(cities))
+      citiesAPI.getCities()
+      .then(cities => setCities(cities))
+      .then(()=>setIsLoading(false))
+      
   },[])
 
     const onBlurCity = (e) => {
@@ -53,54 +59,45 @@ const Cities = () => {
                 }, 1500);
             } else{
                 setCities(cities.filter((city) => city.id !== id))
-            }
-                
-            
+            }     
         }) 
     }
 
+    if(isLoading === true) return <MySpan>Список городов загружается...</MySpan> 
+    
     return ( 
         <div className={'itemContent'}>
-            {!cities 
-                ?   <MySpan>Список городов не доступен, нет ответа от сервера</MySpan>  
-                :   <>
-                        {cities.length
-                            ?   <div className='cities'>
-                                        <ul className={'list'}>
-                                            {cities.map(city => {
-                                                return  <li  id={city.id} key={city.id} className={'listItem'} >
-                                                            <div className="itemInfo">
-                                                                <MySpan>{city.name}</MySpan>
-                                                            </div>
-                                                            <div className="buttons">
-                                                                <MySmallButton onClick={()=>delCity(city.id)}>Удалить</MySmallButton>                                       
-                                                            </div>  
-                                                        </li>    
-                                            })}
-                                        </ul>
-                                    </div>
-                            :   <div className="cities">
-                                    <MySpan>Здесь пока что нету городов</MySpan>
-                                </div>
-                        }
-                            
-                                <form onSubmit={e=>addCity(e)} className={'form'}>
-                                <div className="errorContainer">
-                                    <MyError>{cityError}</MyError>
-                                </div>
-                                    <MyLabel discription={'Добавить город в список'}/>
-                                    <MyInput 
-                                        type="text" 
-                                        name='city'
-                                        placeholder={'Введите название города'} 
-                                        value={city} 
-                                        onBlur = {e=>onBlurCity(e)}
-                                        onChange={e=>{setCity(e.target.value)}}/>
-                                    <MyButton>Добавить город</MyButton>
-                                </form> 
-                           
-                    </>  
-            }                 
+            <div className='cities'>
+                    <ul className={'list'}>
+                        {cities.length === 0 
+                        ? <MySpan>Список городов пуст</MySpan> 
+                        : 
+                        cities.map(city => {
+                            return  <li  id={city.id} key={city.id} className={'listItem'} >
+                                        <div className="itemInfo">
+                                            <MySpan>{city.name}</MySpan>
+                                        </div>
+                                        <div className="buttons">
+                                            <MySmallButton onClick={()=>delCity(city.id)}>Удалить</MySmallButton>                                       
+                                        </div>  
+                                    </li>    
+                        })}    
+                    </ul>
+            </div>
+            <form onSubmit={e=>addCity(e)} className={'form'}>
+            <div className="errorContainer">
+                <MyError>{cityError}</MyError>
+            </div>
+                <MyLabel discription={'Добавить город в список'}/>
+                <MyInput 
+                    type="text" 
+                    name='city'
+                    placeholder={'Введите название города'} 
+                    value={city} 
+                    onBlur = {e=>onBlurCity(e)}
+                    onChange={e=>{setCity(e.target.value)}}/>
+                <MyButton>Добавить город</MyButton>
+            </form>                  
         </div>
     );
 }

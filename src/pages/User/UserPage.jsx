@@ -5,10 +5,10 @@ import MySizeSelector from '../../components/SizeSelector/MySizeSelector';
 import MyCitySelector from '../../components/CitySelector/MyCitySelector';
 import MyDatePicker from '../../components/DatePicker/MyDatePicker';
 import { useNavigate } from 'react-router-dom';
-import citiesAPI from '../../api/citiesAPI';
-import userAPI from '../../api/userAPI';
+import {createUser} from '../../services/user';
 import MyBigButton from '../../components/Buttons/BigButton/MyBigButton';
-import MySpan from '../../components/Span/MySpan';
+import formatDate from '../../functions/formatDate';
+import citiesAPI from '../../api/citiesAPI';
 
 const UserForm = () => {
   const [cities, setCities] = useState([])
@@ -21,11 +21,11 @@ const UserForm = () => {
   const navigate = useNavigate()
   const requiredField = 'Поле обязательное для заполнения'
 
-  const [email,setEmail] = useState('')
-  const [name,setName] = useState('')
+  const [email,setEmail] = useState(sessionStorage.getItem('email') || '')
+  const [name,setName] = useState(sessionStorage.getItem('name') || '')
   const [size,setSize] = useState('')
-  const [city, setCity] = useState('')
-  const [date, setDate] = useState('')
+  const [city, setCity] = useState(sessionStorage.getItem('city') || '')
+  const [date, setDate] = useState(sessionStorage.getItem('start') || '')
 
   const [emailError,setEmailError] = useState('')
   const [nameError,setNameError] = useState('')
@@ -55,40 +55,22 @@ const UserForm = () => {
     }
   }
   const onBlurCity = (e) => {
-    if(!e.target.value){
+    if(!e){
       return setCityError('')
     }
     const cityArr = cities.map(c => c.name)
-    cityArr.includes(e.target.value) ? setCityError('') : setCityError('Вашего города нету в списке')
+    cityArr.includes(e) ? setCityError('') : setCityError('Вашего города нету в списке')
   }
   const getSize = (e) => {
     setSizeError('')
-    setSize(e.target.value)
+    setSize(e)
   }
-  const getDateValue = (d) => {
-    let date;
-    if(!d){
-      date = new Date();
-      date.setHours(date.getHours()+1)
-    } else {
-      date = new Date(d);
-    }
-    let dd = date.getDate();
-    let mm = date.getMonth() + 1; 
-    let yyyy = date.getFullYear();
-    let minutes = '00' 
-    let hours = date.getHours() ;
-    if(dd < 10) dd = '0' + dd;
-    if(mm < 10) mm = '0' + mm;
-    if(hours < 10) hours = '0' + hours;
-    return date = yyyy + '-' + mm + '-' + dd + 'T' + hours + ':' + minutes;
-    
-  }
+
   const getCurrDateValue = (e) => {
-    let currDate = getDateValue(e.target.value)
+    let currDate = formatDate(e) 
     setDate(currDate)
-    if(getDateValue() > currDate){
-        setDate(getDateValue())
+    if(formatDate() > currDate){
+        setDate(formatDate())
     }
     setDateError('')
   }
@@ -116,16 +98,14 @@ const UserForm = () => {
       return
     }
     else{
-     
-      await userAPI.createUser(e)
+      await createUser(e)
       navigate('chooseMaster')
     }
   }
 
     return (
       <div className='userPage'>
-          { cities 
-            ? <form className={'userForm'} onSubmit={e=>getSubmit(e)}>
+             <form className={'userForm'} onSubmit={e=>getSubmit(e)}>
                 <MyInputItem
                   name = 'name' 
                   value = {name}
@@ -144,9 +124,9 @@ const UserForm = () => {
                 />
                 <MySizeSelector 
                   name='size'
-                  onChange = {e => getSize(e)}
+                  onChange = {e => getSize(e.target.value)}
                   error = {sizeError}
-                  size = {size}
+                  value = {size}
                 />
                 <MyCitySelector
                   name='city'
@@ -155,21 +135,20 @@ const UserForm = () => {
                   cities = {cities}
                   error = {cityError}
                   onChange = {e=> setCity(e.target.value)}
-                  onBlur = {e => onBlurCity(e)}
+                  onBlur = {e => onBlurCity(e.target.value)}
                 />
                 <MyDatePicker
                   name = 'date'
                   value = {date}
                   error = {dateError}
-                  min={getDateValue()}
-                  onChange={e=>getCurrDateValue(e)}
+                  min={formatDate()}
+                  onChange={e=>getCurrDateValue(e.target.value)}
                   onBlur = {()=>setDateError('')}
                 />
                 <div className='myButtonWrapper'>
                   <MyBigButton>Далее</MyBigButton>  
                 </div>
               </form>
-            : <MySpan>Нет подключения к серверу</MySpan>}
       </div>
     );
 }

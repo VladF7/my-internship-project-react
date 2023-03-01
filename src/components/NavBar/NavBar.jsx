@@ -9,7 +9,7 @@ const NavBar = ({items}) => {
             <ul className={'navList'}>
                 {items.map((item,index) => {
                     return  <li key={index}>
-                            <NavLink to={item.path} className={'link'}>{item.name}</NavLink>
+                            <NavLink onClick={item.onClick} to={item.path} className={'link'}>{item.name}</NavLink>
                             </li>
                 })}
             </ul>

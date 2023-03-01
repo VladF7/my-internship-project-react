@@ -1,6 +1,15 @@
 import { request } from "../api/requestAPI";
 
-  class MastersAPI {
+  class OrdersAPI {
+      async addOrder (e) {
+        const formData = new FormData(e.target)
+        const masterId = {
+          id: formData.get('masterId')
+        }
+        const id = masterId.id
+        const response = await request(`/api/orders/${id}`, 'POST', sessionStorage) 
+        return response
+      }
       async getOrders () {
         const response = await request('/api/orders')
         return response
@@ -31,5 +40,5 @@ import { request } from "../api/requestAPI";
       }
   }
   
-  const mastersAPI = new MastersAPI()
-  export default mastersAPI
+  const ordersAPI = new OrdersAPI()
+  export default ordersAPI

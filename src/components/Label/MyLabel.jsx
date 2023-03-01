@@ -1,11 +1,11 @@
 import './MyLabel.css'
 
-const MyLabel = ({discription, ...props}) => {
+const MyLabel = ({children,discription, ...props}) => {
     return ( 
         <label 
             className={'myLabel'} 
             {...props}
-        >{discription}</label>
+        >{discription}{children}</label>
      );
 }
  

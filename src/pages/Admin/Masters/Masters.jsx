@@ -7,17 +7,22 @@ import MySpan from "../../../components/Span/MySpan";
 import './Masters.css'
 
 const Masters = () => {
-    const [masters, setMasters] = useState([])
-    const [cities, setCities] = useState([])
+
+    const [masters,setMasters] = useState([])
+    const [masterCities,setMasterCities] = useState([])
     const [error, setError] = useState('')
-    const [masterId, setMasterId] = useState('')
+    const [currMasterId, setCurrMasterId] = useState('')
+    const [isLoading, setIsLoading] = useState(true);
     const textError = 'Не может быть удален, используется в заказе'
+
 
     useEffect(()=>{
         mastersAPI.getMasters()
-        .then(response => {
-            return setMasters(response.masters), setCities(response.cities)
+        .then(res => {
+            setMasters(res.masters)
+            setMasterCities(res.cities)
         })
+        .then(()=>setIsLoading(false))
     },[])
 
     const deleteMaster = (id) => {
@@ -28,55 +33,46 @@ const Masters = () => {
                 setTimeout(() => {
                     setError('')
                 }, 1500);
-            } else {
+            } else{
                 setMasters(masters.filter((master) => master.id !== id))
-            }
-        }) 
-        setMasterId(id)
+            } 
+        })
+        setCurrMasterId(id)  
+       
     }
-
+  
+    if(isLoading) return <MySpan>Список мастеров загружается...</MySpan>
+    
     return ( 
         <div className="itemContent">
-            {!masters
-                ?   <MySpan>Список мастеров не доступен, нет ответа от сервера</MySpan>
-                :   <> 
-                        {masters.length
-                        ?   <div className="masters">
-                                    <ul className="list">
-                                                {masters.map(master => {
-                                                    return  <li  id={master.id} key={master.id} className='listItem'>
-                                                                {
-                                                                masterId === master.id ? <MyError>{error}</MyError> : ""
-                                                                }
-                                                                <div className="itemInfo">
-                                                                    <MySpan>Имя: {master.name},</MySpan>
-                                                                    <MySpan>Рейтинг: {master.rating},</MySpan>
-                                                                    
-                                                                    <MySpan>Город: {
-                                                                        cities.map(city => city.masters_id === master.id ? city.name + ', ' : "")
-                                                                    }</MySpan> 
-                                                                </div>
-                                                                <div className="buttons">
-                                                                    <MySmallButton to={`${master.id}`}>Изменить</MySmallButton>
-                                                                    <MySmallButton onClick={()=>deleteMaster(master.id)} >Удалить</MySmallButton>    
-                                                                </div>                                  
-                                                            </li>  
-                                                })}
-                                    </ul>
-                            </div>
-                        :   <div className="masters">
-                                <MySpan>Здесь пока что нету мастеров</MySpan>
-                            </div>
-                        }   
-                        <div className="addButtonWrapper">
-                            <MyLinkButton to='addMaster'>Добавить мастера</MyLinkButton>
-                        </div> 
-                    </>
-                                      
-            }  
-                        
+            <div className="masters">
+                <ul className="list">
+                    {masters.length === 0 
+                        ?   <MySpan>Список мастеров пуст</MySpan> 
+                        :   masters.map(master => {
+                                return  <li  id={master.id} key={master.id} className='listItem'>
+                                            {currMasterId === master.id ? <MyError>{error}</MyError> : ''}
+                                            <div className="itemInfo">
+                                                <MySpan>Имя: {master.name},</MySpan>
+                                                <MySpan>Рейтинг: {master.rating},</MySpan>
+                                                <MySpan>Город: {
+                                                    masterCities.map(city => city.masters_id === master.id ? city.name + ', ' : "")
+                                                }</MySpan> 
+                                            </div>
+                                            <div className="buttons">
+                                                <MySmallButton to={`${master.id}`}>Изменить</MySmallButton>
+                                                <MySmallButton onClick={()=>deleteMaster(master.id)} >Удалить</MySmallButton>    
+                                            </div>                                  
+                                        </li>  
+                                }) 
+                    }
+                </ul> 
+            </div>    
+            <div className="addButtonWrapper form">
+                <MyLinkButton to='addMaster'>Добавить мастера</MyLinkButton>
+            </div>        
         </div> 
     );
 }
- 
+
 export default Masters;

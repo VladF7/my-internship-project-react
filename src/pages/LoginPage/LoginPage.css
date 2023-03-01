@@ -1,32 +1,15 @@
-.userPage{
+.loginPage{
     display: flex;
     flex-direction: column;
     justify-content: center;
     padding: 20px 20px;
     margin-top: 20px;
     width: 600px;
-    height: 550px;
+    height: 350px;
     border-radius: 5px;
     background:linear-gradient(
         rgba(35,43,85,0.75),
         rgba(35,43,85,0.95)),
         no-repeat center center;
     box-shadow: 0.3em 0.3em 1em rgba(0,0,0,0.3);
-}
-.userForm{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    width: 100%;
-}
-.mastersArea{
-    height: 382px;
-    position: relative;
-    overflow: scroll;
-}
-.mastersFieldset{
-    border: none;
-}
-.masterItem{
-    display: flex;
 }

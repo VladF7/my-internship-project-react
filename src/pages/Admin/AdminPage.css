@@ -1,35 +1,54 @@
 .adminPage{
-    width: 100%;
     height: 100%;
+    width: 100%;
+    background:linear-gradient(
+        rgba(35,43,85,0.75),
+        rgba(35,43,85,0.95)),
+        no-repeat center center;
+    box-shadow: 0.3em 0.3em 1em rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
 }
 .navBar{
-    height: 10%;
+    height: 70px;
+    min-height: 70px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 .adminItem{
-    height: 90%;
+    height: calc(100% - 70px);
     padding: 20px 20px;  
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 .itemContent{
     height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     
 }
-/* .form{
-    padding: 10px 0px;   
-} */
+.form{
+    width: 560px
+}
 .errorContainer{
     position: relative;
 }
-/* .list{
-} */
+.list{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
 .listItem{
     display: flex;
     justify-content: space-between;
     padding: 10px 15px;
     border-bottom: 1px solid lightsalmon;
     position: relative;
+    width: 100%;
 }
 .itemInfo{
     display: flex;

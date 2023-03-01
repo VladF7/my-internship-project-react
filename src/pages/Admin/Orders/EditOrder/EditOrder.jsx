@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import citiesAPI from "../../../../api/citiesAPI";
+import mastersAPI from "../../../../api/mastersAPI";
 import ordersAPI from "../../../../api/ordersAPI";
-import userAPI from "../../../../api/userAPI";
 import MyBigButton from "../../../../components/Buttons/BigButton/MyBigButton";
 import MyCitySelector from "../../../../components/CitySelector/MyCitySelector";
 import MyDatePicker from "../../../../components/DatePicker/MyDatePicker";
 import MySelect from "../../../../components/Select/MySelect";
+import formatDate from "../../../../functions/formatDate";
 
 const EditOrder = () => {
     const [cities, setCities] = useState([])
@@ -28,8 +29,8 @@ const EditOrder = () => {
         .then(order=>{
             setCity(order.city)
             setSize(order.size)
-            setDate(getDateValue(order.start))
-            setEndOrderDate(getDateValue(order.end))
+            setDate(order.start)
+            setEndOrderDate(order.end)
             setMasters([
                 {id:order.master_id, name:order.master, rating:order.rating}
             ])
@@ -49,12 +50,13 @@ const EditOrder = () => {
     })
     
     
-    const getFreeMastersList = async(city,date,endDate) => {
+    const getFreeMastersList = async(id,city,date,endDate) => {
         const data = {}
+        data.id = id
         data.city = city
         data.start = date
         data.end = endDate
-        const masters = await userAPI.getFreeMasters(data)
+        const masters = await mastersAPI.getFreeMasters(data)
         setMasters(masters)
     }
     const getEndOrderDate = async(start,size) => {
@@ -65,57 +67,38 @@ const EditOrder = () => {
         setEndOrderDate(end)
     }
     const onBlurCity = (e) => {
-        if(!e.target.value){
+        if(!e){
             return setCityError('')
         }
         const cityArr = cities.map(c => c.name)
-        cityArr.includes(e.target.value) ? setCityError('') : setCityError('Вашего города нету в списке')
+        cityArr.includes(e) ? setCityError('') : setCityError('Вашего города нету в списке')
 
-        getFreeMastersList(e.target.value,date,endOrderDate)
+        getFreeMastersList(id,e,date,endOrderDate)
     }
     const onBlurDate = () => {
-        getFreeMastersList(city,date,endOrderDate)
+        getFreeMastersList(id,city,date,endOrderDate)
     }
     const onBlurSize = () => {
-        getFreeMastersList(city,date,endOrderDate)
+        getFreeMastersList(id,city,date,endOrderDate)
     }
     const onBlurMaster = () => {
         setMasterError('')
     }
     const changeSize = (e) => {
-        setSize(e.target.value)
-        getEndOrderDate(date, e.target.value)
+        setSize(e)
+        getEndOrderDate(date, e)
     }
-
-    const getDateValue = (d) => {
-        let date;
-        if(!d){
-          date = new Date();
-          date.setHours(date.getHours()+1)
-        } else {
-          date = new Date(d);
-        }
-        let dd = date.getDate();
-        let mm = date.getMonth() + 1; 
-        let yyyy = date.getFullYear();
-        let minutes = '00' 
-        let hours = date.getHours();
-        if(dd < 10) dd = '0' + dd;
-        if(mm < 10) mm = '0' + mm;
-        if(hours < 10) hours = '0' + hours;
-        return date = yyyy + '-' + mm + '-' + dd + 'T' + hours + ':' + minutes;
         
-      }
     const getCurrDateValue = (e) => {
-        let currDate = getDateValue(e.target.value)
+        let currDate = formatDate(e)
         setDate(currDate)
-        if(getDateValue() > currDate){
-            setDate(getDateValue())
+        if(formatDate() > currDate){
+            setDate(formatDate())
         }
-        getEndOrderDate(e.target.value, size)
+        getEndOrderDate(e, size)
     }
     const changeMaster = (e) => {
-        setMaster(e.target.value)
+        setMaster(e)
         setMasterError('')
     }
     const goBack = (e) => {
@@ -144,13 +127,13 @@ const EditOrder = () => {
                 cities={cities}
                 error = {cityError}
                 onChange={e=> setCity(e.target.value)}
-                onBlur = {e => onBlurCity(e)}
+                onBlur = {e => onBlurCity(e.target.value)}
             />
             <MyDatePicker
                 name = 'date'
                 value = {date}
-                min={getDateValue()}
-                onChange={e=>getCurrDateValue(e)}
+                min={formatDate()}
+                onChange={e=>getCurrDateValue(e.target.value)}
                 onBlur = {()=>onBlurDate()}
             />
             <MySelect
@@ -159,7 +142,7 @@ const EditOrder = () => {
                 name = 'size'
                 discription = {'Выберите размер часов'}
                 value = {size}
-                onChange={e =>{changeSize(e)}}
+                onChange={e =>{changeSize(e.target.value)}}
                 onBlur = {()=>onBlurSize()}
             />
             <MySelect
@@ -169,7 +152,7 @@ const EditOrder = () => {
                 discription = {'Выберите мастера'}
                 error = {masterError}
                 value = {master}
-                onChange={e =>changeMaster(e)}
+                onChange={e =>changeMaster(e.target.value)}
                 onBlur = {() =>onBlurMaster()}
             />
             <div className="myButtonWrapper">

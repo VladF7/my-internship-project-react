@@ -7,13 +7,16 @@ if(process.env.NODE_ENV === 'development'){
     baseURL = 'https://internship-backend.onrender.com'
 }
 
-export const request = async (url, method = 'GET', data = null) => {
+export const request = async (url, method = 'GET', data = null, token = null) => {
     try {
         const headers = {}
         let body 
         if(data){
             headers['Content-Type'] = 'application/json'
             body = JSON.stringify(data)
+        }
+        if(headers){
+            headers['Autorization'] = `Bearer ${token}`
         }
         const response = await fetch(
             baseURL + url, {

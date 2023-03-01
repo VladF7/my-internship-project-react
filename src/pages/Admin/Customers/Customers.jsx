@@ -9,11 +9,13 @@ const Customers = () => {
     const [customers, setCustomers] = useState([])
     const [error, setError] = useState('')
     const [customerId, setCustomerId] = useState('')
+    const [isLoading, setIsLoading] = useState(true);
     const textError = 'Не может быть удален, используется в заказе'
 
     useEffect(()=>{
         customersAPI.getCustomers()
         .then(customers => setCustomers(customers))
+        .then(()=>setIsLoading(false))
     },[])
 
     const deleteCustomer = (id) => {
@@ -30,32 +32,33 @@ const Customers = () => {
         })
         setCustomerId(id)     
     }
+
+    if(isLoading) return <MySpan>Список клиентов загружается...</MySpan>
+
     return ( 
         <div className="itemContent">
-            {!customers
-                ?   <MySpan>Список клиентов не доступен, нет ответа от сервера</MySpan>
-                :   customers.length 
-                    ?   <div className="customers">
+                        <div className="customers">
                             <ul className="list">
-                                {customers.map(customer => {
-                                    return  <li  id={customer.id} key={customer.id} className='listItem'>
-                                                {
-                                                customerId === customer.id ? <MyError>{error}</MyError> : ""
-                                                }
-                                                <div className="itemInfo">
-                                                    <MySpan>Имя: {customer.name},</MySpan>
-                                                    <MySpan>Email: {customer.email}</MySpan>
-                                                </div>
-                                                <div className="buttons">
-                                                    <MySmallButton to={`${customer.id}`}>Изменить</MySmallButton>
-                                                    <MySmallButton onClick={()=>deleteCustomer(customer.id)}>Удалить</MySmallButton>    
-                                                </div>                                  
-                                            </li>  
-                                })}
+                                {   customers.length === 0 
+                                        ?   <MySpan>Список клиентов пуст</MySpan>
+                                        :   customers.map(customer => {
+                                                return  <li  id={customer.id} key={customer.id} className='listItem'>
+                                                            {
+                                                            customerId === customer.id ? <MyError>{error}</MyError> : ""
+                                                            }
+                                                            <div className="itemInfo">
+                                                                <MySpan>Имя: {customer.name},</MySpan>
+                                                                <MySpan>Email: {customer.email}</MySpan>
+                                                            </div>
+                                                            <div className="buttons">
+                                                                <MySmallButton onClick={()=>deleteCustomer(customer.id)}>Удалить</MySmallButton>    
+                                                            </div>                                  
+                                                        </li>  
+                                            })
+                                    
+                                }
                             </ul>
                         </div>
-                    :   <MySpan>Здесь пока что нету клиентов</MySpan>
-            }
         </div>
     );
 }
