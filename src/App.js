@@ -32,7 +32,6 @@ function App() {
     } else{
       dispatch(actionLoaded())
     }
-    sessionStorage.clear()
   },[])
 
   const router = createBrowserRouter(createRoutesFromElements(
