@@ -13,6 +13,7 @@ const MyDatePicker = ({...props}) => {
                 id="data" 
                 type="datetime-local" 
                 name="date"
+                step = '3600'
                 {...props}
             />
         </div>
