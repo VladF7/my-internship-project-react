@@ -16,6 +16,7 @@ const UserForm = () => {
   useEffect(()=>{
     citiesAPI.getCities()
     .then(cities => setCities(cities))
+    .then(()=> sessionStorage.clear())
 },[])
 
   const navigate = useNavigate()
