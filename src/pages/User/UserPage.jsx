@@ -8,6 +8,7 @@ import {createUser} from '../../services/user';
 import MyBigButton from '../../components/Buttons/BigButton/MyBigButton';
 import citiesAPI from '../../api/citiesAPI';
 import DatePicker from '../../components/DatePicker/DatePicker';
+import { parse } from 'date-fns';
 
 const UserForm = () => {
   const [cities, setCities] = useState([])
@@ -25,7 +26,7 @@ const UserForm = () => {
   const [name,setName] = useState(sessionStorage.getItem('name') || '')
   const [size,setSize] = useState(sessionStorage.getItem('size') || '')
   const [city, setCity] = useState(sessionStorage.getItem('city') || '')
-  const [date, setDate] = useState(sessionStorage.getItem('start') ? new Date(sessionStorage.getItem('start')) : '')
+  const [date, setDate] = useState(sessionStorage.getItem('start') ? parse(sessionStorage.getItem('start'),'MM.dd.yyyy, HH:mm', new Date()) : '')
 
   const [emailError,setEmailError] = useState('')
   const [nameError,setNameError] = useState('')

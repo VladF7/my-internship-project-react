@@ -1,4 +1,4 @@
-import { format } from "date-fns";
+import { format, parse } from "date-fns";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import citiesAPI from "../../../../api/citiesAPI";
@@ -38,10 +38,9 @@ const EditOrder = () => {
     useEffect(()=>{
         ordersAPI.getOrderById(id)
         .then(order=>{
-            console.log(order);
             setCity(order.city)
             setSize(order.size)
-            setDate(new Date(order.start))
+            setDate(parse(order.start,'MM.dd.yyyy, HH:mm',new Date()))
             setEndOrderDate(order.end)
             setMaster(order.master_id)
         })
@@ -49,7 +48,6 @@ const EditOrder = () => {
         citiesAPI.getCities()
         .then(cities => setCities(cities))
     },[id])
-    console.log(date);
     useEffect(()=>{
         if(!isLoading){
             getFreeMastersList(id,city,date,endOrderDate)
