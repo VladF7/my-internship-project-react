@@ -26,7 +26,7 @@ const Orders = () => {
         setOrders(orders.filter((order) => order.id !== id))
     }
     const goToEdit = (id,start) => {
-            if(format(new Date(), 'MM.dd.yyyy, HH:mm') > start){
+            if(format(new Date(), 'yyyy.MM.dd, HH:mm') > start){
                 setEditError(textError)
                 setTimeout(() => {
                     setEditError('')
@@ -59,7 +59,7 @@ const Orders = () => {
                                             <MySpan>Конец заказа: {order.end}</MySpan>
                                         </div>
                                         <div className="buttons">
-                                            {format(new Date(), 'MM.dd.yyyy, HH:mm') < order.start 
+                                            {format(new Date(), 'yyyy.MM.dd, HH:mm') < order.start 
                                             ? <MySmallButton onClick={()=>goToEdit(order.id,order.start)} >Изменить</MySmallButton>
                                             : ''}
                                             <MySmallButton onClick={()=>delOrder(order.id)}>Удалить</MySmallButton>    

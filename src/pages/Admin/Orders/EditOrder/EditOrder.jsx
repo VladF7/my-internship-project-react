@@ -40,7 +40,7 @@ const EditOrder = () => {
         .then(order=>{
             setCity(order.city)
             setSize(order.size)
-            setDate(parse(order.start,'MM.dd.yyyy, HH:mm',new Date()))
+            setDate(parse(order.start,'yyyy.MM.dd, HH:mm',new Date()))
             setEndOrderDate(order.end)
             setMaster(order.master_id)
         })

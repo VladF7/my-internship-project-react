@@ -35,7 +35,7 @@ const DatePicker = ({value, onChange, error, ...props}) => {
             autoComplete="false"
             className="myInput"
             locale={'ru'}
-            dateFormat = 'MM.dd.yyyy, HH:00'
+            dateFormat = 'yyyy.MM.dd, HH:00'
             placeholderText="Выберите время и дату"
             timeCaption = "Время"
 
