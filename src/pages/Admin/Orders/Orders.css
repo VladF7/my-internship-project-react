@@ -1,5 +1,5 @@
 .orders{
     height: 100%;   
-    overflow: scroll;
+    overflow: auto;
     width: 100%;
 }

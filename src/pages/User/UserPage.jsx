@@ -3,12 +3,11 @@ import { useEffect, useState } from 'react';
 import MyInputItem from '../../components/InputItem/MyInputItem';
 import MySizeSelector from '../../components/SizeSelector/MySizeSelector';
 import MyCitySelector from '../../components/CitySelector/MyCitySelector';
-import MyDatePicker from '../../components/DatePicker/MyDatePicker';
 import { useNavigate } from 'react-router-dom';
 import {createUser} from '../../services/user';
 import MyBigButton from '../../components/Buttons/BigButton/MyBigButton';
-import formatDate from '../../functions/formatDate';
 import citiesAPI from '../../api/citiesAPI';
+import DatePicker from '../../components/DatePicker/DatePicker';
 
 const UserForm = () => {
   const [cities, setCities] = useState([])
@@ -24,9 +23,9 @@ const UserForm = () => {
 
   const [email,setEmail] = useState(sessionStorage.getItem('email') || '')
   const [name,setName] = useState(sessionStorage.getItem('name') || '')
-  const [size,setSize] = useState('')
+  const [size,setSize] = useState(sessionStorage.getItem('size') || '')
   const [city, setCity] = useState(sessionStorage.getItem('city') || '')
-  const [date, setDate] = useState(sessionStorage.getItem('start') || '')
+  const [date, setDate] = useState(sessionStorage.getItem('start') ? new Date(sessionStorage.getItem('start')) : '')
 
   const [emailError,setEmailError] = useState('')
   const [nameError,setNameError] = useState('')
@@ -62,17 +61,12 @@ const UserForm = () => {
     const cityArr = cities.map(c => c.name)
     cityArr.includes(e) ? setCityError('') : setCityError('Вашего города нету в списке')
   }
-  const getSize = (e) => {
+  const changeSize = (e) => {
     setSizeError('')
     setSize(e)
   }
-
-  const getCurrDateValue = (e) => {
-    let currDate = formatDate(e) 
-    setDate(currDate)
-    if(formatDate() > currDate){
-        setDate(formatDate())
-    }
+  const changeDate = (date) => {
+    setDate(date)
     setDateError('')
   }
   const getSubmit = async(e) => {  
@@ -103,10 +97,9 @@ const UserForm = () => {
       navigate('chooseMaster')
     }
   }
-
     return (
       <div className='userPage'>
-             <form className={'userForm'} onSubmit={e=>getSubmit(e)}>
+             <form className={'userForm'} onSubmit={e=>getSubmit(e)} >
                 <MyInputItem
                   name = 'name' 
                   value = {name}
@@ -125,7 +118,7 @@ const UserForm = () => {
                 />
                 <MySizeSelector 
                   name='size'
-                  onChange = {e => getSize(e.target.value)}
+                  onChange = {e => changeSize(e.target.value)}
                   error = {sizeError}
                   value = {size}
                 />
@@ -138,13 +131,11 @@ const UserForm = () => {
                   onChange = {e=> setCity(e.target.value)}
                   onBlur = {e => onBlurCity(e.target.value)}
                 />
-                <MyDatePicker
+                <DatePicker
                   name = 'date'
                   value = {date}
                   error = {dateError}
-                  min={formatDate()}
-                  onChange={e=>getCurrDateValue(e.target.value)}
-                  onBlur = {()=>setDateError('')}
+                  onChange={(date)=>changeDate(date)}
                 />
                 <div className='myButtonWrapper'>
                   <MyBigButton>Далее</MyBigButton>  

@@ -3,10 +3,19 @@ import MySmallButton from "../../../components/Buttons/SmalButton/MySmallButton"
 import ordersAPI from "../../../api/ordersAPI";
 import './Orders.css'
 import MySpan from "../../../components/Span/MySpan";
+import { useNavigate } from "react-router-dom";
+import MyError from "../../../components/Error/MyError";
+import { format } from "date-fns";
 
 const Orders = () => {
     const [orders, setOrders] = useState([])
     const [isLoading, setIsLoading] = useState(true)
+    const [editError,setEditError] = useState('')
+    const [currOrderId, setCurrOrderId] = useState('')
+    const navigate = useNavigate()
+    const textError = 'Не может быть изменен, этот заказ уже был начат'
+
+
     useEffect(()=>{
         ordersAPI.getOrders()
         .then(orders => setOrders(orders))
@@ -16,9 +25,20 @@ const Orders = () => {
         ordersAPI.delOrder(id)
         setOrders(orders.filter((order) => order.id !== id))
     }
-
+    const goToEdit = (id,start) => {
+            if(format(new Date(), 'MM.dd.yyyy, HH:mm') > start){
+                setEditError(textError)
+                setTimeout(() => {
+                    setEditError('')
+                }, 1500);
+            } else {
+                navigate(`${id}`)
+            }
+        setCurrOrderId(id)
+    }
+   
     if(isLoading === true) return <MySpan>Список заказов загружается...</MySpan> 
-    
+
     return ( 
         <div className="itemContent">
            <div className="orders">
@@ -27,6 +47,7 @@ const Orders = () => {
                         ?   <MySpan>Список заказов пуст</MySpan>
                         :   orders.map(order => {
                             return  <li  id={order.id} key={order.id} className='listItem'>
+                                        {currOrderId === order.id ? <MyError>{editError}</MyError> : ''}
                                         <div className="itemInfo">
                                             <MySpan>Имя: {order.name},</MySpan>
                                             <MySpan>Email: {order.email},</MySpan>
@@ -38,12 +59,14 @@ const Orders = () => {
                                             <MySpan>Конец заказа: {order.end}</MySpan>
                                         </div>
                                         <div className="buttons">
-                                            <MySmallButton to={`${order.id}`}>Изменить</MySmallButton>
+                                            {format(new Date(), 'MM.dd.yyyy, HH:mm') < order.start 
+                                            ? <MySmallButton onClick={()=>goToEdit(order.id,order.start)} >Изменить</MySmallButton>
+                                            : ''}
                                             <MySmallButton onClick={()=>delOrder(order.id)}>Удалить</MySmallButton>    
                                         </div>                                  
                                     </li>  
-                        })}
-                    
+                        })
+                    }   
                 </ul>
             </div>
         </div>

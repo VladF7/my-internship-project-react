@@ -21,6 +21,7 @@ const MySizeSelector = ({error, ...props}) => {
                                     id={option.id}
                                     name="size" 
                                     value={option.value}
+                                    defaultChecked = {option.value === props.value ? true : false}
                                     />
                                 <label 
                                     className={'label'} 

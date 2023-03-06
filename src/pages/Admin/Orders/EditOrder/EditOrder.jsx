@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import citiesAPI from "../../../../api/citiesAPI";
@@ -5,9 +6,8 @@ import mastersAPI from "../../../../api/mastersAPI";
 import ordersAPI from "../../../../api/ordersAPI";
 import MyBigButton from "../../../../components/Buttons/BigButton/MyBigButton";
 import MyCitySelector from "../../../../components/CitySelector/MyCitySelector";
-import MyDatePicker from "../../../../components/DatePicker/MyDatePicker";
+import DatePicker from "../../../../components/DatePicker/DatePicker";
 import MySelect from "../../../../components/Select/MySelect";
-import formatDate from "../../../../functions/formatDate";
 
 const EditOrder = () => {
     const [cities, setCities] = useState([])
@@ -21,24 +21,6 @@ const EditOrder = () => {
     const [cityError, setCityError] = useState('')
     const [masterError, setMasterError] = useState('')
 
-    const prevPage = useNavigate()
-    const {id} = useParams()
-
-    useEffect(()=>{
-        ordersAPI.getOrderById(id)
-        .then(order=>{
-            setCity(order.city)
-            setSize(order.size)
-            setDate(order.start)
-            setEndOrderDate(order.end)
-            setMasters([
-                {id:order.master_id, name:order.master, rating:order.rating}
-            ])
-        })
-        citiesAPI.getCities()
-        .then(cities => setCities(cities))
-    },[id])
-
     const requiredField = 'Поле обязательное для заполнения'
     const sizeOptions = [
         {value: 'Маленькие', label: 'Маленькие'},
@@ -48,38 +30,52 @@ const EditOrder = () => {
     const mastersOptions = masters.map(master => {
         return {value: master.id, label: `Имя: ${master.name}, рейтинг: ${master.rating}`}
     })
-    
+
+    const prevPage = useNavigate()
+    const {id} = useParams()
+
+    useEffect(()=>{
+        ordersAPI.getOrderById(id)
+        .then(order=>{
+            setCity(order.city)
+            setSize(order.size)
+            setDate(new Date(order.start))
+            setEndOrderDate(order.end)
+            setMaster(order.master_id)
+        })
+        citiesAPI.getCities()
+        .then(cities => setCities(cities))
+    },[id])
+    useEffect(()=>{
+        getFreeMastersList(id,city,date,endOrderDate)
+    },[endOrderDate])
+
     
     const getFreeMastersList = async(id,city,date,endDate) => {
-        const data = {}
-        data.id = id
-        data.city = city
-        data.start = date
-        data.end = endDate
-        const masters = await mastersAPI.getFreeMasters(data)
+        const order = {}
+        order.id = id
+        order.city = city
+        order.start = format(new Date(date), 'MM.dd.yyyy, HH:mm')
+        order.end = endDate
+        const masters = await mastersAPI.getFreeMasters(order)
         setMasters(masters)
+        return masters
     }
     const getEndOrderDate = async(start,size) => {
         const data = {}
-        data.start = start
+        data.start = format(new Date(start), 'MM.dd.yyyy, HH:mm')
         data.size = size
         const end = await ordersAPI.getOrderEndDate(data)
         setEndOrderDate(end)
+        return end
     }
-    const onBlurCity = (e) => {
-        if(!e){
+    const onBlurCity = (newCity) => {
+        if(!newCity){
             return setCityError('')
         }
-        const cityArr = cities.map(c => c.name)
-        cityArr.includes(e) ? setCityError('') : setCityError('Вашего города нету в списке')
-
-        getFreeMastersList(id,e,date,endOrderDate)
-    }
-    const onBlurDate = () => {
-        getFreeMastersList(id,city,date,endOrderDate)
-    }
-    const onBlurSize = () => {
-        getFreeMastersList(id,city,date,endOrderDate)
+        const cityArr = cities.map(city => city.name)
+        cityArr.includes(newCity) ? setCityError('') : setCityError('Вашего города нету в списке')
+        getFreeMastersList(id,newCity,date,endOrderDate)
     }
     const onBlurMaster = () => {
         setMasterError('')
@@ -88,15 +84,11 @@ const EditOrder = () => {
         setSize(e)
         getEndOrderDate(date, e)
     }
-        
-    const getCurrDateValue = (e) => {
-        let currDate = formatDate(e)
-        setDate(currDate)
-        if(formatDate() > currDate){
-            setDate(formatDate())
-        }
-        getEndOrderDate(e, size)
+    const changeDate = (date) => {
+        setDate(date)
+        getEndOrderDate(date, size)
     }
+
     const changeMaster = (e) => {
         setMaster(e)
         setMasterError('')
@@ -129,12 +121,10 @@ const EditOrder = () => {
                 onChange={e=> setCity(e.target.value)}
                 onBlur = {e => onBlurCity(e.target.value)}
             />
-            <MyDatePicker
+            <DatePicker
                 name = 'date'
                 value = {date}
-                min={formatDate()}
-                onChange={e=>getCurrDateValue(e.target.value)}
-                onBlur = {()=>onBlurDate()}
+                onChange={date=>changeDate(date)}
             />
             <MySelect
                 options = {sizeOptions}
@@ -143,7 +133,6 @@ const EditOrder = () => {
                 discription = {'Выберите размер часов'}
                 value = {size}
                 onChange={e =>{changeSize(e.target.value)}}
-                onBlur = {()=>onBlurSize()}
             />
             <MySelect
                 options = {mastersOptions}

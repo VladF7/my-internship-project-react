@@ -22,7 +22,7 @@
 .mastersArea{
     height: 382px;
     position: relative;
-    overflow: scroll;
+    overflow: auto;
 }
 .mastersFieldset{
     border: none;

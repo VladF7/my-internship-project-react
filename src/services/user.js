@@ -14,9 +14,7 @@ export const createUser = async (e) => {
     sessionStorage.setItem('size', userForm.size)
     sessionStorage.setItem('city', userForm.city)
     sessionStorage.setItem('start', userForm.start)
-
     const end = await ordersAPI.getOrderEndDate(sessionStorage)
-
     sessionStorage.setItem('end', end)  
     
     return end

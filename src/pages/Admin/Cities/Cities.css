@@ -2,7 +2,7 @@
     height: 90%;  
     min-height: 252px;
     width: 100%;
-    overflow: scroll;
+    overflow: auto;
     margin-bottom: 20px;
     
 }
