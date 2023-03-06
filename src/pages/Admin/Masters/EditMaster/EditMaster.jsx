@@ -6,8 +6,10 @@ import mastersAPI from "../../../../api/mastersAPI";
 import MyBigButton from "../../../../components/Buttons/BigButton/MyBigButton";
 import MyInputItem from "../../../../components/InputItem/MyInputItem";
 import MySelect from "../../../../components/Select/MySelect";
+import MySpan from "../../../../components/Span/MySpan";
 
 const EditMaster = () => {
+    const [isLoading, setIsLoadnig] = useState(true)
 
     const {id} = useParams()
     useEffect(()=>{
@@ -19,6 +21,7 @@ const EditMaster = () => {
                 return {value:city.id,label:city.name}
             }))
         })
+        .then(()=>setIsLoadnig(false))
     },[id])
 
     const loadOptions = async() => {
@@ -85,6 +88,11 @@ const EditMaster = () => {
         prevPage(-1)
         await mastersAPI.getMasters()
     }
+
+    if(isLoading){
+        return <MySpan>Данные загружаються, подождите...</MySpan>
+    }
+
     return ( 
         <form onSubmit={e=>editMaster(e)} className={'form'} >
             <MyInputItem

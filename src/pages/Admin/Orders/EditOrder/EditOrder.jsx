@@ -8,8 +8,10 @@ import MyBigButton from "../../../../components/Buttons/BigButton/MyBigButton";
 import MyCitySelector from "../../../../components/CitySelector/MyCitySelector";
 import DatePicker from "../../../../components/DatePicker/DatePicker";
 import MySelect from "../../../../components/Select/MySelect";
+import MySpan from '../../../../components/Span/MySpan'
 
 const EditOrder = () => {
+    const [isLoading, setIsLoadnig] = useState(true)
     const [cities, setCities] = useState([])
     const [masters, setMasters] = useState([])
     const [master, setMaster] = useState('')
@@ -30,7 +32,6 @@ const EditOrder = () => {
     const mastersOptions = masters.map(master => {
         return {value: master.id, label: `Имя: ${master.name}, рейтинг: ${master.rating}`}
     })
-
     const prevPage = useNavigate()
     const {id} = useParams()
 
@@ -44,12 +45,15 @@ const EditOrder = () => {
             setEndOrderDate(order.end)
             setMaster(order.master_id)
         })
+        .then(()=> setIsLoadnig(false))
         citiesAPI.getCities()
         .then(cities => setCities(cities))
     },[id])
     console.log(date);
     useEffect(()=>{
-        getFreeMastersList(id,city,date,endOrderDate)
+        if(!isLoading){
+            getFreeMastersList(id,city,date,endOrderDate)
+        }
     },[endOrderDate])
    
     
@@ -114,6 +118,11 @@ const EditOrder = () => {
         prevPage(-1)
         await ordersAPI.getOrders()
     }
+
+    if(isLoading){
+        return <MySpan>Данные загружаються, подождите...</MySpan>
+    }
+
     return ( 
         <form onSubmit={e=>editOrder(e)} className={'form'} >
             <MyCitySelector
