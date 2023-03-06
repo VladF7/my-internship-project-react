@@ -37,6 +37,7 @@ const EditOrder = () => {
     useEffect(()=>{
         ordersAPI.getOrderById(id)
         .then(order=>{
+            console.log(order);
             setCity(order.city)
             setSize(order.size)
             setDate(new Date(order.start))
@@ -46,10 +47,11 @@ const EditOrder = () => {
         citiesAPI.getCities()
         .then(cities => setCities(cities))
     },[id])
+    console.log(date);
     useEffect(()=>{
         getFreeMastersList(id,city,date,endOrderDate)
     },[endOrderDate])
-
+   
     
     const getFreeMastersList = async(id,city,date,endDate) => {
         const order = {}
