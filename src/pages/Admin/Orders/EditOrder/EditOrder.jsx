@@ -59,7 +59,7 @@ const EditOrder = () => {
         const order = {}
         order.id = id
         order.city = city
-        order.start = format(new Date(date), 'MM.dd.yyyy, HH:mm')
+        order.start = format(new Date(date), 'yyyy.MM.dd, HH:mm')
         order.end = endDate
         const masters = await mastersAPI.getFreeMasters(order)
         setMasters(masters)
@@ -67,7 +67,7 @@ const EditOrder = () => {
     }
     const getEndOrderDate = async(start,size) => {
         const data = {}
-        data.start = format(new Date(start), 'MM.dd.yyyy, HH:mm')
+        data.start = format(new Date(start), 'yyyy.MM.dd, HH:mm')
         data.size = size
         const end = await ordersAPI.getOrderEndDate(data)
         setEndOrderDate(end)
