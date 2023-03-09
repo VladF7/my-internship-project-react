@@ -6,11 +6,11 @@ class MastersAPI {
       return response
     }
     async getMasters () {
-      const response = await request('/api/masters')
+      const response = await request('/api/masters', 'GET', null, localStorage.getItem('token'))
       return response
     }
     async getMasterById (id){
-      const response = await request(`/api/masters/${id}`)
+      const response = await request(`/api/masters/${id}`, 'GET', null, localStorage.getItem('token'))
       return response
     }
     async addMaster (e) {
@@ -21,7 +21,7 @@ class MastersAPI {
           cities: formData.getAll('cities'),
       }
 
-      const response = await request('/api/masters', 'POST', newMaster) 
+      const response = await request('/api/masters', 'POST', newMaster, localStorage.getItem('token')) 
       return response
     }
     async editMaster (e,id) {
@@ -31,11 +31,11 @@ class MastersAPI {
           rating: formData.get('rating'),
           cities: formData.getAll('cities'),
       }
-      const response = await request(`/api/masters/${id}`, 'PUT', editedMaster) 
+      const response = await request(`/api/masters/${id}`, 'PUT', editedMaster, localStorage.getItem('token')) 
       return response
     }
     async delMaster (id) {
-        const response = await request(`/api/masters/${id}`, 'DELETE') 
+        const response = await request(`/api/masters/${id}`, 'DELETE', null, localStorage.getItem('token')) 
         return response
     }
 }

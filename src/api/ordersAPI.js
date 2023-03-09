@@ -11,15 +11,15 @@ import { request } from "../api/requestAPI";
         return response
       }
       async getOrders () {
-        const response = await request('/api/orders')
+        const response = await request('/api/orders', 'GET', null, localStorage.getItem('token'))
         return response
       }
       async getOrderById (id){
-        const response = await request(`/api/orders/${id}`)
+        const response = await request(`/api/orders/${id}`, 'GET', null, localStorage.getItem('token'))
         return response
       }
       async getOrderEndDate (date) {
-        const response = await request('/api/orders', 'POST', date)
+        const response = await request('/api/orders', 'POST', date, localStorage.getItem('token'))
         return response
       }
       async editOrder (e,id,endOrderDate) {
@@ -31,11 +31,11 @@ import { request } from "../api/requestAPI";
             start: formData.get('date'),
             end: endOrderDate,
         }
-        const response = await request(`/api/orders/${id}`, 'PUT', editedOrder) 
+        const response = await request(`/api/orders/${id}`, 'PUT', editedOrder, localStorage.getItem('token')) 
         return response
       }
       async delOrder (id) {
-        const response = await request(`/api/orders/${id}`, 'DELETE') 
+        const response = await request(`/api/orders/${id}`, 'DELETE', null, localStorage.getItem('token')) 
         return response
       }
   }
