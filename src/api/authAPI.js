@@ -1,4 +1,5 @@
 import { request } from "./requestAPI";
+const token = localStorage.getItem('token')
 
 class UserAPI {
     async login (authForm) { 
@@ -13,7 +14,7 @@ class UserAPI {
     }
     async auth () { 
       try {
-        const response = await request(`/api/auth/auth`, 'GET', null, localStorage.getItem('token')) 
+        const response = await request(`/api/auth/auth`, 'GET', null, token) 
         return response
       } catch (error) {
         localStorage.removeItem('token')
