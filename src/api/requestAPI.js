@@ -15,8 +15,8 @@ export const request = async (url, method = 'GET', data = null, token = null) =>
             headers['Content-Type'] = 'application/json'
             body = JSON.stringify(data)
         }
-        if(headers){
-            headers['Autorization'] = `Bearer ${token}`
+        if(token){
+            headers['Autorization'] = `Bearer ${token}` 
         }
         const response = await fetch(
             baseURL + url, {
