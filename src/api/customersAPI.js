@@ -1,13 +1,12 @@
 import { request } from "../api/requestAPI";
-const token = localStorage.getItem('token')
 
 class CustomersAPI {
     async getCustomers () {
-      const response = await request('/api/customers','GET', null, token)
+      const response = await request('/api/customers','GET', null, localStorage.getItem('token'))
       return response
     }
     async getCustomerById (id){
-      const response = await request(`/api/customers/${id}`,'GET', null, token)
+      const response = await request(`/api/customers/${id}`,'GET', null, localStorage.getItem('token'))
       return response
     }
     async editCustomer (e,id) {
@@ -16,11 +15,11 @@ class CustomersAPI {
           name: formData.get('name'),
           email: formData.get('email'),
       }
-      const response = await request(`/api/customers/${id}`, 'PUT', editedCustomer, token) 
+      const response = await request(`/api/customers/${id}`, 'PUT', editedCustomer, localStorage.getItem('token')) 
       return response
     }
     async delCustomer (id) {
-        const response = await request(`/api/customers/${id}`, 'DELETE', null, token) 
+        const response = await request(`/api/customers/${id}`, 'DELETE', null, localStorage.getItem('token')) 
         return response
     }
 }

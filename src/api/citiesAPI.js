@@ -1,5 +1,4 @@
 import { request } from "./requestAPI";
-const token = localStorage.getItem('token')
 
 class CitiesAPI {
     async getCities (){
@@ -11,11 +10,11 @@ class CitiesAPI {
       const newCity = {
         name: formData.get('city'),
       }
-      const response = await request('/api/cities', 'POST', newCity, token) 
+      const response = await request('/api/cities', 'POST', newCity, localStorage.getItem('token')) 
       return response
     }
     async delCity(id) {
-      const response = await request(`/api/cities/${id}`, 'DELETE', null, token) 
+      const response = await request(`/api/cities/${id}`, 'DELETE', null, localStorage.getItem('token')) 
       return response
     }
 }
