@@ -46,7 +46,6 @@ const Cities = () => {
         })
 
         setCity('')
-        ordersAPI.getOrders()
     }
 
     const delCity = (id) => {

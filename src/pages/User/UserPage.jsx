@@ -26,7 +26,7 @@ const UserForm = () => {
   const [name,setName] = useState(sessionStorage.getItem('name') || '')
   const [size,setSize] = useState(sessionStorage.getItem('size') || '')
   const [city, setCity] = useState(sessionStorage.getItem('city') || '')
-  const [date, setDate] = useState(sessionStorage.getItem('start') ? parse(sessionStorage.getItem('start'),'yyyy.MM.dd, HH:mm', new Date()) : '')
+  const [date, setDate] = useState(sessionStorage.getItem('startTime') ? parse(sessionStorage.getItem('startTime'),'yyyy.MM.dd, HH:mm', new Date()) : '')
 
   const [emailError,setEmailError] = useState('')
   const [nameError,setNameError] = useState('')

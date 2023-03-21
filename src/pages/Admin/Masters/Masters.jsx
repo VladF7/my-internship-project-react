@@ -56,7 +56,7 @@ const Masters = () => {
                                                 <MySpan>Имя: {master.name},</MySpan>
                                                 <MySpan>Рейтинг: {master.rating},</MySpan>
                                                 <MySpan>Город: {
-                                                    masterCities.map(city => city.masters_id === master.id ? city.name + ', ' : "")
+                                                    masterCities.map(city => city.masterId === master.id ? city.name + ', ' : "")
                                                 }</MySpan> 
                                             </div>
                                             <div className="buttons">
