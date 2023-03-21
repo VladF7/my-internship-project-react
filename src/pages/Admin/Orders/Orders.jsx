@@ -52,15 +52,15 @@ const Orders = () => {
                                             <MySpan>Имя: {order.name},</MySpan>
                                             <MySpan>Email: {order.email},</MySpan>
                                             <MySpan>Pазмер часов: {order.size},</MySpan>
-                                            <MySpan>Время ремонта: {order.time},</MySpan>
+                                            <MySpan>Время ремонта: {order.timeToFix},</MySpan>
                                             <MySpan>Имя мастера: {order.master},</MySpan>
                                             <MySpan>Город: {order.city},</MySpan>
-                                            <MySpan>Начало заказа: {order.start},</MySpan>
-                                            <MySpan>Конец заказа: {order.end}</MySpan>
+                                            <MySpan>Начало заказа: {order.startTime},</MySpan>
+                                            <MySpan>Конец заказа: {order.endTime}</MySpan>
                                         </div>
                                         <div className="buttons">
-                                            {format(new Date(), 'yyyy.MM.dd, HH:mm') < order.start 
-                                            ? <MySmallButton onClick={()=>goToEdit(order.id,order.start)} >Изменить</MySmallButton>
+                                            {format(new Date(), 'yyyy.MM.dd, HH:mm') < order.startTime 
+                                            ? <MySmallButton onClick={()=>goToEdit(order.id,order.startTime)} >Изменить</MySmallButton>
                                             : ''}
                                             <MySmallButton onClick={()=>delOrder(order.id)}>Удалить</MySmallButton>    
                                         </div>                                  

@@ -18,7 +18,7 @@ const EditOrder = () => {
     const [size, setSize] = useState('')
     const [city, setCity] = useState('')
     const [date, setDate] = useState('')
-    const [endOrderDate, setEndOrderDate] = useState('')
+    const [endTime, setEndTime] = useState('')
 
     const [cityError, setCityError] = useState('')
     const [masterError, setMasterError] = useState('')
@@ -40,9 +40,9 @@ const EditOrder = () => {
         .then(order=>{
             setCity(order.city)
             setSize(order.size)
-            setDate(parse(order.start,'yyyy.MM.dd, HH:mm',new Date()))
-            setEndOrderDate(order.end)
-            setMaster(order.master_id)
+            setDate(parse(order.startTime,'yyyy.MM.dd, HH:mm',new Date()))
+            setEndTime(order.endTime)
+            setMaster(order.masterId)
         })
         .then(()=> setIsLoadnig(false))
         citiesAPI.getCities()
@@ -50,28 +50,28 @@ const EditOrder = () => {
     },[id])
     useEffect(()=>{
         if(!isLoading){
-            getFreeMastersList(id,city,date,endOrderDate)
+            getFreeMastersList(id,city,date,endTime)
         }
-    },[endOrderDate])
+    },[endTime])
    
     
-    const getFreeMastersList = async(id,city,date,endDate) => {
+    const getFreeMastersList = async(id,city,startTime,endTime) => {
         const order = {}
         order.id = id
         order.city = city
-        order.start = format(new Date(date), 'yyyy.MM.dd, HH:mm')
-        order.end = endDate
+        order.startTime = format(new Date(startTime), 'yyyy.MM.dd, HH:mm')
+        order.endTime = endTime
         const masters = await mastersAPI.getFreeMasters(order)
         setMasters(masters)
         return masters
     }
-    const getEndOrderDate = async(start,size) => {
+    const getEndOrderTime = async(start,size) => {
         const data = {}
-        data.start = format(new Date(start), 'yyyy.MM.dd, HH:mm')
+        data.startTime = format(new Date(start), 'yyyy.MM.dd, HH:mm')
         data.size = size
-        const end = await ordersAPI.getOrderEndDate(data)
-        setEndOrderDate(end)
-        return end
+        const endTime = await ordersAPI.getOrderEndDate(data)
+        setEndTime(endTime)
+        return endTime
     }
     const onBlurCity = (newCity) => {
         if(!newCity){
@@ -79,18 +79,18 @@ const EditOrder = () => {
         }
         const cityArr = cities.map(city => city.name)
         cityArr.includes(newCity) ? setCityError('') : setCityError('Вашего города нету в списке')
-        getFreeMastersList(id,newCity,date,endOrderDate)
+        getFreeMastersList(id,newCity,date,endTime)
     }
     const onBlurMaster = () => {
         setMasterError('')
     }
     const changeSize = (e) => {
         setSize(e)
-        getEndOrderDate(date, e)
+        getEndOrderTime(date, e)
     }
     const changeDate = (date) => {
         setDate(date)
-        getEndOrderDate(date, size)
+        getEndOrderTime(date, size)
     }
 
     const changeMaster = (e) => {
@@ -112,7 +112,7 @@ const EditOrder = () => {
             } 
             return
         }
-        await ordersAPI.editOrder(e,id,endOrderDate)
+        await ordersAPI.editOrder(e,id,endTime)
         prevPage(-1)
         await ordersAPI.getOrders()
     }
