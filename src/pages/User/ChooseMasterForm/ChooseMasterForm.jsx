@@ -22,7 +22,7 @@ const ChooseMasterForm = () => {
       .then(()=> setIsLoading(false))
     },[])
 
-    function onSubmit(e) {
+    const onSubmit = (e) => {
       e.preventDefault()
       if(!masterId){
         setMasterIdError('Обязательно укажите мастера')
@@ -32,7 +32,7 @@ const ChooseMasterForm = () => {
         navigate('/successOrder',{replace: true})
       }
     }
-    function getMasterId(e) {
+    const getMasterId = (e) => {
       setMasterId(e.target.value)
       setMasterIdError('')
     }

@@ -22,7 +22,7 @@ import { actionLoaded } from './reducers/loadReducer';
 import { ClockLoader } from 'react-spinners';
 
 
-function App() {
+const App = () => {
   const dispatch = useDispatch()
   const isLoading = useSelector(state => state.load.isLoading)
 

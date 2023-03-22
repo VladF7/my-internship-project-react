@@ -7,7 +7,7 @@ const defaultState = {
     isAuth: false,
 }
 
-export default function authReducer (state = defaultState, action){
+export const authReducer = (state = defaultState, action) => {
     switch (action.type){
         case LOGIN:
             return{
