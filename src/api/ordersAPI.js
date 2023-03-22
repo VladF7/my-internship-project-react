@@ -1,7 +1,7 @@
 import { request } from "../api/requestAPI";
   
   class OrdersAPI {
-      async addOrder (e) {
+      addOrder = async (e) => {
         const formData = new FormData(e.target)
         const masterId = {
           id: formData.get('masterId')
@@ -10,19 +10,19 @@ import { request } from "../api/requestAPI";
         const response = await request(`/api/orders/${id}`, 'POST', sessionStorage) 
         return response
       }
-      async getOrders () {
+      getOrders = async () => {
         const response = await request('/api/orders', 'GET', null, localStorage.getItem('token'))
         return response
       }
-      async getOrderById (id){
+      getOrderById = async (id) => {
         const response = await request(`/api/orders/${id}`, 'GET', null, localStorage.getItem('token'))
         return response
       }
-      async getOrderEndDate (date) {
+      getOrderEndDate = async (date) => {
         const response = await request('/api/orders', 'POST', date, localStorage.getItem('token'))
         return response
       }
-      async editOrder (e,id,endOrderDate) {
+      editOrder = async (e,id,endOrderDate) => {
         const formData = new FormData(e.target)
         const editedOrder = {
             size: formData.get('size'),
@@ -34,7 +34,7 @@ import { request } from "../api/requestAPI";
         const response = await request(`/api/orders/${id}`, 'PUT', editedOrder, localStorage.getItem('token')) 
         return response
       }
-      async delOrder (id) {
+      delOrder = async (id) => {
         const response = await request(`/api/orders/${id}`, 'DELETE', null, localStorage.getItem('token')) 
         return response
       }

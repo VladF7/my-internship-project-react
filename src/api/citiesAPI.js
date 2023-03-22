@@ -1,11 +1,11 @@
 import { request } from "./requestAPI";
 
 class CitiesAPI {
-    async getCities (){
+    getCities = async () => {
       const response = await request('/api/cities')
       return response
     }
-    async addCity(e) {
+    addCity = async (e) => {
       const formData = new FormData(e.target)
       const newCity = {
         name: formData.get('city'),
@@ -13,7 +13,7 @@ class CitiesAPI {
       const response = await request('/api/cities', 'POST', newCity, localStorage.getItem('token')) 
       return response
     }
-    async delCity(id) {
+    delCity = async (id) => {
       const response = await request(`/api/cities/${id}`, 'DELETE', null, localStorage.getItem('token')) 
       return response
     }

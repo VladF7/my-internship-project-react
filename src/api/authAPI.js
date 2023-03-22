@@ -1,7 +1,7 @@
 import { request } from "./requestAPI";
 
 class UserAPI {
-    async login (authForm) { 
+  login = async (authForm) => { 
       const formData = new FormData(authForm.target)
             
       const loginForm = {
@@ -11,7 +11,7 @@ class UserAPI {
       const response = await request(`/api/auth/login`, 'POST', loginForm) 
       return response
     }
-    async auth () { 
+    auth = async () => { 
       try {
         const response = await request(`/api/auth/auth`, 'GET', null, localStorage.getItem('token')) 
         return response

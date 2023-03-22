@@ -1,19 +1,19 @@
 import { request } from "../api/requestAPI";
 
 class MastersAPI {
-    async getFreeMasters (data) {
+    getFreeMasters = async (data) => {
       const response = await request('/api/masters/getMastersList', 'POST', data)
       return response
     }
-    async getMasters () {
+    getMasters = async () => {
       const response = await request('/api/masters', 'GET', null, localStorage.getItem('token'))
       return response
     }
-    async getMasterById (id){
+    getMasterById = async (id) => {
       const response = await request(`/api/masters/${id}`, 'GET', null, localStorage.getItem('token'))
       return response
     }
-    async addMaster (e) {
+    addMaster = async (e) => {
       const formData = new FormData(e.target)
       const newMaster = {
           name: formData.get('name'),
@@ -24,7 +24,7 @@ class MastersAPI {
       const response = await request('/api/masters', 'POST', newMaster, localStorage.getItem('token')) 
       return response
     }
-    async editMaster (e,id) {
+    editMaster = async (e,id) => {
       const formData = new FormData(e.target)
       const editedMaster = {
           name: formData.get('name'),
@@ -34,7 +34,7 @@ class MastersAPI {
       const response = await request(`/api/masters/${id}`, 'PUT', editedMaster, localStorage.getItem('token')) 
       return response
     }
-    async delMaster (id) {
+    delMaster = async (id) => {
         const response = await request(`/api/masters/${id}`, 'DELETE', null, localStorage.getItem('token')) 
         return response
     }
