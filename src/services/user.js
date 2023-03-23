@@ -7,16 +7,15 @@ export const createUser = async (e) => {
     email: formData.get('email'),
     size: formData.get('size'),
     city: formData.get('city'),
-    startTime: formData.get('date'),
+    startTime: formData.get('date')
   }
-    sessionStorage.setItem('name', userForm.name)
-    sessionStorage.setItem('email', userForm.email)
-    sessionStorage.setItem('size', userForm.size)
-    sessionStorage.setItem('city', userForm.city)
-    sessionStorage.setItem('startTime', userForm.startTime)
-    const endTime = await ordersAPI.getOrderEndDate(sessionStorage)
-    sessionStorage.setItem('endTime', endTime)  
-    
-    return endTime
-} 
-    
+  sessionStorage.setItem('name', userForm.name)
+  sessionStorage.setItem('email', userForm.email)
+  sessionStorage.setItem('size', userForm.size)
+  sessionStorage.setItem('city', userForm.city)
+  sessionStorage.setItem('startTime', userForm.startTime)
+  const endTime = await ordersAPI.getOrderEndDate(sessionStorage)
+  sessionStorage.setItem('endTime', endTime)
+
+  return endTime
+}

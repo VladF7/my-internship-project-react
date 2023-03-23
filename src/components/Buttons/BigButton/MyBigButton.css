@@ -1,16 +1,16 @@
-.bigButton{
-    width: 100%;
-    height: 35px;
-    color: white;
-	border: none;
-	border-radius: 20px;
-    background: lightsalmon;
-    font-weight: 400;
-    text-transform: uppercase;
-    font-size: 13px;
-    cursor: pointer;
+.bigButton {
+  width: 100%;
+  height: 35px;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  background: lightsalmon;
+  font-weight: 400;
+  text-transform: uppercase;
+  font-size: 13px;
+  cursor: pointer;
 }
 
-.bigButton:active{
-    background: rgb(124, 204, 124);
+.bigButton:active {
+  background: rgb(124, 204, 124);
 }

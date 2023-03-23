@@ -1,15 +1,15 @@
-.smallButton{
-    height: 20px;
-    width: 100px;
-    color: white;
-	border: none;
-	border-radius: 20px;
-    background: lightsalmon;
-    font-weight: 400;
-    font-size: 13px;
-    cursor: pointer;
-    margin-left: 10px;
+.smallButton {
+  height: 20px;
+  width: 100px;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  background: lightsalmon;
+  font-weight: 400;
+  font-size: 13px;
+  cursor: pointer;
+  margin-left: 10px;
 }
-.smallButton:active{
-    background: rgb(124, 204, 124);
+.smallButton:active {
+  background: rgb(124, 204, 124);
 }

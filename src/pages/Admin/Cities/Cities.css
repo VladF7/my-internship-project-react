@@ -1,8 +1,7 @@
-.cities{
-    height: 90%;  
-    min-height: 252px;
-    width: 100%;
-    overflow: auto;
-    margin-bottom: 20px;
-    
+.cities {
+  height: 90%;
+  min-height: 252px;
+  width: 100%;
+  overflow: auto;
+  margin-bottom: 20px;
 }

@@ -1,46 +1,46 @@
-.sizeSelector{
-    position: relative;
+.sizeSelector {
+  position: relative;
 }
-.fieldset{
-    border: none;
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
+.fieldset {
+  border: none;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
 }
-.legend{
-    font-weight: 400;
-    text-transform: uppercase;
-    font-size: 13px;
-    padding-left: 15px;
-    padding-bottom: 10px;
-    color: rgba(255,255,255,.7);  
+.legend {
+  font-weight: 400;
+  text-transform: uppercase;
+  font-size: 13px;
+  padding-left: 15px;
+  padding-bottom: 10px;
+  color: rgba(255, 255, 255, 0.7);
 }
-.label{
-    font-weight: 400;
-    text-transform: uppercase;
-    font-size: 13px;
-    color: rgba(255,255,255,.7);
-    margin-right: 20px;
-    cursor: pointer;
-    border-bottom: 1px solid lightsalmon;
+.label {
+  font-weight: 400;
+  text-transform: uppercase;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-right: 20px;
+  cursor: pointer;
+  border-bottom: 1px solid lightsalmon;
 }
-.item{
-    display: flex;
-    align-items: center; 
+.item {
+  display: flex;
+  align-items: center;
 }
-.input{
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
+.input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 
-    margin-right: 5px;
-    border-radius: 50%;
-    width: 16px;
-    height: 16px;
-    border: 2px solid lightsalmon;
-    transition: 0.2s all linear;
-    outline: none;
+  margin-right: 5px;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  border: 2px solid lightsalmon;
+  transition: 0.2s all linear;
+  outline: none;
 }
-.input:checked{
-    border: 6px solid lightsalmon;
+.input:checked {
+  border: 6px solid lightsalmon;
 }

@@ -1,15 +1,13 @@
-.loginPage{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 20px 20px;
-    margin-top: 20px;
-    width: 600px;
-    height: 350px;
-    border-radius: 5px;
-    background:linear-gradient(
-        rgba(35,43,85,0.75),
-        rgba(35,43,85,0.95)),
-        no-repeat center center;
-    box-shadow: 0.3em 0.3em 1em rgba(0,0,0,0.3);
+.loginPage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px 20px;
+  margin-top: 20px;
+  width: 600px;
+  height: 350px;
+  border-radius: 5px;
+  background: linear-gradient(rgba(35, 43, 85, 0.75), rgba(35, 43, 85, 0.95)),
+    no-repeat center center;
+  box-shadow: 0.3em 0.3em 1em rgba(0, 0, 0, 0.3);
 }
