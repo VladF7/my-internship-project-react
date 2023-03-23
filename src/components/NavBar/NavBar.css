@@ -1,13 +1,13 @@
-.navList{
-    display: flex;
-    list-style: none; 
+.navList {
+  display: flex;
+  list-style: none;
 }
-.link{
-    margin: 0 10px;
-    font-size: 13px;
-    text-align: left;
-    text-transform: uppercase;
-    cursor: pointer;
-    color: #ffffff;
-    text-decoration: none;
+.link {
+  margin: 0 10px;
+  font-size: 13px;
+  text-align: left;
+  text-transform: uppercase;
+  cursor: pointer;
+  color: #ffffff;
+  text-decoration: none;
 }

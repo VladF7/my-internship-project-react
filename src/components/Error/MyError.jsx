@@ -1,11 +1,7 @@
 import './MyError.css'
 
-const MyError = ({children}) => {
-    return ( 
-        <div className={'myError'}>
-            {children}
-        </div>
-     );
+const MyError = ({ children }) => {
+  return <div className={'myError'}>{children}</div>
 }
- 
-export default MyError;
+
+export default MyError

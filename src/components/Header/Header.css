@@ -1,23 +1,21 @@
-.header{
-    width: 100%;
-    height: 70px;
-    min-height: 70px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 20px;
-    background:linear-gradient(
-        rgba(35,43,85,0.75),
-        rgba(35,43,85,0.95)),
-        no-repeat center center;
+.header {
+  width: 100%;
+  height: 70px;
+  min-height: 70px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  background: linear-gradient(rgba(35, 43, 85, 0.75), rgba(35, 43, 85, 0.95)),
+    no-repeat center center;
 }
-.title{
-    color: lightsalmon;
-    font-weight: 700;
-    cursor: default;
+.title {
+  color: lightsalmon;
+  font-weight: 700;
+  cursor: default;
 }
-.linksWrapper{
-    display: flex;
-    align-items: center;
+.linksWrapper {
+  display: flex;
+  align-items: center;
 }

@@ -1,15 +1,13 @@
-.datePickerWrapper{
-    position: relative;
+.datePickerWrapper {
+  position: relative;
 }
-.react-datepicker__day--selected{
-    background: linear-gradient(
-        rgba(35,43,85,0.8),
-        rgba(35,43,85,0.8)),
-        no-repeat center center;
+.react-datepicker__day--selected {
+  background: linear-gradient(rgba(35, 43, 85, 0.8), rgba(35, 43, 85, 0.8)), no-repeat center center;
 }
-.react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box ul.react-datepicker__time-list li.react-datepicker__time-list-item--selected{
-    background: linear-gradient(
-        rgba(35,43,85,0.8),
-        rgba(35,43,85,0.8)),
-        no-repeat center center;
+.react-datepicker__time-container
+  .react-datepicker__time
+  .react-datepicker__time-box
+  ul.react-datepicker__time-list
+  li.react-datepicker__time-list-item--selected {
+  background: linear-gradient(rgba(35, 43, 85, 0.8), rgba(35, 43, 85, 0.8)), no-repeat center center;
 }

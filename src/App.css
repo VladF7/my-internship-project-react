@@ -1,36 +1,36 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
-#root{
-    width: 100vw;
-    height: 100vh;
+#root {
+  width: 100vw;
+  height: 100vh;
 }
-.App{
-    min-width: 580px;
-    min-height: 615px;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+.App {
+  min-width: 580px;
+  min-height: 615px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
-.App-content{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    height: calc(100% - 70px);
+.App-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: calc(100% - 70px);
 }
-.active{
-    padding-bottom: 10px;
-    border-bottom: lightsalmon 3px solid;
-    color: #ffffff;
+.active {
+  padding-bottom: 10px;
+  border-bottom: lightsalmon 3px solid;
+  color: #ffffff;
 }
-.myButtonWrapper{
-    padding: 20px 0px;
+.myButtonWrapper {
+  padding: 20px 0px;
 }
-.addButtonWrapper{
-    padding: 30px 0px;
+.addButtonWrapper {
+  padding: 30px 0px;
 }

@@ -1,13 +1,7 @@
 import './MyInput.css'
 
-const MyInput = ({...props}) => {
-    
-    return ( 
-        <input 
-            className={'myInput'} 
-            {...props}
-        />
-     );
+const MyInput = ({ ...props }) => {
+  return <input className={'myInput'} {...props} />
 }
- 
-export default MyInput;
+
+export default MyInput
