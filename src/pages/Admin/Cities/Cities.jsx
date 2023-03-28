@@ -6,7 +6,6 @@ import MyError from '../../../components/Error/MyError'
 import MyInput from '../../../components/Input/MyInput'
 import MyLabel from '../../../components/Label/MyLabel'
 import './Cities.css'
-import ordersAPI from '../../../api/ordersAPI'
 import MySpan from '../../../components/Span/MySpan'
 const Cities = () => {
   const [city, setCity] = useState('')
@@ -41,7 +40,7 @@ const Cities = () => {
       if (!city) {
         return setCityError(existingField)
       }
-      setCities([...cities, ...city])
+      setCities([...cities, city])
     })
 
     setCity('')

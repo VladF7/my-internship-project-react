@@ -43,7 +43,7 @@ const AddMaster = () => {
       setNameError('')
     }
   }
-  const onBlurCity = (e) => {
+  const onBlurCity = () => {
     return setCitiesError('')
   }
   const changeRating = (e) => {
@@ -70,13 +70,12 @@ const AddMaster = () => {
       return
     }
     await mastersAPI.addMaster(e)
+    await mastersAPI.getMasters()
 
     setName('')
     setRating(0)
     setCities([])
     prevPage(-1)
-
-    await mastersAPI.getMasters()
   }
   return (
     <form onSubmit={(e) => addMaster(e)} className={'form'}>
