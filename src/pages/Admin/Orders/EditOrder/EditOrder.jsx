@@ -39,8 +39,8 @@ const EditOrder = () => {
     ordersAPI
       .getOrderById(id)
       .then((order) => {
-        setCity(order.city)
-        setSize(order.size)
+        setCity(order.city.name)
+        setSize(order.clock.size)
         setDate(parse(order.startTime, 'yyyy.MM.dd, HH:mm', new Date()))
         setEndTime(order.endTime)
         setMaster(order.masterId)
@@ -48,6 +48,7 @@ const EditOrder = () => {
       .then(() => setIsLoadnig(false))
     citiesAPI.getCities().then((cities) => setCities(cities))
   }, [id])
+
   useEffect(() => {
     if (!isLoading) {
       getFreeMastersList(id, city, date, endTime)

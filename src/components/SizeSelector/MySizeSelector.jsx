@@ -38,7 +38,6 @@ const MySizeSelector = ({ error, ...props }) => {
                 name='size'
                 value={option.value}
                 defaultChecked={option.value === props.value ? true : false}
-                time={option.id}
               />
               <label className={'label'} htmlFor={option.id}>
                 {option.value}

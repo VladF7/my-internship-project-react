@@ -8,7 +8,6 @@ import './Masters.css'
 
 const Masters = () => {
   const [masters, setMasters] = useState([])
-  const [masterCities, setMasterCities] = useState([])
   const [error, setError] = useState('')
   const [currMasterId, setCurrMasterId] = useState('')
   const [isLoading, setIsLoading] = useState(true)
@@ -17,13 +16,11 @@ const Masters = () => {
   useEffect(() => {
     mastersAPI
       .getMasters()
-      .then((res) => {
-        setMasters(res.masters)
-        setMasterCities(res.cities)
+      .then((masters) => {
+        setMasters(masters)
       })
       .then(() => setIsLoading(false))
   }, [])
-
   const deleteMaster = (id) => {
     mastersAPI.delMaster(id).then((master) => {
       if (!master) {
@@ -54,12 +51,7 @@ const Masters = () => {
                   <div className='itemInfo'>
                     <MySpan>Имя: {master.name},</MySpan>
                     <MySpan>Рейтинг: {master.rating},</MySpan>
-                    <MySpan>
-                      Город:{' '}
-                      {masterCities.map((city) =>
-                        city.masterId === master.id ? city.name + ', ' : ''
-                      )}
-                    </MySpan>
+                    <MySpan>Город: {master.cities.map((city) => city.name + ', ')}</MySpan>
                   </div>
                   <div className='buttons'>
                     <MySmallButton to={`${master.id}`}>Изменить</MySmallButton>

@@ -15,11 +15,11 @@ const EditMaster = () => {
   useEffect(() => {
     mastersAPI
       .getMasterById(id)
-      .then((res) => {
-        setName(res.master.name)
-        setRating(res.master.rating)
+      .then((master) => {
+        setName(master.name)
+        setRating(master.rating)
         setCities(
-          res.master.cities.map((city) => {
+          master.cities.map((city) => {
             return { value: city.id, label: city.name }
           })
         )

@@ -51,12 +51,12 @@ const Orders = () => {
                 <li id={order.id} key={order.id} className='listItem'>
                   {currOrderId === order.id ? <MyError>{editError}</MyError> : ''}
                   <div className='itemInfo'>
-                    <MySpan>Имя: {order.name},</MySpan>
-                    <MySpan>Email: {order.email},</MySpan>
-                    <MySpan>Pазмер часов: {order.size},</MySpan>
-                    <MySpan>Время ремонта: {order.timeToFix},</MySpan>
-                    <MySpan>Имя мастера: {order.master},</MySpan>
-                    <MySpan>Город: {order.city},</MySpan>
+                    <MySpan>Имя: {order.customer.name},</MySpan>
+                    <MySpan>Email: {order.customer.email},</MySpan>
+                    <MySpan>Pазмер часов: {order.clock.size},</MySpan>
+                    <MySpan>Время ремонта: {order.clock.timeToFix},</MySpan>
+                    <MySpan>Имя мастера: {order.master.name},</MySpan>
+                    <MySpan>Город: {order.city.name},</MySpan>
                     <MySpan>Начало заказа: {order.startTime},</MySpan>
                     <MySpan>Конец заказа: {order.endTime}</MySpan>
                   </div>
