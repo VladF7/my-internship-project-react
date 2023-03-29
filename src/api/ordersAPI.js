@@ -3,11 +3,11 @@ import { request } from '../api/requestAPI'
 class OrdersAPI {
   async addOrder(e) {
     const formData = new FormData(e.target)
-    const masterId = {
+    const master = {
       id: formData.get('masterId')
     }
-    const id = masterId.id
-    const response = await request(`/api/orders/${id}`, 'POST', sessionStorage)
+    sessionStorage.setItem('masterId', master.id)
+    const response = await request(`/api/orders`, 'POST', sessionStorage)
     return response
   }
   async getOrders() {
@@ -19,7 +19,12 @@ class OrdersAPI {
     return response
   }
   async getOrderEndDate(date) {
-    const response = await request('/api/orders', 'POST', date, localStorage.getItem('token'))
+    const response = await request(
+      '/api/orders/endTime',
+      'POST',
+      date,
+      localStorage.getItem('token')
+    )
     return response
   }
   async editOrder(e, id, endOrderDate) {

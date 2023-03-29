@@ -32,7 +32,6 @@ const AddMaster = () => {
     { value: 4, label: 4 },
     { value: 5, label: 5 }
   ]
-
   const onBlurName = (e) => {
     if (e.target.value.length < 3) {
       setNameError('Имя не должно быть меньше 3 символов')

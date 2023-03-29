@@ -7,6 +7,7 @@ import MyInput from '../../../components/Input/MyInput'
 import MyLabel from '../../../components/Label/MyLabel'
 import './Cities.css'
 import MySpan from '../../../components/Span/MySpan'
+
 const Cities = () => {
   const [city, setCity] = useState('')
   const [cities, setCities] = useState([])
