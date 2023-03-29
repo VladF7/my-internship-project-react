@@ -6,11 +6,12 @@ export const login = (authForm) => {
   return async (dispatch) => {
     try {
       const res = await authAPI.login(authForm)
-      if (!res.message) {
+      if (res) {
         dispatch(actionLogin(res.user))
         localStorage.setItem('token', res.token)
+        return true
       } else {
-        return res.message
+        return false
       }
     } catch (error) {
       console.log(error)
@@ -21,11 +22,11 @@ export const checkAuth = () => {
   return async (dispatch) => {
     try {
       const res = await authAPI.auth()
-      if (!res.message) {
+      if (res) {
         dispatch(actionLogin(res.user))
         localStorage.setItem('token', res.token)
       } else {
-        return res.message
+        return res
       }
     } catch (error) {
       console.log(error.message)

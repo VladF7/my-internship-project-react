@@ -12,12 +12,11 @@ class UserAPI {
     return response
   }
   async auth() {
-    try {
-      const response = await request(`/api/auth/auth`, 'GET', null, localStorage.getItem('token'))
+    const response = await request(`/api/auth/auth`, 'GET', null, localStorage.getItem('token'))
+    if (response) {
       return response
-    } catch (error) {
+    } else {
       localStorage.removeItem('token')
-      console.log(error.message)
     }
   }
 }

@@ -16,10 +16,13 @@ const LoginPage = () => {
   const [password, setPassword] = useState('')
   const [emailError, setEmailError] = useState('')
   const [passwordError, setPasswordError] = useState('')
+  const [emailOrPasswordError, setEmailOrPasswordError] = useState('')
   const requiredField = 'Поле обязательное для заполнения'
 
+  const textError = 'Wrong email or password'
   const resetError = (setError) => {
     setError('')
+    setEmailOrPasswordError('')
   }
 
   const onBlurEmail = (e) => {
@@ -46,14 +49,13 @@ const LoginPage = () => {
       }
       return
     }
-    if (emailError || passwordError) {
+    if (emailError || passwordError || emailOrPasswordError) {
       return
     }
 
     dispatch(login(e)).then((res) => {
-      if (res) {
-        setEmailError(res.email)
-        setPasswordError(res.password)
+      if (!res) {
+        setEmailOrPasswordError(textError)
       } else {
         navigate(fromPage, { replace: true })
       }
@@ -64,7 +66,7 @@ const LoginPage = () => {
       <MyInputItem
         name='email'
         value={email}
-        error={emailError}
+        error={emailError || emailOrPasswordError}
         onChange={(e) => setEmail(e.target.value)}
         onFocus={() => resetError(setEmailError)}
         onBlur={(e) => onBlurEmail(e.target.value)}

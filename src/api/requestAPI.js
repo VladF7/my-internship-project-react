@@ -1,5 +1,6 @@
 let baseURL
 
+// eslint-disable-next-line no-undef
 if (process.env.NODE_ENV === 'development') {
   baseURL = 'http://localhost:5000'
 } else {
@@ -22,8 +23,13 @@ export const request = async (url, method = 'GET', data = null, token = null) =>
       headers,
       body
     })
-    return await response.json()
-  } catch (e) {
-    console.warn('Error:', e.message)
+    if (response.ok) {
+      return await response.json()
+    } else {
+      const res = await response.json()
+      throw new Error(res.message)
+    }
+  } catch (error) {
+    console.warn('Error message: ' + error.message)
   }
 }

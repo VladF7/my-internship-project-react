@@ -34,7 +34,6 @@ const EditOrder = () => {
   })
   const prevPage = useNavigate()
   const { id } = useParams()
-
   useEffect(() => {
     ordersAPI
       .getOrderById(id)
