@@ -7,7 +7,7 @@ import './Header.css'
 const Header = () => {
   const isAuth = useSelector((state) => state.auth.isAuth)
   const currentUser = useSelector((state) => state.auth.currentUser)
-  const regexp = /([^\s]+)@([^\s\.]+\.[a-z]+)/
+  const regexp = /([^\s]+)@([^\s.]+\.[a-z]+)/
   const currentUserName = currentUser.length > 0 ? currentUser.match(regexp)[1] : ''
 
   const dispatch = useDispatch()

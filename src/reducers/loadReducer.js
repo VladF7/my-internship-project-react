@@ -22,5 +22,5 @@ export const loadReducer = (state = defaultState, action) => {
   }
 }
 
-export const actionLoading = (user) => ({ type: LOADING })
+export const actionLoading = () => ({ type: LOADING })
 export const actionLoaded = () => ({ type: LOADED })
