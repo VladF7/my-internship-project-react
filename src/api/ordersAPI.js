@@ -1,13 +1,14 @@
 import { request } from '../api/requestAPI'
 
 class OrdersAPI {
-  async addOrder(e) {
-    const formData = new FormData(e.target)
-    const master = {
-      id: formData.get('masterId')
-    }
-    sessionStorage.setItem('masterId', master.id)
-    const response = await request(`/api/orders`, 'POST', sessionStorage)
+  async addOrder(masterId) {
+    const requestData = {}
+    sessionStorage.setItem('masterId', JSON.stringify(masterId))
+    Object.keys(sessionStorage).forEach((key) => {
+      requestData[key] = JSON.parse(sessionStorage.getItem(key))
+    })
+
+    const response = await request(`/api/orders`, 'POST', requestData)
     return response
   }
   async getOrders() {
@@ -18,23 +19,22 @@ class OrdersAPI {
     const response = await request(`/api/orders/${id}`, 'GET', null, localStorage.getItem('token'))
     return response
   }
-  async getOrderEndDate(date) {
+  async getOrderEndDate(requestData) {
     const response = await request(
       '/api/orders/endTime',
       'POST',
-      date,
+      requestData,
       localStorage.getItem('token')
     )
     return response
   }
-  async editOrder(e, id, endOrderDate) {
-    const formData = new FormData(e.target)
+  async editOrder(id, cityId, masterId, clockId, startTime, endTime) {
     const editedOrder = {
-      size: formData.get('size'),
-      master: formData.get('master'),
-      city: formData.get('city'),
-      start: formData.get('date'),
-      end: endOrderDate
+      cityId,
+      masterId,
+      clockId,
+      startTime,
+      endTime
     }
     const response = await request(
       `/api/orders/${id}`,

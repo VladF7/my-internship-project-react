@@ -18,7 +18,7 @@ const AddMaster = () => {
   const prevPage = useNavigate()
 
   const [name, setName] = useState('')
-  const [rating, setRating] = useState(0)
+  const [rating, setRating] = useState('')
   const [cities, setCities] = useState([])
 
   const [nameError, setNameError] = useState('')
@@ -45,8 +45,8 @@ const AddMaster = () => {
   const onBlurCity = () => {
     return setCitiesError('')
   }
-  const changeRating = (e) => {
-    setRating(e.target.value)
+  const changeRating = (rating) => {
+    setRating(Number(rating))
     setRatingError('')
   }
   const goBack = (e) => {
@@ -56,7 +56,7 @@ const AddMaster = () => {
 
   const addMaster = async (e) => {
     e.preventDefault()
-    if (!name || !rating || !cities.length) {
+    if (!name || !rating || !cities.length || nameError) {
       if (!name) {
         setNameError(requiredField)
       }
@@ -68,11 +68,13 @@ const AddMaster = () => {
       }
       return
     }
-    await mastersAPI.addMaster(e)
+    const citiesId = cities.map((city) => city.value)
+
+    await mastersAPI.addMaster(name, rating, citiesId)
     await mastersAPI.getMasters()
 
     setName('')
-    setRating(0)
+    setRating('')
     setCities([])
     prevPage(-1)
   }
@@ -91,7 +93,6 @@ const AddMaster = () => {
           discription: 'Введите имя мастера'
         }}
       />
-
       <MySelect
         options={ratingOptions}
         placeholder='Кликните для выбора рейтинга'
@@ -100,10 +101,9 @@ const AddMaster = () => {
         error={ratingError}
         value={rating}
         onChange={(e) => {
-          changeRating(e)
+          changeRating(e.target.value)
         }}
       />
-
       <ReactSelect
         value={cities}
         error={citiesError}
@@ -112,7 +112,6 @@ const AddMaster = () => {
         onChange={(e) => setCities(e)}
         onBlur={(e) => onBlurCity(e)}
       />
-
       <div className='myButtonWrapper'>
         <MyBigButton>Добавить мастера</MyBigButton>
       </div>

@@ -63,13 +63,12 @@ const EditMaster = () => {
       setNameError('')
     }
   }
-  const onBlurCity = (e) => {
-    if (!e.target.value) {
-      return setCitiesError('')
-    }
+  const changeCities = (cities) => {
+    setCities(cities)
+    setCitiesError('')
   }
-  const changeRating = (e) => {
-    setRating(e.target.value)
+  const changeRating = (rating) => {
+    setRating(Number(rating))
     setRatingError('')
   }
   const goBack = (e) => {
@@ -78,7 +77,7 @@ const EditMaster = () => {
   }
   const editMaster = async (e) => {
     e.preventDefault()
-    if (!name || !cities.length) {
+    if (!name || !cities.length || nameError) {
       if (!name) {
         setNameError(requiredField)
       }
@@ -87,7 +86,8 @@ const EditMaster = () => {
       }
       return
     }
-    await mastersAPI.editMaster(e, id)
+    const citiesId = cities.map((city) => city.value)
+    await mastersAPI.editMaster(id, name, rating, citiesId)
     prevPage(-1)
     await mastersAPI.getMasters()
   }
@@ -119,7 +119,7 @@ const EditMaster = () => {
         error={ratingError}
         value={rating}
         onChange={(e) => {
-          changeRating(e)
+          changeRating(e.target.value)
         }}
       />
       <ReactSelect
@@ -127,8 +127,7 @@ const EditMaster = () => {
         error={citiesError}
         name='cities'
         loadOptions={loadOptions}
-        onChange={(e) => setCities(e)}
-        onBlur={(e) => onBlurCity(e)}
+        onChange={(e) => changeCities(e)}
       />
 
       <div className='myButtonWrapper'>

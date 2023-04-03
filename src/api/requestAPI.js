@@ -16,7 +16,7 @@ export const request = async (url, method = 'GET', data = null, token = null) =>
       body = JSON.stringify(data)
     }
     if (token) {
-      headers['Autorization'] = `Bearer ${token}`
+      headers['Authorization'] = `Bearer ${token}`
     }
     const response = await fetch(baseURL + url, {
       method,
@@ -26,10 +26,10 @@ export const request = async (url, method = 'GET', data = null, token = null) =>
     if (response.ok) {
       return await response.json()
     } else {
-      const res = await response.json()
-      throw new Error(res.message)
+      const res = await response
+      throw res
     }
   } catch (error) {
-    console.warn('Error message: ' + error.message)
+    console.warn('Error message: ' + error)
   }
 }

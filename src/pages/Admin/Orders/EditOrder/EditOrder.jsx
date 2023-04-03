@@ -5,7 +5,6 @@ import citiesAPI from '../../../../api/citiesAPI'
 import mastersAPI from '../../../../api/mastersAPI'
 import ordersAPI from '../../../../api/ordersAPI'
 import MyBigButton from '../../../../components/Buttons/BigButton/MyBigButton'
-import MyCitySelector from '../../../../components/CitySelector/MyCitySelector'
 import DatePicker from '../../../../components/DatePicker/DatePicker'
 import MySelect from '../../../../components/Select/MySelect'
 import MySpan from '../../../../components/Span/MySpan'
@@ -25,12 +24,15 @@ const EditOrder = () => {
 
   const requiredField = 'Поле обязательное для заполнения'
   const sizeOptions = [
-    { value: 'Маленькие', label: 'Маленькие' },
-    { value: 'Средние', label: 'Средние' },
-    { value: 'Большие', label: 'Большие' }
+    { value: 1, label: 'Маленькие' },
+    { value: 2, label: 'Средние' },
+    { value: 3, label: 'Большие' }
   ]
   const mastersOptions = masters.map((master) => {
     return { value: master.id, label: `Имя: ${master.name}, рейтинг: ${master.rating}` }
+  })
+  const citiesOptionsList = cities.map((city) => {
+    return { value: city.id, label: city.name }
   })
   const prevPage = useNavigate()
   const { id } = useParams()
@@ -38,8 +40,8 @@ const EditOrder = () => {
     ordersAPI
       .getOrderById(id)
       .then((order) => {
-        setCity(order.city.name)
-        setSize(order.clock.size)
+        setCity(order.cityId)
+        setSize(order.clockId)
         setDate(parse(order.startTime, 'yyyy.MM.dd, HH:mm', new Date()))
         setEndTime(order.endTime)
         setMaster(order.masterId)
@@ -47,54 +49,48 @@ const EditOrder = () => {
       .then(() => setIsLoadnig(false))
     citiesAPI.getCities().then((cities) => setCities(cities))
   }, [id])
-
+  useEffect(() => {
+    if (!isLoading) {
+      getEndOrderTime(date, size)
+    }
+  }, [size, date])
   useEffect(() => {
     if (!isLoading) {
       getFreeMastersList(id, city, date, endTime)
     }
-  }, [endTime])
-
+  }, [endTime, city])
   const getFreeMastersList = async (id, city, startTime, endTime) => {
-    const order = {}
-    order.id = id
-    order.city = city
-    order.startTime = format(new Date(startTime), 'yyyy.MM.dd, HH:mm')
-    order.endTime = endTime
-    const masters = await mastersAPI.getFreeMasters(order)
+    const requestData = {
+      cityId: city,
+      startTime: format(new Date(startTime), 'yyyy.MM.dd, HH:mm'),
+      endTime: endTime
+    }
+    const masters = await mastersAPI.getFreeMastersForCurrOrder(id, requestData)
     setMasters(masters)
     return masters
   }
-  const getEndOrderTime = async (start, size) => {
-    const data = {}
-    data.startTime = format(new Date(start), 'yyyy.MM.dd, HH:mm')
-    data.size = size
-    const endTime = await ordersAPI.getOrderEndDate(data)
+  const getEndOrderTime = async (startTime, size) => {
+    const requestData = {
+      clockId: size,
+      startTime: format(new Date(startTime), 'yyyy.MM.dd, HH:mm')
+    }
+    const endTime = await ordersAPI.getOrderEndDate(requestData)
     setEndTime(endTime)
     return endTime
   }
-  const onBlurCity = (newCity) => {
-    if (!newCity) {
-      return setCityError('')
-    }
-    const cityArr = cities.map((city) => city.name)
-    cityArr.includes(newCity) ? setCityError('') : setCityError('Вашего города нету в списке')
-    getFreeMastersList(id, newCity, date, endTime)
+  const changeCity = async (cityId) => {
+    setCityError('')
+    setCity(Number(cityId))
   }
-  const onBlurMaster = () => {
+  const changeSize = (clockId) => {
+    setSize(Number(clockId))
+  }
+  const changeMaster = (masterId) => {
+    setMaster(Number(masterId))
     setMasterError('')
-  }
-  const changeSize = (e) => {
-    setSize(e)
-    getEndOrderTime(date, e)
   }
   const changeDate = (date) => {
     setDate(date)
-    getEndOrderTime(date, size)
-  }
-
-  const changeMaster = (e) => {
-    setMaster(e)
-    setMasterError('')
   }
   const goBack = (e) => {
     e.preventDefault()
@@ -111,23 +107,26 @@ const EditOrder = () => {
       }
       return
     }
-    await ordersAPI.editOrder(e, id, endTime)
+    const master = Number(e.target.master.value)
+    const startTime = e.target.date.value
+    await ordersAPI.editOrder(id, city, master, size, startTime, endTime)
     prevPage(-1)
     await ordersAPI.getOrders()
   }
-
   if (isLoading) {
     return <MySpan>Данные загружаються, подождите...</MySpan>
   }
 
   return (
     <form onSubmit={(e) => editOrder(e)} className={'form'}>
-      <MyCitySelector
+      <MySelect
+        name='city'
         value={city}
-        cities={cities}
+        options={citiesOptionsList}
+        placeholder={'Кликните для выбора города'}
+        discription={'Выберите ваш город'}
         error={cityError}
-        onChange={(e) => setCity(e.target.value)}
-        onBlur={(e) => onBlurCity(e.target.value)}
+        onChange={(e) => changeCity(e.target.value)}
       />
       <DatePicker name='date' value={date} onChange={(date) => changeDate(date)} />
       <MySelect
@@ -148,7 +147,6 @@ const EditOrder = () => {
         error={masterError}
         value={master}
         onChange={(e) => changeMaster(e.target.value)}
-        onBlur={() => onBlurMaster()}
       />
       <div className='myButtonWrapper'>
         <MyBigButton>Изменить заказ</MyBigButton>

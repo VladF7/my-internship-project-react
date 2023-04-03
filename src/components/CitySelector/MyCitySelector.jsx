@@ -9,7 +9,7 @@ const MyCitySelector = ({ ...props }) => {
       <MyLabel htmlFor='city' discription='Выберите город'></MyLabel>
       <MyInput
         name='city'
-        id='city'
+        id={props.id}
         list='cities'
         placeholder='Введите название города'
         value={props.value}
@@ -17,7 +17,7 @@ const MyCitySelector = ({ ...props }) => {
       />
       <datalist id='cities'>
         {props.cities.map((city) => (
-          <option value={city.name} key={city.id}></option>
+          <option id={city.id} value={city.name} key={city.id}></option>
         ))}
       </datalist>
 
