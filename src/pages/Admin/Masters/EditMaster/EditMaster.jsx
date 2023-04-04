@@ -44,7 +44,7 @@ const EditMaster = () => {
   const [nameError, setNameError] = useState('')
   const [ratingError, setRatingError] = useState('')
   const [citiesError, setCitiesError] = useState('')
-  const requiredField = 'Поле обязательное для заполнения'
+  const requiredField = 'Required field'
   const ratingOptions = [
     { value: 1, label: 1 },
     { value: 2, label: 2 },
@@ -55,7 +55,7 @@ const EditMaster = () => {
 
   const onBlurName = (e) => {
     if (e.target.value.length < 3) {
-      setNameError('Имя не должно быть меньше 3 символов')
+      setNameError('Name must not be less than 3 characters')
       if (e.target.value.length === 0) {
         setNameError('')
       }
@@ -93,7 +93,7 @@ const EditMaster = () => {
   }
 
   if (isLoading) {
-    return <MySpan>Данные загружаються, подождите...</MySpan>
+    return <MySpan>Data is loading, please wait...</MySpan>
   }
 
   return (
@@ -107,15 +107,15 @@ const EditMaster = () => {
         item={{
           id: 'name',
           type: 'text',
-          placeholder: 'Не менее 3 символов',
-          discription: 'Введите имя мастера'
+          placeholder: 'Must not be less than 3 characters',
+          discription: 'Enter master name'
         }}
       />
       <MySelect
         options={ratingOptions}
-        placeholder='Кликните для выбора рейтинга'
+        placeholder='Click to select rating'
         name='rating'
-        discription={'Выберите рейтинг'}
+        discription={'Choose master rating'}
         error={ratingError}
         value={rating}
         onChange={(e) => {
@@ -131,10 +131,10 @@ const EditMaster = () => {
       />
 
       <div className='myButtonWrapper'>
-        <MyBigButton>Изменить мастера</MyBigButton>
+        <MyBigButton>Edit master</MyBigButton>
       </div>
       <div className='myButtonWrapper'>
-        <MyBigButton onClick={(e) => goBack(e)}>Отменить</MyBigButton>
+        <MyBigButton onClick={(e) => goBack(e)}>Cancel</MyBigButton>
       </div>
     </form>
   )

@@ -7,7 +7,7 @@ import MyError from '../Error/MyError'
 const ReactSelect = ({ error, ...props }) => {
   return (
     <div className='reactSelectContainer'>
-      <MyLabel discription={'Выберите город'}></MyLabel>
+      <MyLabel discription={'Choose master cities'}></MyLabel>
       <MyError>{error}</MyError>
       <AsyncSelect
         {...props}
@@ -15,9 +15,9 @@ const ReactSelect = ({ error, ...props }) => {
         defaultOptions
         closeMenuOnSelect={false}
         isMulti
-        placeholder='Выберите город'
+        placeholder='Choose available cities'
         isSearchable={false}
-        noOptionsMessage={() => 'Городов больше нету'}
+        noOptionsMessage={() => 'No more cities'}
         styles={ReactSelectStyles}
       />
     </div>

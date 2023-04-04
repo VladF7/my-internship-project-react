@@ -17,7 +17,7 @@ const LoginPage = () => {
   const [emailError, setEmailError] = useState('')
   const [passwordError, setPasswordError] = useState('')
   const [emailOrPasswordError, setEmailOrPasswordError] = useState('')
-  const requiredField = 'Поле обязательное для заполнения'
+  const requiredField = 'Required field'
 
   const textError = 'Wrong email or password'
   const resetError = (setError) => {
@@ -29,7 +29,7 @@ const LoginPage = () => {
     const re =
       /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i
     if (!re.test(String(e).toLowerCase())) {
-      setEmailError('Не корректный email')
+      setEmailError('Incorrect email')
       if (!e) {
         setEmailError('')
       }
@@ -73,8 +73,8 @@ const LoginPage = () => {
         item={{
           id: 'email',
           type: 'text',
-          placeholder: 'Введите почтовый адресс',
-          discription: 'Введите email'
+          placeholder: 'Enter your email',
+          discription: 'Enter email'
         }}
       />
       <MyInputItem
@@ -86,12 +86,12 @@ const LoginPage = () => {
         item={{
           id: 'password',
           type: 'password',
-          placeholder: 'Введите ваш пароль',
-          discription: 'Введите пароль'
+          placeholder: 'Enter your password',
+          discription: 'Enter password'
         }}
       />
       <div className='myButtonWrapper'>
-        <MyBigButton>Войти</MyBigButton>
+        <MyBigButton>Log in</MyBigButton>
       </div>
     </form>
   )

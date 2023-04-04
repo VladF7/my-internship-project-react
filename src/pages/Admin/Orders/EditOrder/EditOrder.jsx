@@ -22,14 +22,14 @@ const EditOrder = () => {
   const [cityError, setCityError] = useState('')
   const [masterError, setMasterError] = useState('')
 
-  const requiredField = 'Поле обязательное для заполнения'
+  const requiredField = 'Required field'
   const sizeOptions = [
-    { value: 1, label: 'Маленькие' },
-    { value: 2, label: 'Средние' },
-    { value: 3, label: 'Большие' }
+    { value: 1, label: 'Small' },
+    { value: 2, label: 'Medium' },
+    { value: 3, label: 'Big' }
   ]
   const mastersOptions = masters.map((master) => {
-    return { value: master.id, label: `Имя: ${master.name}, рейтинг: ${master.rating}` }
+    return { value: master.id, label: `Name: ${master.name}, rating: ${master.rating}` }
   })
   const citiesOptionsList = cities.map((city) => {
     return { value: city.id, label: city.name }
@@ -114,7 +114,7 @@ const EditOrder = () => {
     await ordersAPI.getOrders()
   }
   if (isLoading) {
-    return <MySpan>Данные загружаються, подождите...</MySpan>
+    return <MySpan>Data is loading, please wait...</MySpan>
   }
 
   return (
@@ -123,17 +123,17 @@ const EditOrder = () => {
         name='city'
         value={city}
         options={citiesOptionsList}
-        placeholder={'Кликните для выбора города'}
-        discription={'Выберите ваш город'}
+        placeholder={'Click to select city'}
+        discription={'Choose city'}
         error={cityError}
         onChange={(e) => changeCity(e.target.value)}
       />
       <DatePicker name='date' value={date} onChange={(date) => changeDate(date)} />
       <MySelect
         options={sizeOptions}
-        placeholder='Кликните для выбора размера'
+        placeholder='Click to select size'
         name='size'
-        discription={'Выберите размер часов'}
+        discription={'Choose clock size'}
         value={size}
         onChange={(e) => {
           changeSize(e.target.value)
@@ -141,18 +141,18 @@ const EditOrder = () => {
       />
       <MySelect
         options={mastersOptions}
-        placeholder='Кликните для выбора мастера'
+        placeholder='Click to select master'
         name='master'
-        discription={'Выберите мастера'}
+        discription={'Choose master'}
         error={masterError}
         value={master}
         onChange={(e) => changeMaster(e.target.value)}
       />
       <div className='myButtonWrapper'>
-        <MyBigButton>Изменить заказ</MyBigButton>
+        <MyBigButton>Edit order</MyBigButton>
       </div>
       <div className='myButtonWrapper'>
-        <MyBigButton onClick={(e) => goBack(e)}>Отменить</MyBigButton>
+        <MyBigButton onClick={(e) => goBack(e)}>Cancel</MyBigButton>
       </div>
     </form>
   )

@@ -12,7 +12,7 @@ const Header = () => {
 
   const dispatch = useDispatch()
   const logout = () => {
-    const isLogout = window.confirm('Вы уверены, что желаете выйти из аккаунта?')
+    const isLogout = window.confirm('Are you sure you want to log out of your account?')
     if (isLogout) {
       dispatch(actionLogout())
     }
@@ -20,11 +20,11 @@ const Header = () => {
 
   const items =
     (!isAuth && [
-      { name: 'Вызвать мастера', path: '/' },
-      { name: 'Войти', path: '/auth' }
+      { name: 'Create order', path: '/' },
+      { name: 'Log in', path: '/auth' }
     ]) ||
     (isAuth && [
-      { name: 'Вызвать мастера', path: '/' },
+      { name: 'Create order', path: '/' },
       { name: `${currentUserName}`, path: '/admin' }
     ])
 
@@ -38,7 +38,7 @@ const Header = () => {
         <NavBar items={items} />
         {isAuth && (
           <div className='link' onClick={() => logout()}>
-            Выйти
+            Log out
           </div>
         )}
       </div>

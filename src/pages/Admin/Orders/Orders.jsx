@@ -13,7 +13,7 @@ const Orders = () => {
   const [editError, setEditError] = useState('')
   const [currOrderId, setCurrOrderId] = useState('')
   const navigate = useNavigate()
-  const textError = 'Не может быть изменен, этот заказ уже был начат'
+  const textError = 'Cannot be edited, this order has already been started'
 
   useEffect(() => {
     ordersAPI
@@ -37,38 +37,38 @@ const Orders = () => {
     setCurrOrderId(id)
   }
 
-  if (isLoading === true) return <MySpan>Список заказов загружается...</MySpan>
+  if (isLoading === true) return <MySpan>The list of orders is loading...</MySpan>
 
   return (
     <div className='itemContent'>
       <div className='orders'>
         <ul className='list'>
           {orders.length === 0 ? (
-            <MySpan>Список заказов пуст</MySpan>
+            <MySpan>The list of orders is empty</MySpan>
           ) : (
             orders.map((order) => {
               return (
                 <li id={order.id} key={order.id} className='listItem'>
                   {currOrderId === order.id ? <MyError>{editError}</MyError> : ''}
                   <div className='itemInfo'>
-                    <MySpan>Имя: {order.customer.name},</MySpan>
+                    <MySpan>Name: {order.customer.name},</MySpan>
                     <MySpan>Email: {order.customer.email},</MySpan>
-                    <MySpan>Pазмер часов: {order.clock.size},</MySpan>
-                    <MySpan>Время ремонта: {order.clock.timeToFix},</MySpan>
-                    <MySpan>Имя мастера: {order.master.name},</MySpan>
-                    <MySpan>Город: {order.city.name},</MySpan>
-                    <MySpan>Начало заказа: {order.startTime},</MySpan>
-                    <MySpan>Конец заказа: {order.endTime}</MySpan>
+                    <MySpan>Clock size: {order.clock.size},</MySpan>
+                    <MySpan>Time to fix: {order.clock.timeToFix},</MySpan>
+                    <MySpan>Master name: {order.master.name},</MySpan>
+                    <MySpan>City: {order.city.name},</MySpan>
+                    <MySpan>Order start time: {order.startTime},</MySpan>
+                    <MySpan>Order end time: {order.endTime}</MySpan>
                   </div>
                   <div className='buttons'>
                     {format(new Date(), 'yyyy.MM.dd, HH:mm') < order.startTime ? (
                       <MySmallButton onClick={() => goToEdit(order.id, order.startTime)}>
-                        Изменить
+                        Edit
                       </MySmallButton>
                     ) : (
                       ''
                     )}
-                    <MySmallButton onClick={() => delOrder(order.id)}>Удалить</MySmallButton>
+                    <MySmallButton onClick={() => delOrder(order.id)}>Delete</MySmallButton>
                   </div>
                 </li>
               )

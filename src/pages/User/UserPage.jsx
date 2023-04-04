@@ -36,14 +36,14 @@ const UserForm = () => {
   }, [])
 
   const navigate = useNavigate()
-  const requiredField = 'Поле обязательное для заполнения'
+  const requiredField = 'Required field'
   const citiesOptionsList = cities.map((city) => {
     return { value: city.id, label: city.name }
   })
 
   const onBlurName = (name) => {
     if (name.length < 3) {
-      setNameError('Имя не должно быть меньше 3 символов')
+      setNameError('Name must not be less than 3 characters')
       if (name.length === 0) {
         setNameError('')
       }
@@ -55,7 +55,7 @@ const UserForm = () => {
     const re =
       /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i
     if (!re.test(String(email).toLowerCase())) {
-      setEmailError('Не корректный email')
+      setEmailError('Incorrect email')
       if (!email) {
         setEmailError('')
       }
@@ -115,8 +115,8 @@ const UserForm = () => {
           item={{
             id: 'name',
             type: 'text',
-            placeholder: 'Не менее 3 символов',
-            discription: 'Введите ваше имя'
+            placeholder: 'Must not be less than 3 characters',
+            discription: 'Enter your name'
           }}
         />
         <MyInputItem
@@ -129,7 +129,7 @@ const UserForm = () => {
             id: 'mail',
             type: 'mail',
             placeholder: 'example@example.com',
-            discription: 'Введите ваш email'
+            discription: 'Enter your email'
           }}
         />
         <MySizeSelector
@@ -142,8 +142,8 @@ const UserForm = () => {
           name='city'
           value={city}
           options={citiesOptionsList}
-          placeholder={'Кликните для выбора города'}
-          discription={'Выберите ваш город'}
+          placeholder={'Click to select city'}
+          discription={'Choose your city'}
           error={cityError}
           onChange={(e) => changeCity(e.target.value)}
         />
@@ -154,7 +154,7 @@ const UserForm = () => {
           onChange={(date) => changeDate(date)}
         />
         <div className='myButtonWrapper'>
-          <MyBigButton>Далее</MyBigButton>
+          <MyBigButton>Next</MyBigButton>
         </div>
       </form>
     </div>
