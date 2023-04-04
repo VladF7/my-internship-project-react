@@ -6,11 +6,20 @@ class MastersAPI {
     Object.keys(sessionStorage).forEach((key) => {
       requestData[key] = JSON.parse(sessionStorage.getItem(key))
     })
-    const response = await request('/api/masters/getMastersList', 'POST', requestData)
+
+    const response = await request(
+      `/api/masters/getFreeMasters/` + '?' + new URLSearchParams(requestData),
+      'GET'
+    )
     return response
   }
   async getFreeMastersForCurrOrder(orderId, requestData) {
-    const response = await request(`/api/masters/getMastersList/${orderId}`, 'POST', requestData)
+    const response = await request(
+      `/api/masters/freeMastersForOrder/${orderId}` + '?' + new URLSearchParams(requestData),
+      'GET',
+      null,
+      localStorage.getItem('token')
+    )
     return response
   }
   async getMasters() {

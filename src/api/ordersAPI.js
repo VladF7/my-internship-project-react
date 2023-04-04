@@ -21,10 +21,8 @@ class OrdersAPI {
   }
   async getOrderEndDate(requestData) {
     const response = await request(
-      '/api/orders/endTime',
-      'POST',
-      requestData,
-      localStorage.getItem('token')
+      '/api/orders/orderEndTime' + '?' + new URLSearchParams(requestData),
+      'GET'
     )
     return response
   }
