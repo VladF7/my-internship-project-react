@@ -8,8 +8,8 @@ const SuccessOrder = () => {
   useEffect(() => {
     sessionStorage.clear()
   }, [])
-  const message = `Ваш заказ успешно создан. 
-    Вам на почту будет отправленно письмо с дополнительной информацией.`
+  const message = `Your order has been successfully created.
+  An email will be sent to you with additional information.`
 
   const goBack = (e) => {
     e.preventDefault()
@@ -21,7 +21,7 @@ const SuccessOrder = () => {
         <MySpan>{message}</MySpan>
       </div>
       <div className='myButtonWrapper'>
-        <MyLinkButton onClick={(e) => goBack(e)}>Назад</MyLinkButton>
+        <MyLinkButton onClick={(e) => goBack(e)}>Back</MyLinkButton>
       </div>
     </div>
   )

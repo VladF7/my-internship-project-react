@@ -4,10 +4,10 @@ import './AdminPage.css'
 
 const AdminForm = () => {
   const items = [
-    { name: 'Список мастеров', path: 'masters' },
-    { name: 'Список городов', path: 'cities' },
-    { name: 'Список заказов', path: 'orders' },
-    { name: 'Список клиентов', path: 'customers' }
+    { name: 'Masters', path: 'masters' },
+    { name: 'Cities', path: 'cities' },
+    { name: 'Orders', path: 'orders' },
+    { name: 'Customers', path: 'customers' }
   ]
   return (
     <div className={'adminPage'}>

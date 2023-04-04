@@ -4,20 +4,20 @@ import './MySizeSelector.css'
 
 const MySizeSelector = ({ error, ...props }) => {
   const options = [
-    { value: 'Маленькие', id: 1 },
-    { value: 'Средние', id: 2 },
-    { value: 'Большие', id: 3 }
+    { value: 'Small', id: 1 },
+    { value: 'Medium', id: 2 },
+    { value: 'Big', id: 3 }
   ]
 
   let word
-  let time = options.filter((option) => option.value === props.value)
+  let time = options.filter((option) => option.id === props.value)
 
-  if (time.length > 0) {
+  if (time.length) {
     time = time[0].id
     if (time % 10 === 1) {
-      word = 'час'
+      word = 'hour'
     } else {
-      word = 'часa'
+      word = 'hours'
     }
   } else {
     time = null
@@ -27,7 +27,7 @@ const MySizeSelector = ({ error, ...props }) => {
     <div className={'sizeSelector'}>
       <MyError>{error}</MyError>
       <fieldset className={'fieldset'} {...props}>
-        <legend className={'legend'}>Выберите размер часов</legend>
+        <legend className={'legend'}>Choose clock size</legend>
         {options.map((option) => {
           return (
             <span key={option.id} className={'item'}>
@@ -53,7 +53,7 @@ const MySizeSelector = ({ error, ...props }) => {
             visibility: time ? '' : 'hidden'
           }}
         >
-          Ремонт займет {time} {word}
+          Time to fix {time} {word}
         </MyLabel>
       </fieldset>
     </div>

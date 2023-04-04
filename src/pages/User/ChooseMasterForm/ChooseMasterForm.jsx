@@ -32,11 +32,13 @@ const ChooseMasterForm = () => {
   const onSubmit = (e) => {
     e.preventDefault()
     if (!masterId) {
-      setMasterIdError('Обязательно укажите мастера')
+      setMasterIdError('Please choose master')
       return
     } else {
-      ordersAPI.addOrder(masterId)
-      navigate('/successOrder', { replace: true })
+      const order = ordersAPI.addOrder(masterId)
+      if (order) {
+        navigate('/successOrder', { replace: true })
+      }
     }
   }
 
@@ -46,11 +48,13 @@ const ChooseMasterForm = () => {
         <div className='mastersArea'>
           <fieldset className='mastersFieldset'>
             <MyError>{masterIdError}</MyError>
-            <legend className='legend'>Выберите мастера</legend>
+            <legend className='legend'>Choose master</legend>
             {isLoading ? (
-              <MySpan>Идет загрузка свободных мастеров, подождите...</MySpan>
+              <MySpan>Free masters are loading, please wait...</MySpan>
             ) : freeMastersList.length === 0 ? (
-              <MySpan>К сожалению сейчас нету свободных масеров, выберите другое время</MySpan>
+              <MySpan>
+                Sorry, there are no free masers at the moment, please select another time
+              </MySpan>
             ) : (
               freeMastersList.map((master) => {
                 return (
@@ -64,7 +68,7 @@ const ChooseMasterForm = () => {
                       value={master.id}
                     />
                     <MyLabel htmlFor={master.id}>
-                      имя: {master.name}, рейтинг: {master.rating}
+                      Name: {master.name}, rating: {master.rating}
                     </MyLabel>
                   </div>
                 )
@@ -73,9 +77,9 @@ const ChooseMasterForm = () => {
           </fieldset>
         </div>
         <div className='myButtonWrapper'>
-          <MyBigButton>Сделать заказ</MyBigButton>
+          <MyBigButton>Create order</MyBigButton>
         </div>
-        <MyBigButton onClick={(e) => goBack(e)}>Отменить</MyBigButton>
+        <MyBigButton onClick={(e) => goBack(e)}>Cancel</MyBigButton>
       </form>
     </div>
   )

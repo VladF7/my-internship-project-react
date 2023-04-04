@@ -11,7 +11,7 @@ const Masters = () => {
   const [error, setError] = useState('')
   const [currMasterId, setCurrMasterId] = useState('')
   const [isLoading, setIsLoading] = useState(true)
-  const textError = 'Не может быть удален, используется в заказе'
+  const textError = 'Master cannot be deleted, used in order'
 
   useEffect(() => {
     mastersAPI
@@ -35,27 +35,27 @@ const Masters = () => {
     setCurrMasterId(id)
   }
 
-  if (isLoading) return <MySpan>Список мастеров загружается...</MySpan>
+  if (isLoading) return <MySpan>The list of masters is loading...</MySpan>
 
   return (
     <div className='itemContent'>
       <div className='masters'>
         <ul className='list'>
           {masters.length === 0 ? (
-            <MySpan>Список мастеров пуст</MySpan>
+            <MySpan>The list of customers is empty</MySpan>
           ) : (
             masters.map((master) => {
               return (
                 <li id={master.id} key={master.id} className='listItem'>
                   {currMasterId === master.id ? <MyError>{error}</MyError> : ''}
                   <div className='itemInfo'>
-                    <MySpan>Имя: {master.name},</MySpan>
-                    <MySpan>Рейтинг: {master.rating},</MySpan>
-                    <MySpan>Город: {master.cities.map((city) => city.name + ', ')}</MySpan>
+                    <MySpan>Name: {master.name},</MySpan>
+                    <MySpan>Rating: {master.rating},</MySpan>
+                    <MySpan>City: {master.cities.map((city) => city.name + ', ')}</MySpan>
                   </div>
                   <div className='buttons'>
-                    <MySmallButton to={`${master.id}`}>Изменить</MySmallButton>
-                    <MySmallButton onClick={() => deleteMaster(master.id)}>Удалить</MySmallButton>
+                    <MySmallButton to={`${master.id}`}>Edit</MySmallButton>
+                    <MySmallButton onClick={() => deleteMaster(master.id)}>Delete</MySmallButton>
                   </div>
                 </li>
               )
@@ -64,7 +64,7 @@ const Masters = () => {
         </ul>
       </div>
       <div className='addButtonWrapper form'>
-        <MyLinkButton to='addMaster'>Добавить мастера</MyLinkButton>
+        <MyLinkButton to='addMaster'>Add master</MyLinkButton>
       </div>
     </div>
   )

@@ -10,7 +10,7 @@ const Customers = () => {
   const [error, setError] = useState('')
   const [customerId, setCustomerId] = useState('')
   const [isLoading, setIsLoading] = useState(true)
-  const textError = 'Не может быть удален, используется в заказе'
+  const textError = 'Customer cannot be deleted, used in order'
 
   useEffect(() => {
     customersAPI
@@ -33,26 +33,26 @@ const Customers = () => {
     setCustomerId(id)
   }
 
-  if (isLoading) return <MySpan>Список клиентов загружается...</MySpan>
+  if (isLoading) return <MySpan>The list of customers is loading...</MySpan>
 
   return (
     <div className='itemContent'>
       <div className='customers'>
         <ul className='list'>
           {customers.length === 0 ? (
-            <MySpan>Список клиентов пуст</MySpan>
+            <MySpan>The list of customers is empty</MySpan>
           ) : (
             customers.map((customer) => {
               return (
                 <li id={customer.id} key={customer.id} className='listItem'>
                   {customerId === customer.id ? <MyError>{error}</MyError> : ''}
                   <div className='itemInfo'>
-                    <MySpan>Имя: {customer.name},</MySpan>
+                    <MySpan>Name: {customer.name},</MySpan>
                     <MySpan>Email: {customer.email}</MySpan>
                   </div>
                   <div className='buttons'>
                     <MySmallButton onClick={() => deleteCustomer(customer.id)}>
-                      Удалить
+                      Delete
                     </MySmallButton>
                   </div>
                 </li>
