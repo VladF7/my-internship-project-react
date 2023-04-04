@@ -4,9 +4,9 @@ import './MySizeSelector.css'
 
 const MySizeSelector = ({ error, ...props }) => {
   const options = [
-    { value: 'Маленькие', id: '1' },
-    { value: 'Средние', id: '2' },
-    { value: 'Большие', id: '3' }
+    { value: 'Маленькие', id: 1 },
+    { value: 'Средние', id: 2 },
+    { value: 'Большие', id: 3 }
   ]
 
   let word
@@ -36,8 +36,8 @@ const MySizeSelector = ({ error, ...props }) => {
                 type='radio'
                 id={option.id}
                 name='size'
-                value={option.value}
-                defaultChecked={option.value === props.value ? true : false}
+                value={option.id}
+                defaultChecked={option.id === props.value ? true : false}
               />
               <label className={'label'} htmlFor={option.id}>
                 {option.value}

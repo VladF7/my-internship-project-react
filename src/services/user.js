@@ -1,21 +1,18 @@
 import ordersAPI from '../api/ordersAPI'
 
-export const createUser = async (e) => {
-  const formData = new FormData(e.target)
-  const userForm = {
-    name: formData.get('name'),
-    email: formData.get('email'),
-    size: formData.get('size'),
-    city: formData.get('city'),
-    startTime: formData.get('date')
+export const createUser = async (name, email, clockId, cityId, startTime) => {
+  const requestData = {
+    clockId,
+    startTime
   }
-  sessionStorage.setItem('name', userForm.name)
-  sessionStorage.setItem('email', userForm.email)
-  sessionStorage.setItem('size', userForm.size)
-  sessionStorage.setItem('city', userForm.city)
-  sessionStorage.setItem('startTime', userForm.startTime)
-  const endTime = await ordersAPI.getOrderEndDate(sessionStorage)
-  sessionStorage.setItem('endTime', endTime)
+  const endTime = await ordersAPI.getOrderEndDate(requestData)
+
+  sessionStorage.setItem('name', JSON.stringify(name))
+  sessionStorage.setItem('email', JSON.stringify(email))
+  sessionStorage.setItem('clockId', JSON.stringify(clockId))
+  sessionStorage.setItem('cityId', JSON.stringify(cityId))
+  sessionStorage.setItem('startTime', JSON.stringify(startTime))
+  sessionStorage.setItem('endTime', JSON.stringify(endTime))
 
   return endTime
 }

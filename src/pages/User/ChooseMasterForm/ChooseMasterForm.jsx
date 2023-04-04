@@ -10,35 +10,34 @@ import MySpan from '../../../components/Span/MySpan'
 
 const ChooseMasterForm = () => {
   const navigate = useNavigate()
-  const [freeMastersList, setFreeMastersList] = useState('')
-  const [masterId, setMasterId] = useState('')
+  const [freeMastersList, setFreeMastersList] = useState([])
+  const [masterId, setMasterId] = useState(0)
   const [masterIdError, setMasterIdError] = useState('')
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     mastersAPI
-      .getFreeMasters(sessionStorage)
+      .getFreeMasters()
       .then((res) => setFreeMastersList(res))
       .then(() => setIsLoading(false))
   }, [])
-
+  const getMasterId = (masterId) => {
+    setMasterId(Number(masterId))
+    setMasterIdError('')
+  }
+  const goBack = (e) => {
+    e.preventDefault()
+    navigate(-1)
+  }
   const onSubmit = (e) => {
     e.preventDefault()
     if (!masterId) {
       setMasterIdError('Обязательно укажите мастера')
       return
     } else {
-      ordersAPI.addOrder(e)
+      ordersAPI.addOrder(masterId)
       navigate('/successOrder', { replace: true })
     }
-  }
-  const getMasterId = (e) => {
-    setMasterId(e.target.value)
-    setMasterIdError('')
-  }
-  const goBack = (e) => {
-    e.preventDefault()
-    navigate(-1)
   }
 
   return (
@@ -58,7 +57,7 @@ const ChooseMasterForm = () => {
                   <div className='masterItem' key={master.id}>
                     <input
                       className='input'
-                      onChange={(e) => getMasterId(e)}
+                      onChange={(e) => getMasterId(e.target.value)}
                       type='radio'
                       id={master.id}
                       name='masterId'

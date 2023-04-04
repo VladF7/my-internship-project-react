@@ -7,7 +7,7 @@ const MySelect = ({ discription, name, placeholder, options, ...props }) => {
       <MyLabel discription={discription}></MyLabel>
       <MyError>{props.error}</MyError>
       <select {...props} name={name} id={name} className='select'>
-        <option value='0' disabled>
+        <option value={''} disabled>
           {placeholder}
         </option>
         {options.map((option) => {

@@ -1,8 +1,25 @@
 import { request } from '../api/requestAPI'
 
 class MastersAPI {
-  async getFreeMasters(data) {
-    const response = await request('/api/masters/getMastersList', 'POST', data)
+  async getFreeMasters() {
+    const requestData = {}
+    Object.keys(sessionStorage).forEach((key) => {
+      requestData[key] = JSON.parse(sessionStorage.getItem(key))
+    })
+
+    const response = await request(
+      `/api/masters/getFreeMasters/` + '?' + new URLSearchParams(requestData),
+      'GET'
+    )
+    return response
+  }
+  async getFreeMastersForCurrOrder(orderId, requestData) {
+    const response = await request(
+      `/api/masters/freeMastersForOrder/${orderId}` + '?' + new URLSearchParams(requestData),
+      'GET',
+      null,
+      localStorage.getItem('token')
+    )
     return response
   }
   async getMasters() {
@@ -13,28 +30,32 @@ class MastersAPI {
     const response = await request(`/api/masters/${id}`, 'GET', null, localStorage.getItem('token'))
     return response
   }
-  async addMaster(e) {
-    const formData = new FormData(e.target)
-    const newMaster = {
-      name: formData.get('name'),
-      rating: formData.get('rating'),
-      cities: formData.getAll('cities')
+  async addMaster(name, rating, cities) {
+    const requestData = {
+      name,
+      rating,
+      cities
     }
 
-    const response = await request('/api/masters', 'POST', newMaster, localStorage.getItem('token'))
+    const response = await request(
+      '/api/masters',
+      'POST',
+      requestData,
+      localStorage.getItem('token')
+    )
     return response
   }
-  async editMaster(e, id) {
-    const formData = new FormData(e.target)
-    const editedMaster = {
-      name: formData.get('name'),
-      rating: formData.get('rating'),
-      cities: formData.getAll('cities')
+  async editMaster(id, name, rating, cities) {
+    const requestData = {
+      name,
+      rating,
+      cities
     }
+
     const response = await request(
       `/api/masters/${id}`,
       'PUT',
-      editedMaster,
+      requestData,
       localStorage.getItem('token')
     )
     return response
