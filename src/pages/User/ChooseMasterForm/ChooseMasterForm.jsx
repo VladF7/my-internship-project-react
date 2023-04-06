@@ -29,13 +29,13 @@ const ChooseMasterForm = () => {
     e.preventDefault()
     navigate(-1)
   }
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault()
     if (!masterId) {
       setMasterIdError('Please choose master')
       return
     } else {
-      const order = ordersAPI.addOrder(masterId)
+      const order = await ordersAPI.addOrder(masterId)
       if (order) {
         navigate('/successOrder', { replace: true })
       }

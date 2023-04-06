@@ -59,6 +59,8 @@ const Orders = () => {
                     <MySpan>City: {order.city.name},</MySpan>
                     <MySpan>Order start time: {order.startTime},</MySpan>
                     <MySpan>Order end time: {order.endTime}</MySpan>
+                    <MySpan>Order price: {order.price}</MySpan>
+                    <MySpan>Order status: {order.status.name}</MySpan>
                   </div>
                   <div className='buttons'>
                     {format(new Date(), 'yyyy.MM.dd, HH:mm') < order.startTime ? (

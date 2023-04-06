@@ -7,7 +7,6 @@ class OrdersAPI {
     Object.keys(sessionStorage).forEach((key) => {
       requestData[key] = JSON.parse(sessionStorage.getItem(key))
     })
-
     const response = await request(`/api/orders`, 'POST', requestData)
     return response
   }
@@ -19,20 +18,34 @@ class OrdersAPI {
     const response = await request(`/api/orders/${id}`, 'GET', null, localStorage.getItem('token'))
     return response
   }
-  async getOrderEndDate(requestData) {
+  async getOrderEndTime(requestData) {
     const response = await request(
       '/api/orders/orderEndTime' + '?' + new URLSearchParams(requestData),
       'GET'
     )
     return response
   }
-  async editOrder(id, cityId, masterId, clockId, startTime, endTime) {
+  async editOrder(
+    id,
+    cityId,
+    masterId,
+    clockId,
+    startTime,
+    endTime,
+    priceForHour,
+    price,
+    statusId
+  ) {
     const editedOrder = {
+      id,
       cityId,
       masterId,
       clockId,
       startTime,
-      endTime
+      endTime,
+      priceForHour,
+      price,
+      statusId
     }
     const response = await request(
       `/api/orders/${id}`,

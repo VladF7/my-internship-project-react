@@ -5,12 +5,34 @@ class CitiesAPI {
     const response = await request('/api/cities')
     return response
   }
-  async addCity(e) {
-    const formData = new FormData(e.target)
-    const newCity = {
-      name: formData.get('city')
+  async addCity(name, priceForHour) {
+    const requestData = {
+      name,
+      priceForHour
     }
-    const response = await request('/api/cities', 'POST', newCity, localStorage.getItem('token'))
+    const response = await request(
+      '/api/cities',
+      'POST',
+      requestData,
+      localStorage.getItem('token')
+    )
+    return response
+  }
+  async editCity(id, name, priceForHour) {
+    const requestData = {
+      name,
+      priceForHour
+    }
+    const response = await request(
+      `/api/cities/${id}`,
+      'PUT',
+      requestData,
+      localStorage.getItem('token')
+    )
+    return response
+  }
+  async getCityById(id) {
+    const response = await request(`/api/cities/${id}`, 'GET', null, localStorage.getItem('token'))
     return response
   }
   async delCity(id) {

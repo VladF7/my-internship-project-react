@@ -26,6 +26,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { checkAuth } from './services/auth'
 import { actionLoaded } from './reducers/loadReducer'
 import { ClockLoader } from 'react-spinners'
+import EditCity from './pages/Admin/Cities/EditCity/EditCity'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -59,6 +60,7 @@ const App = () => {
           <Route path='masters/:id' element={<EditMaster />}></Route>
           <Route path='masters/addMaster' element={<AddMaster />}></Route>
           <Route path='cities' element={<Cities />} />
+          <Route path='cities/:id' element={<EditCity />}></Route>
           <Route path='orders' element={<Orders />}></Route>
           <Route path='orders/:id' element={<EditOrder />}></Route>
           <Route path='customers' element={<Customers />}></Route>
