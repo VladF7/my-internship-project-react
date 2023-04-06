@@ -17,6 +17,7 @@ const EditCity = () => {
   const [error, setError] = useState('')
   const [priceForHourError, setPriceForHourError] = useState('')
   const requiredField = 'Required field'
+  const priceForHourField = 'Must be not empty and not null'
 
   useEffect(() => {
     citiesAPI
@@ -49,7 +50,7 @@ const EditCity = () => {
         setCityError(requiredField)
       }
       if (!priceForHour) {
-        setPriceForHourError(requiredField)
+        setPriceForHourError(priceForHourField)
       }
       return
     }
@@ -61,7 +62,7 @@ const EditCity = () => {
       await citiesAPI.getCities()
       prevPage(-1)
     } else {
-      setError('A city with that name alredy exist or incorrect price for hour')
+      setError('A city with that name alredy exist')
     }
   }
   if (isLoading) {
@@ -83,6 +84,10 @@ const EditCity = () => {
           setCityName(e.target.value)
         }}
       />
+
+      <div className='errorContainer'>
+        <MyError>{priceForHourError}</MyError>
+      </div>
       <MyLabel discription={'Edit price for hour'} />
       <MyInput
         type='number'
