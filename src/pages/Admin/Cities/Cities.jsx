@@ -19,6 +19,7 @@ const Cities = () => {
   const [isLoading, setIsLoading] = useState(true)
 
   const requiredField = 'Required field'
+  const priceForHourField = 'Must be not empty and not null'
 
   useEffect(() => {
     citiesAPI
@@ -44,7 +45,7 @@ const Cities = () => {
         setCityError(requiredField)
       }
       if (!priceForHour) {
-        setPriceForHourError(requiredField)
+        setPriceForHourError(priceForHourField)
       }
       return
     }
@@ -58,7 +59,7 @@ const Cities = () => {
       setCity('')
       setPriceForHour('')
     } else {
-      setError('A city with that name alredy exist or incorrect price for hour')
+      setError('A city with that name alredy exist')
     }
   }
 
@@ -116,6 +117,7 @@ const Cities = () => {
             setCity(e.target.value)
           }}
         />
+
         <div className='errorContainer'>
           <MyError>{priceForHourError}</MyError>
         </div>
