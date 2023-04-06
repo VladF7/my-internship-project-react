@@ -82,8 +82,8 @@ const EditOrder = () => {
     getPrice(timeToFix, priceForHour)
   }, [priceForHour, timeToFix])
 
-  const getPrice = (size, priceForHour) => {
-    const price = size * priceForHour
+  const getPrice = (timeToFix, priceForHour) => {
+    const price = timeToFix * priceForHour
     setPrice(price)
   }
   const getPriceForHour = (cityId) => {

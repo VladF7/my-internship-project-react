@@ -56,7 +56,7 @@ const UserForm = () => {
     }
   }, [clock])
   useEffect(() => {
-    getPrice(clock, priceForHour)
+    getPrice(timeToFix, priceForHour)
   }, [priceForHour, timeToFix])
 
   const navigate = useNavigate()
@@ -85,8 +85,8 @@ const UserForm = () => {
       setEmailError('')
     }
   }
-  const getPrice = (size, priceForHour) => {
-    const price = size * priceForHour
+  const getPrice = (timeToFix, priceForHour) => {
+    const price = timeToFix * priceForHour
     setPrice(price)
   }
   const getPriceForHour = (cityId) => {
