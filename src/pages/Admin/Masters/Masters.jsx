@@ -42,7 +42,7 @@ const Masters = () => {
       <div className='masters'>
         <ul className='list'>
           {masters.length === 0 ? (
-            <MySpan>The list of customers is empty</MySpan>
+            <MySpan>The list of masters is empty</MySpan>
           ) : (
             masters.map((master) => {
               return (

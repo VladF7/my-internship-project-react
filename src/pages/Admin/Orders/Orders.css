@@ -3,3 +3,13 @@
   overflow: auto;
   width: 100%;
 }
+.buttonBoxWrapp {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+}
+.buttonBox {
+  width: 48%;
+
+  padding: 10px 0;
+}

@@ -10,12 +10,15 @@ import MySpan from '../../../components/Span/MySpan'
 
 const Cities = () => {
   const [city, setCity] = useState('')
+  const [priceForHour, setPriceForHour] = useState('')
   const [cities, setCities] = useState([])
   const [cityError, setCityError] = useState('')
+  const [priceForHourError, setPriceForHourError] = useState('')
+  const [error, setError] = useState('')
+
   const [isLoading, setIsLoading] = useState(true)
 
   const requiredField = 'Required field'
-  const existingField = 'A city with that name already exists'
 
   useEffect(() => {
     citiesAPI
@@ -24,27 +27,39 @@ const Cities = () => {
       .then(() => setIsLoading(false))
   }, [])
 
-  const onBlurCity = (e) => {
-    if (e.target.value !== 0) {
-      return setCityError('')
-    }
+  const onBlurCity = () => {
+    setCityError('')
+    setError('')
   }
-
-  const addCity = (e) => {
+  const onBlurPriceForHour = () => {
+    setPriceForHourError('')
+    setError('')
+  }
+  const addCity = async (e) => {
     e.preventDefault()
+    setError('')
 
-    if (!city) {
-      return setCityError(requiredField)
+    if (!city || !priceForHour) {
+      if (!city) {
+        setCityError(requiredField)
+      }
+      if (!priceForHour) {
+        setPriceForHourError(requiredField)
+      }
+      return
+    }
+    if (cityError || priceForHourError) {
+      return
     }
 
-    citiesAPI.addCity(e).then((city) => {
-      if (!city) {
-        return setCityError(existingField)
-      }
-      setCities([...cities, city])
-    })
-
-    setCity('')
+    const newCity = await citiesAPI.addCity(city, priceForHour)
+    if (newCity) {
+      setCities([...cities, newCity])
+      setCity('')
+      setPriceForHour('')
+    } else {
+      setError('A city with that name alredy exist or incorrect price for hour')
+    }
   }
 
   const delCity = (id) => {
@@ -73,9 +88,11 @@ const Cities = () => {
               return (
                 <li id={city.id} key={city.id} className={'listItem'}>
                   <div className='itemInfo'>
-                    <MySpan>{city.name}</MySpan>
+                    <MySpan>City: {city.name},</MySpan>
+                    <MySpan>Price for hour: {city.priceForHour} USD,</MySpan>
                   </div>
                   <div className='buttons'>
+                    <MySmallButton to={`${city.id}`}>Edit</MySmallButton>
                     <MySmallButton onClick={() => delCity(city.id)}>Delete</MySmallButton>
                   </div>
                 </li>
@@ -86,7 +103,7 @@ const Cities = () => {
       </div>
       <form onSubmit={(e) => addCity(e)} className={'form'}>
         <div className='errorContainer'>
-          <MyError>{cityError}</MyError>
+          <MyError>{cityError || error}</MyError>
         </div>
         <MyLabel discription={'Add city to the list'} />
         <MyInput
@@ -94,9 +111,23 @@ const Cities = () => {
           name='city'
           placeholder={'Enter the name of the city'}
           value={city}
-          onBlur={(e) => onBlurCity(e)}
+          onBlur={() => onBlurCity()}
           onChange={(e) => {
             setCity(e.target.value)
+          }}
+        />
+        <div className='errorContainer'>
+          <MyError>{priceForHourError}</MyError>
+        </div>
+        <MyLabel discription={'Add price for hour'} />
+        <MyInput
+          type='number'
+          name='price'
+          placeholder={'Enter the price for hour'}
+          value={priceForHour}
+          onBlur={() => onBlurPriceForHour()}
+          onChange={(e) => {
+            setPriceForHour(Number(e.target.value))
           }}
         />
         <MyButton>Add city</MyButton>

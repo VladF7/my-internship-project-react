@@ -42,15 +42,14 @@ const EditMaster = () => {
   const [cities, setCities] = useState([])
 
   const [nameError, setNameError] = useState('')
-  const [ratingError, setRatingError] = useState('')
   const [citiesError, setCitiesError] = useState('')
   const requiredField = 'Required field'
   const ratingOptions = [
-    { value: 1, label: 1 },
-    { value: 2, label: 2 },
-    { value: 3, label: 3 },
-    { value: 4, label: 4 },
-    { value: 5, label: 5 }
+    { id: 1, label: 1 },
+    { id: 2, label: 2 },
+    { id: 3, label: 3 },
+    { id: 4, label: 4 },
+    { id: 5, label: 5 }
   ]
 
   const onBlurName = (e) => {
@@ -66,10 +65,6 @@ const EditMaster = () => {
   const changeCities = (cities) => {
     setCities(cities)
     setCitiesError('')
-  }
-  const changeRating = (rating) => {
-    setRating(Number(rating))
-    setRatingError('')
   }
   const goBack = (e) => {
     e.preventDefault()
@@ -87,9 +82,11 @@ const EditMaster = () => {
       return
     }
     const citiesId = cities.map((city) => city.value)
-    await mastersAPI.editMaster(id, name, rating, citiesId)
-    prevPage(-1)
-    await mastersAPI.getMasters()
+    const editedMaster = await mastersAPI.editMaster(id, name, rating, citiesId)
+    if (editedMaster) {
+      prevPage(-1)
+      await mastersAPI.getMasters()
+    }
   }
 
   if (isLoading) {
@@ -116,10 +113,9 @@ const EditMaster = () => {
         placeholder='Click to select rating'
         name='rating'
         discription={'Choose master rating'}
-        error={ratingError}
         value={rating}
         onChange={(e) => {
-          changeRating(e.target.value)
+          setRating(Number(e.target.value))
         }}
       />
       <ReactSelect

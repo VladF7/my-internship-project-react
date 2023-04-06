@@ -8,14 +8,23 @@ import MyBigButton from '../../components/Buttons/BigButton/MyBigButton'
 import citiesAPI from '../../api/citiesAPI'
 import DatePicker from '../../components/DatePicker/DatePicker'
 import { parse } from 'date-fns'
-import MySelect from '../../components/Select/MySelect'
+import MyLabel from '../../components/Label/MyLabel'
+import clocksAPI from '../../api/clocksAPI'
+import MySelectWithLabel from '../../components/Select/MySelectWithLabel'
 
 const UserForm = () => {
+  const [isLoading, setIsLoading] = useState(true)
   const [cities, setCities] = useState([])
+  const [clocks, setClocks] = useState([])
   const [email, setEmail] = useState(JSON.parse(sessionStorage.getItem('email')) || '')
   const [name, setName] = useState(JSON.parse(sessionStorage.getItem('name')) || '')
-  const [size, setSize] = useState(JSON.parse(sessionStorage.getItem('clockId')) || '')
+  const [clock, setClock] = useState(JSON.parse(sessionStorage.getItem('clockId')) || '')
   const [city, setCity] = useState(JSON.parse(sessionStorage.getItem('cityId')) || '')
+  const [priceForHour, setPriceForHour] = useState(
+    JSON.parse(sessionStorage.getItem('priceForHour')) || ''
+  )
+  const [timeToFix, setTimeToFix] = useState(JSON.parse(sessionStorage.getItem('timeToFix')) || '')
+  const [price, setPrice] = useState(JSON.parse(sessionStorage.getItem('price')) || '')
   const [date, setDate] = useState(
     sessionStorage.getItem('startTime')
       ? parse(JSON.parse(sessionStorage.getItem('startTime')), 'yyyy.MM.dd, HH:mm', new Date())
@@ -29,17 +38,34 @@ const UserForm = () => {
   const [dateError, setDateError] = useState('')
 
   useEffect(() => {
-    citiesAPI
-      .getCities()
-      .then((cities) => setCities(cities))
-      .then(() => sessionStorage.clear())
+    clocksAPI
+      .getClocks()
+      .then((clocks) => setClocks(clocks))
+      .then(() =>
+        citiesAPI
+          .getCities()
+          .then((cities) => setCities(cities))
+          .then(() => setIsLoading(false))
+          .then(() => sessionStorage.clear())
+      )
   }, [])
+  useEffect(() => {
+    if (!isLoading) {
+      getPriceForHour(city)
+    }
+  }, [city])
+  useEffect(() => {
+    if (!isLoading) {
+      getTimeToFix(clock)
+    }
+  }, [clock])
+  useEffect(() => {
+    getPrice(clock, priceForHour)
+  }, [priceForHour, timeToFix])
 
   const navigate = useNavigate()
   const requiredField = 'Required field'
-  const citiesOptionsList = cities.map((city) => {
-    return { value: city.id, label: city.name }
-  })
+  const currency = 'USD'
 
   const onBlurName = (name) => {
     if (name.length < 3) {
@@ -63,31 +89,51 @@ const UserForm = () => {
       setEmailError('')
     }
   }
-  const changeSize = (size) => {
-    setSizeError('')
-    setSize(Number(size))
+  const getPrice = (size, priceForHour) => {
+    const price = size * priceForHour
+    setPrice(price)
   }
-  const changeCity = (city) => {
+  const getPriceForHour = (cityId) => {
+    const [city] = cities.filter((city) => city.id === cityId)
+    if (city) {
+      setPriceForHour(city.priceForHour)
+    } else {
+      setPriceForHour('')
+    }
+  }
+  const getTimeToFix = (clockId) => {
+    const [clock] = clocks.filter((clock) => clock.id === clockId)
+    if (clock) {
+      setTimeToFix(clock.timeToFix)
+    } else {
+      setPriceForHour('')
+    }
+  }
+  const changeClock = (clockId) => {
+    setSizeError('')
+    setClock(Number(clockId))
+  }
+  const changeCity = (cityId) => {
     setCityError('')
-    setCity(Number(city))
+    setCity(Number(cityId))
   }
   const changeDate = (date) => {
-    setDate(date)
     setDateError('')
+    setDate(date)
   }
   const getSubmit = async (e) => {
     e.preventDefault()
     if (nameError || emailError || sizeError || cityError || dateError) {
       return
     }
-    if (!name || !email || !size || !city || !date) {
+    if (!name || !email || !clock || !city || !date) {
       if (!name) {
         setNameError(requiredField)
       }
       if (!email) {
         setEmailError(requiredField)
       }
-      if (!size) {
+      if (!clock) {
         setSizeError(requiredField)
       }
       if (!city) {
@@ -99,10 +145,13 @@ const UserForm = () => {
       return
     } else {
       const startTime = e.target.date.value
-      await createUser(name, email, size, city, startTime)
+      await createUser(name, email, clock, city, startTime, price, priceForHour, timeToFix)
       navigate('chooseMaster')
     }
   }
+
+  if (isLoading === true) return <div className='userPage'></div>
+
   return (
     <div className='userPage'>
       <form className={'userForm'} onSubmit={(e) => getSubmit(e)}>
@@ -133,15 +182,22 @@ const UserForm = () => {
           }}
         />
         <MySizeSelector
-          name='size'
-          onChange={(e) => changeSize(e.target.value)}
+          name='clock'
+          labelText='Time to fix'
+          labelValue={timeToFix}
+          labelWord={timeToFix > 1 ? 'hours' : 'hour'}
+          onChange={(e) => changeClock(e.target.value)}
+          options={clocks}
           error={sizeError}
-          value={size}
+          value={clock}
         />
-        <MySelect
+        <MySelectWithLabel
           name='city'
           value={city}
-          options={citiesOptionsList}
+          options={cities}
+          labelText='Price for hour'
+          labelValue={priceForHour}
+          labelWord={currency}
           placeholder={'Click to select city'}
           discription={'Choose your city'}
           error={cityError}
@@ -153,6 +209,13 @@ const UserForm = () => {
           error={dateError}
           onChange={(date) => changeDate(date)}
         />
+        <MyLabel
+          style={{
+            visibility: price ? '' : 'hidden'
+          }}
+        >
+          Clock repair will cost {price} {currency}
+        </MyLabel>
         <div className='myButtonWrapper'>
           <MyBigButton>Next</MyBigButton>
         </div>

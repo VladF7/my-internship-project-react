@@ -2,63 +2,120 @@ import { format, parse } from 'date-fns'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import citiesAPI from '../../../../api/citiesAPI'
+import clocksAPI from '../../../../api/clocksAPI'
 import mastersAPI from '../../../../api/mastersAPI'
 import ordersAPI from '../../../../api/ordersAPI'
 import MyBigButton from '../../../../components/Buttons/BigButton/MyBigButton'
 import DatePicker from '../../../../components/DatePicker/DatePicker'
+import MyLabel from '../../../../components/Label/MyLabel'
 import MySelect from '../../../../components/Select/MySelect'
 import MySpan from '../../../../components/Span/MySpan'
+import MySelectWithLabel from '../../../../components/Select/MySelectWithLabel'
+import statusesAPI from '../../../../api/statuses.API'
 
 const EditOrder = () => {
   const [isLoading, setIsLoadnig] = useState(true)
   const [cities, setCities] = useState([])
+  const [clocks, setClocks] = useState([])
   const [masters, setMasters] = useState([])
+  const [statuses, setStatuses] = useState([])
   const [master, setMaster] = useState('')
-  const [size, setSize] = useState('')
+  const [clock, setClock] = useState('')
   const [city, setCity] = useState('')
   const [date, setDate] = useState('')
   const [endTime, setEndTime] = useState('')
+  const [priceForHour, setPriceForHour] = useState('')
+  const [timeToFix, setTimeToFix] = useState('')
+  const [price, setPrice] = useState('')
+  const [status, setStatus] = useState()
 
-  const [cityError, setCityError] = useState('')
   const [masterError, setMasterError] = useState('')
 
+  const currency = 'USD'
   const requiredField = 'Required field'
-  const sizeOptions = [
-    { value: 1, label: 'Small' },
-    { value: 2, label: 'Medium' },
-    { value: 3, label: 'Big' }
-  ]
+  const sizeOptions = clocks.map((clock) => {
+    return { id: clock.id, name: clock.size }
+  })
   const mastersOptions = masters.map((master) => {
-    return { value: master.id, label: `Name: ${master.name}, rating: ${master.rating}` }
+    return { id: master.id, label: `Name: ${master.name}, rating: ${master.rating}` }
   })
-  const citiesOptionsList = cities.map((city) => {
-    return { value: city.id, label: city.name }
+  const statusesOptions = statuses.map((status) => {
+    return { id: status.id, label: status.name }
   })
+
   const prevPage = useNavigate()
   const { id } = useParams()
   useEffect(() => {
-    ordersAPI
-      .getOrderById(id)
-      .then((order) => {
-        setCity(order.cityId)
-        setSize(order.clockId)
-        setDate(parse(order.startTime, 'yyyy.MM.dd, HH:mm', new Date()))
-        setEndTime(order.endTime)
-        setMaster(order.masterId)
-      })
-      .then(() => setIsLoadnig(false))
-    citiesAPI.getCities().then((cities) => setCities(cities))
+    clocksAPI
+      .getClocks()
+      .then((clocks) => setClocks(clocks))
+      .then(() =>
+        citiesAPI
+          .getCities()
+          .then((cities) => setCities(cities))
+          .then(() =>
+            statusesAPI
+              .getStatuses()
+              .then((statuses) => setStatuses(statuses))
+              .then(() =>
+                ordersAPI
+                  .getOrderById(id)
+                  .then((order) => {
+                    setCity(order.cityId)
+                    setClock(order.clockId)
+                    setDate(parse(order.startTime, 'yyyy.MM.dd, HH:mm', new Date()))
+                    setEndTime(order.endTime)
+                    setMaster(order.masterId)
+                    setStatus(order.statusId)
+                  })
+                  .then(() => setIsLoadnig(false))
+              )
+          )
+      )
   }, [id])
+
   useEffect(() => {
     if (!isLoading) {
-      getEndOrderTime(date, size)
+      getOrderEndTime(date, clock)
     }
-  }, [size, date])
+  }, [clock, date])
   useEffect(() => {
     if (!isLoading) {
       getFreeMastersList(id, city, date, endTime)
     }
   }, [endTime, city])
+
+  useEffect(() => {
+    getPriceForHour(city)
+  }, [city])
+  useEffect(() => {
+    getTimeToFix(clock)
+  }, [clock])
+  useEffect(() => {
+    getPrice(timeToFix, priceForHour)
+  }, [priceForHour, timeToFix])
+
+  const getPrice = (size, priceForHour) => {
+    const price = size * priceForHour
+    setPrice(price)
+  }
+  const getPriceForHour = (cityId) => {
+    const [city] = cities.filter((c) => c.id === cityId)
+    if (city) {
+      setPriceForHour(city.priceForHour)
+    } else {
+      setPriceForHour('')
+    }
+  }
+  const getTimeToFix = (clockId) => {
+    const [clock] = clocks.filter((c) => c.id === clockId)
+    if (clock) {
+      setTimeToFix(clock.timeToFix)
+    } else {
+      setTimeToFix('')
+    }
+  }
+
   const getFreeMastersList = async (id, city, startTime, endTime) => {
     const requestData = {
       cityId: city,
@@ -67,30 +124,19 @@ const EditOrder = () => {
     }
     const masters = await mastersAPI.getFreeMastersForCurrOrder(id, requestData)
     setMasters(masters)
+    if (masters.length) {
+      setMasterError('')
+    }
     return masters
   }
-  const getEndOrderTime = async (startTime, size) => {
+  const getOrderEndTime = async (startTime, size) => {
     const requestData = {
       clockId: size,
       startTime: format(new Date(startTime), 'yyyy.MM.dd, HH:mm')
     }
-    const endTime = await ordersAPI.getOrderEndDate(requestData)
+    const endTime = await ordersAPI.getOrderEndTime(requestData)
     setEndTime(endTime)
     return endTime
-  }
-  const changeCity = async (cityId) => {
-    setCityError('')
-    setCity(Number(cityId))
-  }
-  const changeSize = (clockId) => {
-    setSize(Number(clockId))
-  }
-  const changeMaster = (masterId) => {
-    setMaster(Number(masterId))
-    setMasterError('')
-  }
-  const changeDate = (date) => {
-    setDate(date)
   }
   const goBack = (e) => {
     e.preventDefault()
@@ -98,20 +144,27 @@ const EditOrder = () => {
   }
   const editOrder = async (e) => {
     e.preventDefault()
-    if (!city || masters.length === 0) {
-      if (!city) {
-        setCityError(requiredField)
-      }
-      if (masters.length === 0) {
-        setMasterError(requiredField)
-      }
+    if (!masters.length) {
+      setMasterError(requiredField)
       return
     }
     const master = Number(e.target.master.value)
     const startTime = e.target.date.value
-    await ordersAPI.editOrder(id, city, master, size, startTime, endTime)
-    prevPage(-1)
-    await ordersAPI.getOrders()
+    const editedOrder = await ordersAPI.editOrder(
+      id,
+      city,
+      master,
+      clock,
+      startTime,
+      endTime,
+      priceForHour,
+      price,
+      status
+    )
+    if (editedOrder) {
+      prevPage(-1)
+      await ordersAPI.getOrders()
+    }
   }
   if (isLoading) {
     return <MySpan>Data is loading, please wait...</MySpan>
@@ -119,24 +172,29 @@ const EditOrder = () => {
 
   return (
     <form onSubmit={(e) => editOrder(e)} className={'form'}>
-      <MySelect
+      <MySelectWithLabel
         name='city'
         value={city}
-        options={citiesOptionsList}
+        options={cities}
+        labelText='Price for hour'
+        labelValue={priceForHour}
+        labelWord={currency}
         placeholder={'Click to select city'}
         discription={'Choose city'}
-        error={cityError}
-        onChange={(e) => changeCity(e.target.value)}
+        onChange={(e) => setCity(Number(e.target.value))}
       />
-      <DatePicker name='date' value={date} onChange={(date) => changeDate(date)} />
-      <MySelect
+      <DatePicker name='date' value={date} onChange={(date) => setDate(date)} />
+      <MySelectWithLabel
         options={sizeOptions}
         placeholder='Click to select size'
-        name='size'
+        name='clock'
+        labelText='Time to fix'
+        labelValue={timeToFix}
+        labelWord={timeToFix > 1 ? 'hours' : 'hour'}
         discription={'Choose clock size'}
-        value={size}
+        value={clock}
         onChange={(e) => {
-          changeSize(e.target.value)
+          setClock(Number(e.target.value))
         }}
       />
       <MySelect
@@ -146,13 +204,30 @@ const EditOrder = () => {
         discription={'Choose master'}
         error={masterError}
         value={master}
-        onChange={(e) => changeMaster(e.target.value)}
+        onChange={(e) => setMaster(Number(e.target.value))}
       />
-      <div className='myButtonWrapper'>
-        <MyBigButton>Edit order</MyBigButton>
-      </div>
-      <div className='myButtonWrapper'>
-        <MyBigButton onClick={(e) => goBack(e)}>Cancel</MyBigButton>
+      <MySelect
+        options={statusesOptions}
+        placeholder='Click to select status'
+        name='status'
+        discription={'Change status'}
+        value={status}
+        onChange={(e) => setStatus(Number(e.target.value))}
+      />
+      <MyLabel
+        style={{
+          visibility: price ? '' : 'hidden'
+        }}
+      >
+        Clock repair will cost {price} {currency}
+      </MyLabel>
+      <div className='buttonBoxWrapp'>
+        <div className='buttonBox'>
+          <MyBigButton onClick={(e) => goBack(e)}>Cancel</MyBigButton>
+        </div>
+        <div className='buttonBox'>
+          <MyBigButton>Edit order</MyBigButton>
+        </div>
       </div>
     </form>
   )

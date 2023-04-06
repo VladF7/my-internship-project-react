@@ -26,11 +26,11 @@ const AddMaster = () => {
   const [citiesError, setCitiesError] = useState('')
   const requiredField = 'Required field'
   const ratingOptions = [
-    { value: 1, label: 1 },
-    { value: 2, label: 2 },
-    { value: 3, label: 3 },
-    { value: 4, label: 4 },
-    { value: 5, label: 5 }
+    { id: 1, label: 1 },
+    { id: 2, label: 2 },
+    { id: 3, label: 3 },
+    { id: 4, label: 4 },
+    { id: 5, label: 5 }
   ]
   const onBlurName = (e) => {
     if (e.target.value.length < 3) {
