@@ -47,10 +47,16 @@ const EditOrder = () => {
   const { id } = useParams()
   useEffect(() => {
     Promise.all([
-      clocksAPI.getClocks().then((clocks) => setClocks(clocks)),
-      citiesAPI.getCities().then((cities) => setCities(cities)),
-      statusesAPI.getStatuses().then((statuses) => setStatuses(statuses)),
-      ordersAPI.getOrderById(id).then((order) => {
+      clocksAPI.getClocks(),
+      citiesAPI.getCities(),
+      statusesAPI.getStatuses(),
+      ordersAPI.getOrderById(id)
+    ])
+      .then((result) => {
+        const [clocks, cities, statuses, order] = result
+        setClocks(clocks)
+        setCities(cities)
+        setStatuses(statuses)
         setCity(order.cityId)
         setClock(order.clockId)
         setDate(parse(order.startTime, 'yyyy.MM.dd, HH:mm', new Date()))
@@ -58,7 +64,7 @@ const EditOrder = () => {
         setMaster(order.masterId)
         setStatus(order.statusId)
       })
-    ]).then(() => setIsLoadnig(false))
+      .then(() => setIsLoadnig(false))
   }, [id])
 
   useEffect(() => {

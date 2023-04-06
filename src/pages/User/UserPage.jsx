@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import './UserPage.css'
 import { useEffect, useState } from 'react'
 import MyInputItem from '../../components/InputItem/MyInputItem'
@@ -38,10 +39,13 @@ const UserForm = () => {
   const [dateError, setDateError] = useState('')
 
   useEffect(() => {
-    Promise.all([
-      clocksAPI.getClocks().then((clocks) => setClocks(clocks)),
-      citiesAPI.getCities().then((cities) => setCities(cities))
-    ])
+    Promise.all([clocksAPI.getClocks(), citiesAPI.getCities()])
+      .then((result) => {
+        const [clocks, cities] = result
+        setClocks(clocks)
+        setCities(cities)
+      })
+
       .then(() => setIsLoading(false))
       .then(() => sessionStorage.clear())
   }, [])
