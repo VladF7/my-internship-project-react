@@ -46,32 +46,19 @@ const EditOrder = () => {
   const prevPage = useNavigate()
   const { id } = useParams()
   useEffect(() => {
-    clocksAPI
-      .getClocks()
-      .then((clocks) => setClocks(clocks))
-      .then(() =>
-        citiesAPI
-          .getCities()
-          .then((cities) => setCities(cities))
-          .then(() =>
-            statusesAPI
-              .getStatuses()
-              .then((statuses) => setStatuses(statuses))
-              .then(() =>
-                ordersAPI
-                  .getOrderById(id)
-                  .then((order) => {
-                    setCity(order.cityId)
-                    setClock(order.clockId)
-                    setDate(parse(order.startTime, 'yyyy.MM.dd, HH:mm', new Date()))
-                    setEndTime(order.endTime)
-                    setMaster(order.masterId)
-                    setStatus(order.statusId)
-                  })
-                  .then(() => setIsLoadnig(false))
-              )
-          )
-      )
+    Promise.all([
+      clocksAPI.getClocks().then((clocks) => setClocks(clocks)),
+      citiesAPI.getCities().then((cities) => setCities(cities)),
+      statusesAPI.getStatuses().then((statuses) => setStatuses(statuses)),
+      ordersAPI.getOrderById(id).then((order) => {
+        setCity(order.cityId)
+        setClock(order.clockId)
+        setDate(parse(order.startTime, 'yyyy.MM.dd, HH:mm', new Date()))
+        setEndTime(order.endTime)
+        setMaster(order.masterId)
+        setStatus(order.statusId)
+      })
+    ]).then(() => setIsLoadnig(false))
   }, [id])
 
   useEffect(() => {

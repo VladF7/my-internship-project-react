@@ -38,16 +38,12 @@ const UserForm = () => {
   const [dateError, setDateError] = useState('')
 
   useEffect(() => {
-    clocksAPI
-      .getClocks()
-      .then((clocks) => setClocks(clocks))
-      .then(() =>
-        citiesAPI
-          .getCities()
-          .then((cities) => setCities(cities))
-          .then(() => setIsLoading(false))
-          .then(() => sessionStorage.clear())
-      )
+    Promise.all([
+      clocksAPI.getClocks().then((clocks) => setClocks(clocks)),
+      citiesAPI.getCities().then((cities) => setCities(cities))
+    ])
+      .then(() => setIsLoading(false))
+      .then(() => sessionStorage.clear())
   }, [])
   useEffect(() => {
     if (!isLoading) {
@@ -150,7 +146,7 @@ const UserForm = () => {
     }
   }
 
-  if (isLoading === true) return <div className='userPage'></div>
+  if (isLoading) return <div className='userPage'></div>
 
   return (
     <div className='userPage'>
