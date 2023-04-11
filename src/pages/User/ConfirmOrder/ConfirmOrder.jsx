@@ -7,6 +7,7 @@ import ordersAPI from '../../../api/ordersAPI'
 import MyBigButton from '../../../components/Buttons/BigButton/MyBigButton'
 import MyLabel from '../../../components/Label/MyLabel'
 import MySpan from '../../../components/Span/MySpan'
+import { formatValueToDecimal } from '../../../helpers'
 
 const ConfirmOrder = () => {
   const email = JSON.parse(sessionStorage.getItem('email'))
@@ -40,10 +41,6 @@ const ConfirmOrder = () => {
       })
       .then(() => setIsLoading(false))
   }, [])
-
-  const formatValueToDecimal = (value) => {
-    return (value / 100).toFixed(2)
-  }
 
   const goBack = (e) => {
     e.preventDefault()

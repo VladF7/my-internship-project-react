@@ -6,6 +6,7 @@ import MySpan from '../../../components/Span/MySpan'
 import { useNavigate } from 'react-router-dom'
 import MyError from '../../../components/Error/MyError'
 import { format } from 'date-fns'
+import { formatValueToDecimal } from '../../../helpers'
 
 const Orders = () => {
   const [orders, setOrders] = useState([])
@@ -24,10 +25,6 @@ const Orders = () => {
   const delOrder = (id) => {
     ordersAPI.delOrder(id)
     setOrders(orders.filter((order) => order.id !== id))
-  }
-
-  const formatValueToDecimal = (value) => {
-    return (value / 100).toFixed(2)
   }
 
   const goToEdit = (id, start) => {

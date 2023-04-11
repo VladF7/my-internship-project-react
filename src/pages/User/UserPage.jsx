@@ -12,6 +12,7 @@ import { parse } from 'date-fns'
 import MyLabel from '../../components/Label/MyLabel'
 import clocksAPI from '../../api/clocksAPI'
 import MySelectWithLabel from '../../components/Select/MySelectWithLabel'
+import { formatValueToDecimal } from '../../helpers'
 
 const UserForm = () => {
   const [isLoading, setIsLoading] = useState(true)
@@ -111,9 +112,6 @@ const UserForm = () => {
     } else {
       setPriceForHour('')
     }
-  }
-  const formatValueToDecimal = (value) => {
-    return (value / 100).toFixed(2)
   }
 
   const getSubmit = async (e) => {

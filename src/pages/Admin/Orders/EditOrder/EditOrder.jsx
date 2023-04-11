@@ -12,6 +12,7 @@ import MySelect from '../../../../components/Select/MySelect'
 import MySpan from '../../../../components/Span/MySpan'
 import MySelectWithLabel from '../../../../components/Select/MySelectWithLabel'
 import statusesAPI from '../../../../api/statuses.API'
+import { formatValueToDecimal } from '../../../../helpers'
 
 const EditOrder = () => {
   const [isLoading, setIsLoadnig] = useState(true)
@@ -106,9 +107,6 @@ const EditOrder = () => {
     } else {
       setTimeToFix('')
     }
-  }
-  const formatValueToDecimal = (value) => {
-    return (value / 100).toFixed(2)
   }
   const getFreeMastersList = async (id, city, startTime, endTime) => {
     const requestData = {

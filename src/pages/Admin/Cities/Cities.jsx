@@ -7,6 +7,7 @@ import MyInput from '../../../components/Input/MyInput'
 import MyLabel from '../../../components/Label/MyLabel'
 import './Cities.css'
 import MySpan from '../../../components/Span/MySpan'
+import { formatValueToDecimal, formatValueToInteger } from '../../../helpers'
 
 const Cities = () => {
   const [city, setCity] = useState('')
@@ -51,12 +52,6 @@ const Cities = () => {
       return
     }
     setPriceForHour(priceForHour)
-  }
-  const formatValueToDecimal = (value) => {
-    return (value / 100).toFixed(2)
-  }
-  const formatValueToInteger = (value) => {
-    return value * 100
   }
 
   const addCity = async (e) => {
