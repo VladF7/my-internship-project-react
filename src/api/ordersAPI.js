@@ -1,9 +1,8 @@
 import { request } from '../api/requestAPI'
 
 class OrdersAPI {
-  async addOrder(masterId) {
+  async addOrder() {
     const requestData = {}
-    sessionStorage.setItem('masterId', JSON.stringify(masterId))
     Object.keys(sessionStorage).forEach((key) => {
       requestData[key] = JSON.parse(sessionStorage.getItem(key))
     })
@@ -25,17 +24,7 @@ class OrdersAPI {
     )
     return response
   }
-  async editOrder(
-    id,
-    cityId,
-    masterId,
-    clockId,
-    startTime,
-    endTime,
-    priceForHour,
-    price,
-    statusId
-  ) {
+  async editOrder(id, cityId, masterId, clockId, startTime, endTime, priceForHour, price, status) {
     const editedOrder = {
       id,
       cityId,
@@ -45,7 +34,7 @@ class OrdersAPI {
       endTime,
       priceForHour,
       price,
-      statusId
+      status
     }
     const response = await request(
       `/api/orders/${id}`,

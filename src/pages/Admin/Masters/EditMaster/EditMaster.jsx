@@ -101,6 +101,7 @@ const EditMaster = () => {
         error={nameError}
         onChange={(e) => setName(e.target.value)}
         onBlur={(e) => onBlurName(e)}
+        onFocus={() => setNameError('')}
         item={{
           id: 'name',
           type: 'text',
@@ -121,6 +122,7 @@ const EditMaster = () => {
       <ReactSelect
         value={cities}
         error={citiesError}
+        onFocus={() => setCitiesError('')}
         name='cities'
         loadOptions={loadOptions}
         onChange={(e) => changeCities(e)}
@@ -130,7 +132,9 @@ const EditMaster = () => {
         <MyBigButton>Edit master</MyBigButton>
       </div>
       <div className='myButtonWrapper'>
-        <MyBigButton onClick={(e) => goBack(e)}>Cancel</MyBigButton>
+        <MyBigButton onClick={(e) => goBack(e)} className='backBigButton'>
+          Cancel
+        </MyBigButton>
       </div>
     </form>
   )

@@ -24,18 +24,37 @@ const EditCity = () => {
       .getCityById(id)
       .then((city) => {
         setCityName(city.name)
-        setPriceForHour(city.priceForHour)
+        setPriceForHour(formatValueToDecimal(city.priceForHour))
       })
       .then(() => setIsLoadnig(false))
   }, [id])
 
-  const onBlurCity = () => {
-    setCityError('')
-    setError('')
+  const changePriceForHour = (event) => {
+    let priceForHour = event.target.value
+    priceForHour = priceForHour.replace(/,/g, '.')
+    priceForHour = priceForHour.replace(/[^\d.]/g, '')
+
+    if (parseFloat(priceForHour) < 0) {
+      event.preventDefault()
+      return
+    }
+    const dotIndex = priceForHour.indexOf('.')
+    if (dotIndex !== -1 && priceForHour.indexOf('.', dotIndex + 1) !== -1) {
+      event.preventDefault()
+      return
+    }
+    const decimalIndex = priceForHour.indexOf('.')
+    if (decimalIndex !== -1 && priceForHour.substring(decimalIndex + 1).length > 2) {
+      event.preventDefault()
+      return
+    }
+    setPriceForHour(priceForHour)
   }
-  const onBlurPriceForHour = () => {
-    setPriceForHourError('')
-    setError('')
+  const formatValueToDecimal = (value) => {
+    return (value / 100).toFixed(2)
+  }
+  const formatValueToInteger = (value) => {
+    return value * 100
   }
 
   const goBack = (e) => {
@@ -45,11 +64,13 @@ const EditCity = () => {
   const editCity = async (e) => {
     e.preventDefault()
     setError('')
-    if (!cityName || !priceForHour) {
+    const formattedPriceForHour = formatValueToInteger(priceForHour)
+
+    if (!cityName || !priceForHour || formattedPriceForHour === 0) {
       if (!cityName) {
         setCityError(requiredField)
       }
-      if (!priceForHour) {
+      if (!priceForHour || formattedPriceForHour === 0) {
         setPriceForHourError(priceForHourField)
       }
       return
@@ -57,7 +78,8 @@ const EditCity = () => {
     if (cityError || priceForHourError) {
       return
     }
-    const editedCity = await citiesAPI.editCity(id, cityName, priceForHour)
+
+    const editedCity = await citiesAPI.editCity(id, cityName, formattedPriceForHour)
     if (editedCity) {
       await citiesAPI.getCities()
       prevPage(-1)
@@ -79,7 +101,11 @@ const EditCity = () => {
         name='city'
         placeholder={'Enter the name of the city'}
         value={cityName}
-        onBlur={() => onBlurCity()}
+        error={cityError || error}
+        onFocus={() => {
+          setCityError('')
+          setError('')
+        }}
         onChange={(e) => {
           setCityName(e.target.value)
         }}
@@ -90,20 +116,23 @@ const EditCity = () => {
       </div>
       <MyLabel discription={'Edit price for hour'} />
       <MyInput
-        type='number'
+        type='text'
         name='price'
         placeholder={'Enter the price for hour'}
         value={priceForHour}
-        onBlur={() => onBlurPriceForHour()}
+        error={priceForHourError}
+        onFocus={() => setPriceForHourError('')}
         onChange={(e) => {
-          setPriceForHour(Number(e.target.value))
+          changePriceForHour(e)
         }}
       />
       <div className='myButtonWrapper'>
         <MyBigButton>Edit city</MyBigButton>
       </div>
       <div className='myButtonWrapper'>
-        <MyBigButton onClick={(e) => goBack(e)}>Cancel</MyBigButton>
+        <MyBigButton onClick={(e) => goBack(e)} className='backBigButton'>
+          Cancel
+        </MyBigButton>
       </div>
     </form>
   )

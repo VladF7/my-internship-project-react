@@ -2,7 +2,6 @@ import { useEffect } from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import mastersAPI from '../../../api/mastersAPI'
-import ordersAPI from '../../../api/ordersAPI'
 import MyBigButton from '../../../components/Buttons/BigButton/MyBigButton'
 import MyError from '../../../components/Error/MyError'
 import MyLabel from '../../../components/Label/MyLabel'
@@ -11,7 +10,7 @@ import MySpan from '../../../components/Span/MySpan'
 const ChooseMasterForm = () => {
   const navigate = useNavigate()
   const [freeMastersList, setFreeMastersList] = useState([])
-  const [masterId, setMasterId] = useState(0)
+  const [masterId, setMasterId] = useState(JSON.parse(sessionStorage.getItem('masterId')) || '')
   const [masterIdError, setMasterIdError] = useState('')
   const [isLoading, setIsLoading] = useState(true)
 
@@ -35,10 +34,8 @@ const ChooseMasterForm = () => {
       setMasterIdError('Please choose master')
       return
     } else {
-      const order = await ordersAPI.addOrder(masterId)
-      if (order) {
-        navigate('/successOrder', { replace: true })
-      }
+      sessionStorage.setItem('masterId', JSON.stringify(masterId))
+      navigate('/confirmOrder')
     }
   }
 
@@ -51,7 +48,7 @@ const ChooseMasterForm = () => {
             <legend className='legend'>Choose master</legend>
             {isLoading ? (
               <MySpan>Free masters are loading, please wait...</MySpan>
-            ) : freeMastersList.length === 0 ? (
+            ) : !freeMastersList.length ? (
               <MySpan>
                 Sorry, there are no free masers at the moment, please select another time
               </MySpan>
@@ -66,6 +63,7 @@ const ChooseMasterForm = () => {
                       id={master.id}
                       name='masterId'
                       value={master.id}
+                      defaultChecked={master.id === masterId ? true : false}
                     />
                     <MyLabel htmlFor={master.id}>
                       Name: {master.name}, rating: {master.rating}
@@ -76,10 +74,16 @@ const ChooseMasterForm = () => {
             )}
           </fieldset>
         </div>
-        <div className='myButtonWrapper'>
-          <MyBigButton>Create order</MyBigButton>
+        <div className='buttonBoxWrapper'>
+          <div className='buttonBox'>
+            <MyBigButton onClick={(e) => goBack(e)} className='backBigButton'>
+              Back
+            </MyBigButton>
+          </div>
+          <div className='buttonBox'>
+            <MyBigButton>Next</MyBigButton>
+          </div>
         </div>
-        <MyBigButton onClick={(e) => goBack(e)}>Cancel</MyBigButton>
       </form>
     </div>
   )

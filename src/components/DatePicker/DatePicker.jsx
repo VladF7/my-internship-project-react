@@ -28,7 +28,7 @@ const DatePicker = ({ value, onChange, error, ...props }) => {
       <ReactDatePicker
         {...props}
         autoComplete='false'
-        className='myInput'
+        className={error ? 'myInput' + ' ' + 'errorField' : 'myInput'}
         timeFormat='HH:mm'
         dateFormat='yyyy.MM.dd, HH:00'
         placeholderText='Choose time and date'

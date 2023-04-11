@@ -8,7 +8,13 @@ const MyInputItem = ({ item, ...props }) => {
     <div className={'inputItem'}>
       <MyLabel htmlFor={item.id} discription={item.discription}></MyLabel>
       <MyError>{props.error}</MyError>
-      <MyInput id={item.id} type={item.type} placeholder={item.placeholder} {...props} />
+      <MyInput
+        id={item.id}
+        type={item.type}
+        placeholder={item.placeholder}
+        error={props.error}
+        {...props}
+      />
     </div>
   )
 }

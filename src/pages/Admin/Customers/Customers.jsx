@@ -51,7 +51,10 @@ const Customers = () => {
                     <MySpan>Email: {customer.email}</MySpan>
                   </div>
                   <div className='buttons'>
-                    <MySmallButton onClick={() => deleteCustomer(customer.id)}>
+                    <MySmallButton
+                      onClick={() => deleteCustomer(customer.id)}
+                      className='smallButtonDelete'
+                    >
                       Delete
                     </MySmallButton>
                   </div>

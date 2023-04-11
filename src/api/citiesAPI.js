@@ -32,7 +32,7 @@ class CitiesAPI {
     return response
   }
   async getCityById(id) {
-    const response = await request(`/api/cities/${id}`, 'GET', null, localStorage.getItem('token'))
+    const response = await request(`/api/cities/${id}`)
     return response
   }
   async delCity(id) {

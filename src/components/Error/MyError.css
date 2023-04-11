@@ -2,5 +2,8 @@
   position: absolute;
   top: 1px;
   right: 15px;
-  color: lightsalmon;
+  color: rgba(220, 20, 60, 0.8);
+}
+.errorField {
+  box-shadow: 0px 0px 0px 1.5px rgba(220, 20, 60, 0.8);
 }

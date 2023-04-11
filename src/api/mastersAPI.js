@@ -27,7 +27,7 @@ class MastersAPI {
     return response
   }
   async getMasterById(id) {
-    const response = await request(`/api/masters/${id}`, 'GET', null, localStorage.getItem('token'))
+    const response = await request(`/api/masters/${id}`)
     return response
   }
   async addMaster(name, rating, cities) {

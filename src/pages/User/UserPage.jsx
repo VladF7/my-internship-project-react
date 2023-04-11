@@ -34,9 +34,16 @@ const UserForm = () => {
 
   const [emailError, setEmailError] = useState('')
   const [nameError, setNameError] = useState('')
-  const [sizeError, setSizeError] = useState('')
+  const [clockError, setClockError] = useState('')
   const [cityError, setCityError] = useState('')
   const [dateError, setDateError] = useState('')
+
+  const clocksOptions = clocks.map((clock) => {
+    return { id: clock.id, name: clock.size }
+  })
+  const navigate = useNavigate()
+  const requiredField = 'Required field'
+  const currency = 'USD'
 
   useEffect(() => {
     Promise.all([clocksAPI.getClocks(), citiesAPI.getCities()])
@@ -62,10 +69,6 @@ const UserForm = () => {
   useEffect(() => {
     getPrice(timeToFix, priceForHour)
   }, [priceForHour, timeToFix])
-
-  const navigate = useNavigate()
-  const requiredField = 'Required field'
-  const currency = 'USD'
 
   const onBlurName = (name) => {
     if (name.length < 3) {
@@ -109,21 +112,13 @@ const UserForm = () => {
       setPriceForHour('')
     }
   }
-  const changeClock = (clockId) => {
-    setSizeError('')
-    setClock(Number(clockId))
+  const formatValueToDecimal = (value) => {
+    return (value / 100).toFixed(2)
   }
-  const changeCity = (cityId) => {
-    setCityError('')
-    setCity(Number(cityId))
-  }
-  const changeDate = (date) => {
-    setDateError('')
-    setDate(date)
-  }
+
   const getSubmit = async (e) => {
     e.preventDefault()
-    if (nameError || emailError || sizeError || cityError || dateError) {
+    if (nameError || emailError || clockError || cityError || dateError) {
       return
     }
     if (!name || !email || !clock || !city || !date) {
@@ -134,7 +129,7 @@ const UserForm = () => {
         setEmailError(requiredField)
       }
       if (!clock) {
-        setSizeError(requiredField)
+        setClockError(requiredField)
       }
       if (!city) {
         setCityError(requiredField)
@@ -161,6 +156,7 @@ const UserForm = () => {
           error={nameError}
           onChange={(e) => setName(e.target.value)}
           onBlur={(e) => onBlurName(e.target.value)}
+          onFocus={() => setNameError('')}
           item={{
             id: 'name',
             type: 'text',
@@ -174,6 +170,7 @@ const UserForm = () => {
           error={emailError}
           onChange={(e) => setEmail(e.target.value)}
           onBlur={(e) => onBlurEmail(e.target.value)}
+          onFocus={() => setEmailError('')}
           item={{
             id: 'mail',
             type: 'mail',
@@ -181,40 +178,41 @@ const UserForm = () => {
             discription: 'Enter your email'
           }}
         />
-        <MySizeSelector
+        <DatePicker
+          name='date'
+          value={date}
+          error={dateError}
+          onFocus={() => setDateError('')}
+          onChange={(date) => setDate(date)}
+        />
+        <MySelectWithLabel
           name='clock'
-          labelText='Time to fix'
-          labelValue={timeToFix}
-          labelWord={timeToFix > 1 ? 'hours' : 'hour'}
-          onChange={(e) => changeClock(e.target.value)}
-          options={clocks}
-          error={sizeError}
           value={clock}
+          options={clocksOptions}
+          placeholder={'Click to select clock size'}
+          discription={'Choose clock size'}
+          error={clockError}
+          onFocus={() => setClockError('')}
+          onChange={(e) => setClock(Number(e.target.value))}
         />
         <MySelectWithLabel
           name='city'
           value={city}
           options={cities}
-          labelText='Price for hour'
-          labelValue={priceForHour}
-          labelWord={currency}
           placeholder={'Click to select city'}
           discription={'Choose your city'}
           error={cityError}
-          onChange={(e) => changeCity(e.target.value)}
-        />
-        <DatePicker
-          name='date'
-          value={date}
-          error={dateError}
-          onChange={(date) => changeDate(date)}
+          onFocus={() => setCityError('')}
+          onChange={(e) => setCity(Number(e.target.value))}
         />
         <MyLabel
           style={{
-            visibility: price ? '' : 'hidden'
+            visibility: price ? '' : 'hidden',
+            paddingLeft: '0px',
+            justifyContent: 'center'
           }}
         >
-          Clock repair will cost {price} {currency}
+          Clock repair will cost {formatValueToDecimal(price)} {currency}
         </MyLabel>
         <div className='myButtonWrapper'>
           <MyBigButton>Next</MyBigButton>

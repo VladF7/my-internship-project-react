@@ -27,6 +27,7 @@ import { checkAuth } from './services/auth'
 import { actionLoaded } from './reducers/loadReducer'
 import { ClockLoader } from 'react-spinners'
 import EditCity from './pages/Admin/Cities/EditCity/EditCity'
+import ConfirmOrder from './pages/User/ConfirmOrder/ConfirmOrder'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -45,6 +46,7 @@ const App = () => {
       <Route path='/' element={<Layout />}>
         <Route index element={<UserPage />} />
         <Route path='chooseMaster' element={<ChooseMasterForm />} />
+        <Route path='confirmOrder' element={<ConfirmOrder />} />
         <Route path='successOrder' element={<SuccessOrder />} />
         <Route path='auth' element={<LoginPage />} />
         <Route

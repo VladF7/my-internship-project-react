@@ -5,5 +5,5 @@
   padding-left: 15px;
   padding-bottom: 10px;
   color: rgba(255, 255, 255, 0.7);
-  display: block;
+  display: flex;
 }

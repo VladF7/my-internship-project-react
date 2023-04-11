@@ -1,8 +1,8 @@
 import './MyBigButton.css'
 
-const MyBigButton = ({ children, ...props }) => {
+const MyBigButton = ({ children, className, ...props }) => {
   return (
-    <button {...props} className={'bigButton'}>
+    <button {...props} className={className ? className : 'bigButton'}>
       {children}
     </button>
   )

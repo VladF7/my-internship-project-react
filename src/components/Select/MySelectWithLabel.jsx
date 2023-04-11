@@ -15,7 +15,12 @@ const MySelectWithLabel = ({
     <div className='mySelect'>
       <MyLabel discription={discription}></MyLabel>
       <MyError>{props.error}</MyError>
-      <select {...props} name={name} id={name} className='select'>
+      <select
+        {...props}
+        name={name}
+        id={name}
+        className={props.error ? 'select' + ' ' + 'errorField' : 'select'}
+      >
         <option value={''} disabled>
           {placeholder}
         </option>
