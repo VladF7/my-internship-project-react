@@ -42,9 +42,7 @@ const AddMaster = () => {
       setNameError('')
     }
   }
-  const onBlurCity = () => {
-    return setCitiesError('')
-  }
+
   const changeRating = (rating) => {
     setRating(Number(rating))
     setRatingError('')
@@ -86,6 +84,7 @@ const AddMaster = () => {
         error={nameError}
         onChange={(e) => setName(e.target.value)}
         onBlur={(e) => onBlurName(e)}
+        onFocus={() => setNameError('')}
         item={{
           id: 'name',
           type: 'text',
@@ -100,6 +99,7 @@ const AddMaster = () => {
         discription={'Choose master rating'}
         error={ratingError}
         value={rating}
+        onFocus={() => setRatingError('')}
         onChange={(e) => {
           changeRating(e.target.value)
         }}
@@ -110,13 +110,15 @@ const AddMaster = () => {
         name='cities'
         loadOptions={loadOptions}
         onChange={(e) => setCities(e)}
-        onBlur={(e) => onBlurCity(e)}
+        onFocus={() => setCitiesError('')}
       />
       <div className='myButtonWrapper'>
         <MyBigButton>Add master</MyBigButton>
       </div>
       <div className='myButtonWrapper'>
-        <MyBigButton onClick={(e) => goBack(e)}>Cancel</MyBigButton>
+        <MyBigButton onClick={(e) => goBack(e)} className='backBigButton'>
+          Cancel
+        </MyBigButton>
       </div>
     </form>
   )

@@ -55,7 +55,12 @@ const Masters = () => {
                   </div>
                   <div className='buttons'>
                     <MySmallButton to={`${master.id}`}>Edit</MySmallButton>
-                    <MySmallButton onClick={() => deleteMaster(master.id)}>Delete</MySmallButton>
+                    <MySmallButton
+                      onClick={() => deleteMaster(master.id)}
+                      className='smallButtonDelete'
+                    >
+                      Delete
+                    </MySmallButton>
                   </div>
                 </li>
               )

@@ -13,7 +13,7 @@ const SuccessOrder = () => {
 
   const goBack = (e) => {
     e.preventDefault()
-    navigate(-1)
+    navigate('/')
   }
   return (
     <div className='userPage'>

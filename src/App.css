@@ -34,3 +34,12 @@
 .addButtonWrapper {
   padding: 30px 0px;
 }
+.buttonBoxWrapper {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+}
+.buttonBox {
+  width: 48%;
+  padding: 10px 0;
+}

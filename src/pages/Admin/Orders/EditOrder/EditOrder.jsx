@@ -12,6 +12,7 @@ import MySelect from '../../../../components/Select/MySelect'
 import MySpan from '../../../../components/Span/MySpan'
 import MySelectWithLabel from '../../../../components/Select/MySelectWithLabel'
 import statusesAPI from '../../../../api/statuses.API'
+import { formatValueToDecimal } from '../../../../helpers'
 
 const EditOrder = () => {
   const [isLoading, setIsLoadnig] = useState(true)
@@ -40,9 +41,8 @@ const EditOrder = () => {
     return { id: master.id, label: `Name: ${master.name}, rating: ${master.rating}` }
   })
   const statusesOptions = statuses.map((status) => {
-    return { id: status.id, label: status.name }
+    return { id: status, label: status }
   })
-
   const prevPage = useNavigate()
   const { id } = useParams()
   useEffect(() => {
@@ -62,7 +62,7 @@ const EditOrder = () => {
         setDate(parse(order.startTime, 'yyyy.MM.dd, HH:mm', new Date()))
         setEndTime(order.endTime)
         setMaster(order.masterId)
-        setStatus(order.statusId)
+        setStatus(order.status)
       })
       .then(() => setIsLoadnig(false))
   }, [id])
@@ -108,7 +108,6 @@ const EditOrder = () => {
       setTimeToFix('')
     }
   }
-
   const getFreeMastersList = async (id, city, startTime, endTime) => {
     const requestData = {
       cityId: city,
@@ -119,6 +118,8 @@ const EditOrder = () => {
     setMasters(masters)
     if (masters.length) {
       setMasterError('')
+    } else {
+      setMasterError('Тhere are no free masers at the moment')
     }
     return masters
   }
@@ -165,18 +166,8 @@ const EditOrder = () => {
 
   return (
     <form onSubmit={(e) => editOrder(e)} className={'form'}>
-      <MySelectWithLabel
-        name='city'
-        value={city}
-        options={cities}
-        labelText='Price for hour'
-        labelValue={priceForHour}
-        labelWord={currency}
-        placeholder={'Click to select city'}
-        discription={'Choose city'}
-        onChange={(e) => setCity(Number(e.target.value))}
-      />
       <DatePicker name='date' value={date} onChange={(date) => setDate(date)} />
+
       <MySelectWithLabel
         options={sizeOptions}
         placeholder='Click to select size'
@@ -190,6 +181,27 @@ const EditOrder = () => {
           setClock(Number(e.target.value))
         }}
       />
+      <MySelectWithLabel
+        name='city'
+        value={city}
+        options={cities}
+        labelText='Price for hour'
+        labelValue={formatValueToDecimal(priceForHour)}
+        labelWord={currency}
+        placeholder={'Click to select city'}
+        discription={'Choose city'}
+        onChange={(e) => setCity(Number(e.target.value))}
+      />
+      <MyLabel
+        style={{
+          visibility: price ? '' : 'hidden',
+          paddingLeft: '0px',
+          justifyContent: 'center'
+        }}
+      >
+        Clock repair will cost {formatValueToDecimal(price)} {currency}
+      </MyLabel>
+
       <MySelect
         options={mastersOptions}
         placeholder='Click to select master'
@@ -197,6 +209,7 @@ const EditOrder = () => {
         discription={'Choose master'}
         error={masterError}
         value={master}
+        onFocus={() => setMasterError('')}
         onChange={(e) => setMaster(Number(e.target.value))}
       />
       <MySelect
@@ -205,18 +218,14 @@ const EditOrder = () => {
         name='status'
         discription={'Change status'}
         value={status}
-        onChange={(e) => setStatus(Number(e.target.value))}
+        onChange={(e) => setStatus(e.target.value)}
       />
-      <MyLabel
-        style={{
-          visibility: price ? '' : 'hidden'
-        }}
-      >
-        Clock repair will cost {price} {currency}
-      </MyLabel>
-      <div className='buttonBoxWrapp'>
+
+      <div className='buttonBoxWrapper'>
         <div className='buttonBox'>
-          <MyBigButton onClick={(e) => goBack(e)}>Cancel</MyBigButton>
+          <MyBigButton onClick={(e) => goBack(e)} className='backBigButton'>
+            Cancel
+          </MyBigButton>
         </div>
         <div className='buttonBox'>
           <MyBigButton>Edit order</MyBigButton>

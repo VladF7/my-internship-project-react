@@ -13,3 +13,19 @@
 .smallButton:active {
   background: rgb(124, 204, 124);
 }
+
+.smallButtonDelete {
+  height: 20px;
+  width: 100px;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  background: rgba(220, 20, 60, 0.8);
+  font-weight: 400;
+  font-size: 13px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+.smallButtonDelete:active {
+  background: rgb(227, 72, 72);
+}

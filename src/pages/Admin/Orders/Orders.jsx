@@ -6,6 +6,7 @@ import MySpan from '../../../components/Span/MySpan'
 import { useNavigate } from 'react-router-dom'
 import MyError from '../../../components/Error/MyError'
 import { format } from 'date-fns'
+import { formatValueToDecimal } from '../../../helpers'
 
 const Orders = () => {
   const [orders, setOrders] = useState([])
@@ -25,6 +26,7 @@ const Orders = () => {
     ordersAPI.delOrder(id)
     setOrders(orders.filter((order) => order.id !== id))
   }
+
   const goToEdit = (id, start) => {
     if (format(new Date(), 'yyyy.MM.dd, HH:mm') > start) {
       setEditError(textError)
@@ -59,8 +61,8 @@ const Orders = () => {
                     <MySpan>City: {order.city.name},</MySpan>
                     <MySpan>Order start time: {order.startTime},</MySpan>
                     <MySpan>Order end time: {order.endTime}</MySpan>
-                    <MySpan>Order price: {order.price}</MySpan>
-                    <MySpan>Order status: {order.status.name}</MySpan>
+                    <MySpan>Order price: {formatValueToDecimal(order.price)}</MySpan>
+                    <MySpan>Order status: {order.status}</MySpan>
                   </div>
                   <div className='buttons'>
                     {format(new Date(), 'yyyy.MM.dd, HH:mm') < order.startTime ? (
@@ -70,7 +72,9 @@ const Orders = () => {
                     ) : (
                       ''
                     )}
-                    <MySmallButton onClick={() => delOrder(order.id)}>Delete</MySmallButton>
+                    <MySmallButton onClick={() => delOrder(order.id)} className='smallButtonDelete'>
+                      Delete
+                    </MySmallButton>
                   </div>
                 </li>
               )

@@ -7,6 +7,7 @@ import MyInput from '../../../components/Input/MyInput'
 import MyLabel from '../../../components/Label/MyLabel'
 import './Cities.css'
 import MySpan from '../../../components/Span/MySpan'
+import { formatValueToDecimal, formatValueToInteger } from '../../../helpers'
 
 const Cities = () => {
   const [city, setCity] = useState('')
@@ -14,12 +15,15 @@ const Cities = () => {
   const [cities, setCities] = useState([])
   const [cityError, setCityError] = useState('')
   const [priceForHourError, setPriceForHourError] = useState('')
+  const [cityId, setCityId] = useState('')
   const [error, setError] = useState('')
+  const [cityDeleteError, setCityDeleteError] = useState('')
 
   const [isLoading, setIsLoading] = useState(true)
 
   const requiredField = 'Required field'
   const priceForHourField = 'Must be not empty and not null'
+  const currency = 'USD'
 
   useEffect(() => {
     citiesAPI
@@ -28,23 +32,38 @@ const Cities = () => {
       .then(() => setIsLoading(false))
   }, [])
 
-  const onBlurCity = () => {
-    setCityError('')
-    setError('')
+  const changePriceForHour = (event) => {
+    let priceForHour = event.target.value
+    priceForHour = priceForHour.replace(/,/g, '.')
+    priceForHour = priceForHour.replace(/[^\d.]/g, '')
+
+    if (parseFloat(priceForHour) < 0) {
+      event.preventDefault()
+      return
+    }
+    const dotIndex = priceForHour.indexOf('.')
+    if (dotIndex !== -1 && priceForHour.indexOf('.', dotIndex + 1) !== -1) {
+      event.preventDefault()
+      return
+    }
+    const decimalIndex = priceForHour.indexOf('.')
+    if (decimalIndex !== -1 && priceForHour.substring(decimalIndex + 1).length > 2) {
+      event.preventDefault()
+      return
+    }
+    setPriceForHour(priceForHour)
   }
-  const onBlurPriceForHour = () => {
-    setPriceForHourError('')
-    setError('')
-  }
+
   const addCity = async (e) => {
     e.preventDefault()
     setError('')
+    const formattedPriceForHour = formatValueToInteger(priceForHour)
 
-    if (!city || !priceForHour) {
+    if (!city || !priceForHour || formattedPriceForHour === 0) {
       if (!city) {
         setCityError(requiredField)
       }
-      if (!priceForHour) {
+      if (!priceForHour || formattedPriceForHour === 0) {
         setPriceForHourError(priceForHourField)
       }
       return
@@ -53,7 +72,7 @@ const Cities = () => {
       return
     }
 
-    const newCity = await citiesAPI.addCity(city, priceForHour)
+    const newCity = await citiesAPI.addCity(city, formattedPriceForHour)
     if (newCity) {
       setCities([...cities, newCity])
       setCity('')
@@ -66,35 +85,41 @@ const Cities = () => {
   const delCity = (id) => {
     citiesAPI.delCity(id).then((city) => {
       if (!city) {
-        setCityError('Cannot be deleted, city is in use')
+        setCityDeleteError('Cannot be deleted, city is in use')
         setTimeout(() => {
-          setCityError('')
+          setCityDeleteError('')
         }, 1500)
       } else {
         setCities(cities.filter((city) => city.id !== id))
       }
     })
+    setCityId(id)
   }
 
-  if (isLoading === true) return <MySpan>The list of cities is loading...</MySpan>
+  if (isLoading) return <MySpan>The list of cities is loading...</MySpan>
 
   return (
     <div className={'itemContent'}>
       <div className='cities'>
         <ul className={'list'}>
-          {cities.length === 0 ? (
+          {!cities.length ? (
             <MySpan>The list of cities is empty</MySpan>
           ) : (
             cities.map((city) => {
               return (
                 <li id={city.id} key={city.id} className={'listItem'}>
+                  {cityId === city.id ? <MyError>{cityDeleteError}</MyError> : ''}
                   <div className='itemInfo'>
                     <MySpan>City: {city.name},</MySpan>
-                    <MySpan>Price for hour: {city.priceForHour} USD,</MySpan>
+                    <MySpan>
+                      Price for hour: {formatValueToDecimal(city.priceForHour)} {currency},
+                    </MySpan>
                   </div>
                   <div className='buttons'>
                     <MySmallButton to={`${city.id}`}>Edit</MySmallButton>
-                    <MySmallButton onClick={() => delCity(city.id)}>Delete</MySmallButton>
+                    <MySmallButton onClick={() => delCity(city.id)} className='smallButtonDelete'>
+                      Delete
+                    </MySmallButton>
                   </div>
                 </li>
               )
@@ -111,25 +136,29 @@ const Cities = () => {
           type='text'
           name='city'
           placeholder={'Enter the name of the city'}
+          error={cityError || error}
           value={city}
-          onBlur={() => onBlurCity()}
+          onFocus={() => {
+            setCityError('')
+            setError('')
+          }}
           onChange={(e) => {
             setCity(e.target.value)
           }}
         />
-
         <div className='errorContainer'>
           <MyError>{priceForHourError}</MyError>
         </div>
         <MyLabel discription={'Add price for hour'} />
         <MyInput
-          type='number'
+          type='text'
           name='price'
           placeholder={'Enter the price for hour'}
           value={priceForHour}
-          onBlur={() => onBlurPriceForHour()}
+          error={priceForHourError}
+          onFocus={() => setPriceForHourError('')}
           onChange={(e) => {
-            setPriceForHour(Number(e.target.value))
+            changePriceForHour(e)
           }}
         />
         <MyButton>Add city</MyButton>
