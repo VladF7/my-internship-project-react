@@ -24,7 +24,6 @@ export const checkAuth = () => {
       const res = await userAPI.auth()
       if (res) {
         dispatch(actionLogin(res.user))
-        localStorage.setItem('token', res.token)
       } else {
         return res
       }
