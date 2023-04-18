@@ -37,6 +37,15 @@ class CustomersAPI {
     )
     return response
   }
+  async resetPassword(id) {
+    const response = await request(
+      `/api/customers/resetPassword/${id}`,
+      'GET',
+      null,
+      localStorage.getItem('token')
+    )
+    return response
+  }
 }
 
 const customersAPI = new CustomersAPI()

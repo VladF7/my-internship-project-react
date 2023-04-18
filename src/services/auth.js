@@ -1,11 +1,11 @@
-import authAPI from '../api/authAPI'
 import { actionLogin } from '../reducers/authReducer'
 import { actionLoaded } from '../reducers/loadReducer'
+import userAPI from '../api/userAPI'
 
 export const login = (authForm) => {
   return async (dispatch) => {
     try {
-      const res = await authAPI.login(authForm)
+      const res = await userAPI.login(authForm)
       if (res) {
         dispatch(actionLogin(res.user))
         localStorage.setItem('token', res.token)
@@ -21,7 +21,7 @@ export const login = (authForm) => {
 export const checkAuth = () => {
   return async (dispatch) => {
     try {
-      const res = await authAPI.auth()
+      const res = await userAPI.auth()
       if (res) {
         dispatch(actionLogin(res.user))
         localStorage.setItem('token', res.token)

@@ -42,7 +42,7 @@ const ChooseMasterForm = () => {
   return (
     <div className='userPage'>
       <form className='userForm' onSubmit={(e) => onSubmit(e)}>
-        <div className='mastersArea'>
+        <div className='content'>
           <fieldset className='mastersFieldset'>
             <MyError>{masterIdError}</MyError>
             <legend className='legend'>Choose master</legend>

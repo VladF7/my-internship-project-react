@@ -80,7 +80,7 @@ const LoginPage = () => {
       <MyInputItem
         name='password'
         value={password}
-        error={passwordError}
+        error={passwordError || emailOrPasswordError}
         onChange={(e) => setPassword(e.target.value)}
         onFocus={() => resetError(setPasswordError)}
         item={{

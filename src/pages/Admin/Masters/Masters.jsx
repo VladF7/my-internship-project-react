@@ -8,8 +8,10 @@ import './Masters.css'
 
 const Masters = () => {
   const [masters, setMasters] = useState([])
-  const [error, setError] = useState('')
-  const [currMasterId, setCurrMasterId] = useState('')
+  const [deleteError, setdeleteError] = useState('')
+  const [activateError, setActivateError] = useState('')
+  const [resetPasswordError, setResetPasswordError] = useState('')
+  const [currentMasterId, setCurrentMasterId] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const textError = 'Master cannot be deleted, used in order'
 
@@ -21,18 +23,40 @@ const Masters = () => {
       })
       .then(() => setIsLoading(false))
   }, [])
-  const deleteMaster = (id) => {
-    mastersAPI.delMaster(id).then((master) => {
-      if (!master) {
-        setError(textError)
-        setTimeout(() => {
-          setError('')
-        }, 1500)
-      } else {
-        setMasters(masters.filter((master) => master.id !== id))
-      }
-    })
-    setCurrMasterId(id)
+
+  const activateMaster = async (id) => {
+    const activateMaster = await mastersAPI.activateMaster(id)
+    if (!activateMaster) {
+      setActivateError("Master can't be activated")
+    } else {
+      const masters = await mastersAPI.getMasters()
+      setMasters(masters)
+    }
+  }
+  const resetPassword = async (id) => {
+    const resetPassword = await mastersAPI.resetPassword(id)
+    if (!resetPassword) {
+      setResetPasswordError("Password can't be reseted")
+    } else {
+      setResetPasswordError('Password has been reset')
+      setTimeout(() => {
+        setResetPasswordError('')
+      }, 1500)
+    }
+    setCurrentMasterId(id)
+  }
+
+  const deleteMaster = async (id) => {
+    const deletedMaster = await mastersAPI.delMaster(id)
+    if (!deletedMaster) {
+      setdeleteError(textError)
+      setTimeout(() => {
+        setdeleteError('')
+      }, 1500)
+    } else {
+      setMasters(masters.filter((master) => master.id !== id))
+    }
+    setCurrentMasterId(id)
   }
 
   if (isLoading) return <MySpan>The list of masters is loading...</MySpan>
@@ -47,14 +71,33 @@ const Masters = () => {
             masters.map((master) => {
               return (
                 <li id={master.id} key={master.id} className='listItem'>
-                  {currMasterId === master.id ? <MyError>{error}</MyError> : ''}
+                  {currentMasterId === master.id ? (
+                    <MyError>{deleteError || activateError || resetPasswordError}</MyError>
+                  ) : (
+                    ''
+                  )}
                   <div className='itemInfo'>
                     <MySpan>Name: {master.name},</MySpan>
                     <MySpan>Rating: {master.rating},</MySpan>
-                    <MySpan>City: {master.cities.map((city) => city.name + ', ')}</MySpan>
+                    <MySpan>Cities: {master.cities.map((city) => city.name + ', ')}</MySpan>
+                    <MySpan>Email: {master.user.email},</MySpan>
+                    <MySpan>Email activated: {`${master.user.isEmailActivated}`}.</MySpan>
                   </div>
                   <div className='buttons'>
+                    <MySmallButton
+                      style={{
+                        display: !master.isActivated ? '' : 'none'
+                      }}
+                      className='smallButtonActivate'
+                      onClick={() => activateMaster(master.id)}
+                    >
+                      Activate master
+                    </MySmallButton>
+
                     <MySmallButton to={`${master.id}`}>Edit</MySmallButton>
+                    <MySmallButton onClick={() => resetPassword(master.id)}>
+                      Reset password
+                    </MySmallButton>
                     <MySmallButton
                       onClick={() => deleteMaster(master.id)}
                       className='smallButtonDelete'
@@ -69,7 +112,7 @@ const Masters = () => {
         </ul>
       </div>
       <div className='addButtonWrapper form'>
-        <MyLinkButton to='addMaster'>Add master</MyLinkButton>
+        <MyLinkButton to='registration'>Add master</MyLinkButton>
       </div>
     </div>
   )

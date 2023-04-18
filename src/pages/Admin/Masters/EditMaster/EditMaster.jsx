@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import ReactSelect from '../../../../components/React-select/React-select'
 import citiesAPI from '../../../../api/citiesAPI'
 import mastersAPI from '../../../../api/mastersAPI'
 import MyBigButton from '../../../../components/Buttons/BigButton/MyBigButton'
 import MyInputItem from '../../../../components/InputItem/MyInputItem'
 import MySelect from '../../../../components/Select/MySelect'
 import MySpan from '../../../../components/Span/MySpan'
+import CitiesSelect from '../../../../components/React-select/React-select'
 
 const EditMaster = () => {
   const [isLoading, setIsLoadnig] = useState(true)
@@ -119,7 +119,7 @@ const EditMaster = () => {
           setRating(Number(e.target.value))
         }}
       />
-      <ReactSelect
+      <CitiesSelect
         value={cities}
         error={citiesError}
         onFocus={() => setCitiesError('')}

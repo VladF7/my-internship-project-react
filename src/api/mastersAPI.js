@@ -30,21 +30,6 @@ class MastersAPI {
     const response = await request(`/api/masters/${id}`)
     return response
   }
-  async addMaster(name, rating, cities) {
-    const requestData = {
-      name,
-      rating,
-      cities
-    }
-
-    const response = await request(
-      '/api/masters',
-      'POST',
-      requestData,
-      localStorage.getItem('token')
-    )
-    return response
-  }
   async editMaster(id, name, rating, cities) {
     const requestData = {
       name,
@@ -64,6 +49,24 @@ class MastersAPI {
     const response = await request(
       `/api/masters/${id}`,
       'DELETE',
+      null,
+      localStorage.getItem('token')
+    )
+    return response
+  }
+  async activateMaster(id) {
+    const response = await request(
+      `/api/masters/activate/${id}`,
+      'GET',
+      null,
+      localStorage.getItem('token')
+    )
+    return response
+  }
+  async resetPassword(id) {
+    const response = await request(
+      `/api/masters/resetPassword/${id}`,
+      'GET',
       null,
       localStorage.getItem('token')
     )
