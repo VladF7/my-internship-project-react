@@ -57,7 +57,7 @@ const ConfirmOrder = () => {
   return (
     <div className='userPage'>
       <form className='userForm' onSubmit={(e) => onSubmit(e)}>
-        <div className='mastersArea'>
+        <div className='content'>
           <MyLabel>Сheck the order information and confirm it:</MyLabel>
           {isLoading ? (
             <MySpan>Data is loading, please wait...</MySpan>

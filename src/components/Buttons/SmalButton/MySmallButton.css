@@ -1,6 +1,6 @@
 .smallButton {
   height: 20px;
-  width: 100px;
+  width: 110px;
   color: white;
   border: none;
   border-radius: 20px;
@@ -16,7 +16,7 @@
 
 .smallButtonDelete {
   height: 20px;
-  width: 100px;
+  width: 110px;
   color: white;
   border: none;
   border-radius: 20px;
@@ -28,4 +28,20 @@
 }
 .smallButtonDelete:active {
   background: rgb(227, 72, 72);
+}
+
+.smallButtonActivate {
+  height: 20px;
+  width: 110px;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  background: rgba(17, 210, 68, 0.8);
+  font-weight: 400;
+  font-size: 13px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+.smallButtonActivate:active {
+  background: rgb(124, 204, 124);
 }

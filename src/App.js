@@ -28,6 +28,9 @@ import { actionLoaded } from './reducers/loadReducer'
 import { ClockLoader } from 'react-spinners'
 import EditCity from './pages/Admin/Cities/EditCity/EditCity'
 import ConfirmOrder from './pages/User/ConfirmOrder/ConfirmOrder'
+import SignUpPage from './pages/SignUp/SignUpPage'
+import SuccessSignUp from './pages/SignUp/SuccessSignUp/SuccessSignUpPage'
+import AddCustomer from './pages/Admin/Customers/AddCustomer/AddCustomer'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -49,6 +52,8 @@ const App = () => {
         <Route path='confirmOrder' element={<ConfirmOrder />} />
         <Route path='successOrder' element={<SuccessOrder />} />
         <Route path='auth' element={<LoginPage />} />
+        <Route path='registration' element={<SignUpPage />} />
+        <Route path='successSignUp' element={<SuccessSignUp />} />
         <Route
           path='admin'
           element={
@@ -60,12 +65,13 @@ const App = () => {
           <Route path='/admin' element={<Navigate to='masters' replace />} />
           <Route path='masters' element={<Masters />} />
           <Route path='masters/:id' element={<EditMaster />}></Route>
-          <Route path='masters/addMaster' element={<AddMaster />}></Route>
+          <Route path='masters/registration' element={<AddMaster />}></Route>
           <Route path='cities' element={<Cities />} />
           <Route path='cities/:id' element={<EditCity />}></Route>
           <Route path='orders' element={<Orders />}></Route>
           <Route path='orders/:id' element={<EditOrder />}></Route>
           <Route path='customers' element={<Customers />}></Route>
+          <Route path='customers/registration' element={<AddCustomer />}></Route>
         </Route>
         <Route path='*' element={<Navigate to='/' replace />} />
       </Route>

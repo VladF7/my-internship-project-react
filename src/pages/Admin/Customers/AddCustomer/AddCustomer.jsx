@@ -1,32 +1,21 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import citiesAPI from '../../../../api/citiesAPI'
-import mastersAPI from '../../../../api/mastersAPI'
 import userAPI from '../../../../api/userAPI'
 import MyBigButton from '../../../../components/Buttons/BigButton/MyBigButton'
 import MyInputItem from '../../../../components/InputItem/MyInputItem'
-import CitiesSelect from '../../../../components/React-select/React-select'
+import customersAPI from '../../../../api/customersAPI'
 
-const AddMaster = () => {
-  const loadOptions = async () => {
-    const cities = await citiesAPI.getCities()
-    const options = await cities.map((city) => {
-      return { value: city.id, label: city.name }
-    })
-    return options
-  }
+const AddCustomer = () => {
   const prevPage = useNavigate()
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [emailError, setEmailError] = useState('')
-  const [cities, setCities] = useState([])
 
   const [nameError, setNameError] = useState('')
+  const [emailError, setEmailError] = useState('')
   const [passwordError, setPasswordError] = useState('')
   const [registrationError, setRegistrationError] = useState('')
-  const [citiesError, setCitiesError] = useState('')
   const requiredField = 'Required field'
 
   const resetError = (setError) => {
@@ -72,14 +61,11 @@ const AddMaster = () => {
     prevPage(-1)
   }
 
-  const addMaster = async (e) => {
+  const addCustomer = async (e) => {
     e.preventDefault()
-    if (!name || !cities.length || !email || !password) {
+    if (!name || !email || !password) {
       if (!name) {
         setNameError(requiredField)
-      }
-      if (!cities.length) {
-        setCitiesError(requiredField)
       }
       if (!password) {
         setPasswordError(requiredField)
@@ -89,22 +75,19 @@ const AddMaster = () => {
       }
       return
     }
-    const citiesId = cities.map((city) => city.value)
-
-    const successMasterRegistration = await userAPI.masterRegistrationFromAdminPage(
+    const successCustomerRegistration = await userAPI.customerRegistrationFromAdminPage(
       name,
       email,
-      password,
-      citiesId
+      password
     )
-    if (successMasterRegistration) {
-      await mastersAPI.getMasters()
+    if (successCustomerRegistration) {
+      await customersAPI.getCustomers()
       prevPage(-1)
     }
     setRegistrationError('User with this email is alredy exist')
   }
   return (
-    <form onSubmit={(e) => addMaster(e)} className={'form'}>
+    <form onSubmit={(e) => addCustomer(e)} className={'form'}>
       <MyInputItem
         name='name'
         value={name}
@@ -116,7 +99,7 @@ const AddMaster = () => {
           id: 'name',
           type: 'text',
           placeholder: 'Must not be less than 3 characters',
-          discription: 'Enter master name'
+          discription: 'Enter customer name'
         }}
       />
       <MyInputItem
@@ -147,16 +130,8 @@ const AddMaster = () => {
           discription: 'Enter password'
         }}
       />
-      <CitiesSelect
-        value={cities}
-        error={citiesError}
-        name='cities'
-        loadOptions={loadOptions}
-        onChange={(e) => setCities(e)}
-        onFocus={() => resetError(setCitiesError)}
-      />
       <div className='myButtonWrapper'>
-        <MyBigButton>Add master</MyBigButton>
+        <MyBigButton>Add customer</MyBigButton>
       </div>
       <div className='myButtonWrapper'>
         <MyBigButton onClick={(e) => goBack(e)} className='backBigButton'>
@@ -167,4 +142,4 @@ const AddMaster = () => {
   )
 }
 
-export default AddMaster
+export default AddCustomer

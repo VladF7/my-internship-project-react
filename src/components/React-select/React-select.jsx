@@ -3,7 +3,7 @@ import './ReactSelectStyles.css'
 import MyLabel from '../Label/MyLabel'
 import MyError from '../Error/MyError'
 
-const ReactSelect = ({ error, ...props }) => {
+const CitiesSelect = ({ error, ...props }) => {
   const styles = {
     error: error,
     control: (baseStyles, state) => ({
@@ -67,4 +67,4 @@ const ReactSelect = ({ error, ...props }) => {
   )
 }
 
-export default ReactSelect
+export default CitiesSelect
