@@ -69,7 +69,7 @@ const Customers = () => {
                     <MySpan>Name: {customer.name},</MySpan>
                     <MySpan>Email: {customer.email},</MySpan>
                     {customer.user ? (
-                      <MySpan>Email activated: {`${customer.user.isEmailActivated}`}.</MySpan>
+                      <MySpan>Email confirmed: {`${customer.user.isEmailActivated}`}.</MySpan>
                     ) : (
                       <MySpan>Customer not registered.</MySpan>
                     )}

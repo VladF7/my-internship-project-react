@@ -3,11 +3,10 @@ import citiesAPI from '../../../api/citiesAPI'
 import MyButton from '../../../components/Buttons/BigButton/MyBigButton'
 import MySmallButton from '../../../components/Buttons/SmalButton/MySmallButton'
 import MyError from '../../../components/Error/MyError'
-import MyInput from '../../../components/Input/MyInput'
-import MyLabel from '../../../components/Label/MyLabel'
 import './Cities.css'
 import MySpan from '../../../components/Span/MySpan'
 import { formatValueToDecimal, formatValueToInteger } from '../../../helpers'
+import MyInputItem from '../../../components/InputItem/MyInputItem'
 
 const Cities = () => {
   const [city, setCity] = useState('')
@@ -16,7 +15,7 @@ const Cities = () => {
   const [cityError, setCityError] = useState('')
   const [priceForHourError, setPriceForHourError] = useState('')
   const [cityId, setCityId] = useState('')
-  const [error, setError] = useState('')
+  const [addCityerror, setAddCityError] = useState('')
   const [cityDeleteError, setCityDeleteError] = useState('')
 
   const [isLoading, setIsLoading] = useState(true)
@@ -31,6 +30,11 @@ const Cities = () => {
       .then((cities) => setCities(cities))
       .then(() => setIsLoading(false))
   }, [])
+
+  const resetError = (setError) => {
+    setError('')
+    setAddCityError('')
+  }
 
   const changePriceForHour = (event) => {
     let priceForHour = event.target.value
@@ -56,7 +60,7 @@ const Cities = () => {
 
   const addCity = async (e) => {
     e.preventDefault()
-    setError('')
+    setAddCityError('')
     const formattedPriceForHour = formatValueToInteger(priceForHour)
 
     if (!city || !priceForHour || formattedPriceForHour === 0) {
@@ -78,7 +82,7 @@ const Cities = () => {
       setCity('')
       setPriceForHour('')
     } else {
-      setError('A city with that name alredy exist')
+      setAddCityError('A city with that name alredy exist')
     }
   }
 
@@ -128,40 +132,33 @@ const Cities = () => {
         </ul>
       </div>
       <form onSubmit={(e) => addCity(e)} className={'form'}>
-        <div className='errorContainer'>
-          <MyError>{cityError || error}</MyError>
-        </div>
-        <MyLabel discription={'Add city to the list'} />
-        <MyInput
-          type='text'
-          name='city'
-          placeholder={'Enter the name of the city'}
-          error={cityError || error}
+        <MyInputItem
           value={city}
-          onFocus={() => {
-            setCityError('')
-            setError('')
-          }}
-          onChange={(e) => {
-            setCity(e.target.value)
+          error={cityError || addCityerror}
+          onChange={(e) => setCity(e.target.value)}
+          onFocus={() => resetError(setCityError)}
+          item={{
+            id: 'city',
+            type: 'text',
+            placeholder: 'Enter the name of the city',
+            discription: 'Add city to the list'
           }}
         />
-        <div className='errorContainer'>
-          <MyError>{priceForHourError}</MyError>
-        </div>
-        <MyLabel discription={'Add price for hour'} />
-        <MyInput
-          type='text'
-          name='price'
-          placeholder={'Enter the price for hour'}
+        <MyInputItem
           value={priceForHour}
           error={priceForHourError}
-          onFocus={() => setPriceForHourError('')}
-          onChange={(e) => {
-            changePriceForHour(e)
+          onChange={(e) => changePriceForHour(e)}
+          onFocus={() => resetError(setPriceForHourError)}
+          item={{
+            id: 'city',
+            type: 'text',
+            placeholder: 'Enter the price for hour',
+            discription: 'Add price for hour'
           }}
         />
-        <MyButton>Add city</MyButton>
+        <div className='myButtonWrapper'>
+          <MyButton>Add city</MyButton>
+        </div>
       </form>
     </div>
   )

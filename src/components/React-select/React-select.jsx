@@ -1,7 +1,7 @@
 import AsyncSelect from 'react-select/async'
 import './ReactSelectStyles.css'
 import MyLabel from '../Label/MyLabel'
-import MyError from '../Error/MyError'
+import RequiredField from '../Error/RequiredField'
 
 const CitiesSelect = ({ error, ...props }) => {
   const styles = {
@@ -9,11 +9,7 @@ const CitiesSelect = ({ error, ...props }) => {
     control: (baseStyles, state) => ({
       ...baseStyles,
       border: state.isFocused ? 0 : 0,
-      boxShadow: error
-        ? '0 0 0 1.5px rgba(220, 20, 60, 0.8)'
-        : state.isFocused
-        ? '0 0 0 3px #4C7C54'
-        : 0,
+      boxShadow: error ? '0 0 0 1.5px #ff0000;' : state.isFocused ? '0 0 0 3px #4C7C54' : 0,
       '&:hover': {
         border: state.isFocused ? 0 : 0
       },
@@ -48,22 +44,26 @@ const CitiesSelect = ({ error, ...props }) => {
   }
 
   return (
-    <div className='reactSelectContainer'>
-      <MyLabel discription={'Choose master cities'}></MyLabel>
-      <MyError>{error}</MyError>
-      <AsyncSelect
-        {...props}
-        cacheOptions
-        defaultOptions
-        closeMenuOnSelect={false}
-        isMulti
-        placeholder='Choose available cities'
-        isSearchable={false}
-        noOptionsMessage={() => 'No more cities'}
-        error={error}
-        styles={styles}
-      />
-    </div>
+    <>
+      <div className='reactSelectContainer'>
+        <MyLabel discription={'Choose master cities'}></MyLabel>
+
+        <AsyncSelect
+          {...props}
+          cacheOptions
+          defaultOptions
+          closeMenuOnSelect={false}
+          isMulti
+          placeholder='Choose available cities'
+          isSearchable={false}
+          noOptionsMessage={() => 'No more cities'}
+          error={error}
+          styles={styles}
+        />
+
+        <RequiredField>{error}</RequiredField>
+      </div>
+    </>
   )
 }
 

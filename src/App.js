@@ -62,7 +62,7 @@ const App = () => {
             </RequireAuth>
           }
         >
-          <Route path='/admin' element={<Navigate to='masters' replace />} />
+          <Route path='/admin' element={<Navigate to='orders' replace />} />
           <Route path='masters' element={<Masters />} />
           <Route path='masters/:id' element={<EditMaster />}></Route>
           <Route path='masters/registration' element={<AddMaster />}></Route>
