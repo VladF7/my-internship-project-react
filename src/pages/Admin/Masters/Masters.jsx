@@ -81,7 +81,8 @@ const Masters = () => {
                     <MySpan>Rating: {master.rating},</MySpan>
                     <MySpan>Cities: {master.cities.map((city) => city.name + ', ')}</MySpan>
                     <MySpan>Email: {master.user.email},</MySpan>
-                    <MySpan>Email activated: {`${master.user.isEmailActivated}`}.</MySpan>
+                    <MySpan>Email confirmed: {`${master.user.isEmailActivated}`},</MySpan>
+                    <MySpan>Profile activated: {`${master.isActivated}`}.</MySpan>
                   </div>
                   <div className='buttons'>
                     <MySmallButton
@@ -91,7 +92,7 @@ const Masters = () => {
                       className='smallButtonActivate'
                       onClick={() => activateMaster(master.id)}
                     >
-                      Activate master
+                      Activate profile
                     </MySmallButton>
 
                     <MySmallButton to={`${master.id}`}>Edit</MySmallButton>

@@ -1,4 +1,4 @@
-import MyError from '../Error/MyError'
+import RequiredField from '../Error/RequiredField'
 import MyLabel from '../Label/MyLabel'
 import './MySelect.css'
 const MySelectWithLabel = ({
@@ -14,7 +14,7 @@ const MySelectWithLabel = ({
   return (
     <div className='mySelect'>
       <MyLabel discription={discription}></MyLabel>
-      <MyError>{props.error}</MyError>
+      <RequiredField>{props.error}</RequiredField>
       <select
         {...props}
         name={name}

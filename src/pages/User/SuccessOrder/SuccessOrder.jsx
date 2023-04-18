@@ -21,7 +21,7 @@ const SuccessOrder = () => {
         <MySpan>{message}</MySpan>
       </div>
       <div className='myButtonWrapper'>
-        <MyLinkButton onClick={(e) => goBack(e)}>Back</MyLinkButton>
+        <MyLinkButton onClick={(e) => goBack(e)}>Done</MyLinkButton>
       </div>
     </div>
   )

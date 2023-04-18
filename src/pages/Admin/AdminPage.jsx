@@ -4,9 +4,9 @@ import './AdminPage.css'
 
 const AdminForm = () => {
   const items = [
+    { name: 'Orders', path: 'orders' },
     { name: 'Masters', path: 'masters' },
     { name: 'Cities', path: 'cities' },
-    { name: 'Orders', path: 'orders' },
     { name: 'Customers', path: 'customers' }
   ]
   return (

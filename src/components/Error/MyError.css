@@ -2,8 +2,14 @@
   position: absolute;
   top: 1px;
   right: 15px;
-  color: rgba(220, 20, 60, 0.8);
+  color: #ff0000;
 }
 .errorField {
-  box-shadow: 0px 0px 0px 1.5px rgba(220, 20, 60, 0.8);
+  box-shadow: 0px 0px 0px 1.5px #ff0000;
+}
+.requiredField {
+  position: absolute;
+  bottom: -2px;
+  right: 15px;
+  color: #ff0000;
 }

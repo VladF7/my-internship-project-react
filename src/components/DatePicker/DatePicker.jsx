@@ -3,9 +3,9 @@ import ReactDatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import './DatePicker.css'
 
-import MyError from '../Error/MyError'
 import MyLabel from '../Label/MyLabel'
 import { setHours, setMinutes } from 'date-fns'
+import RequiredField from '../Error/RequiredField'
 
 const DatePicker = ({ value, onChange, error, ...props }) => {
   const changeValue = (date) => {
@@ -23,7 +23,7 @@ const DatePicker = ({ value, onChange, error, ...props }) => {
 
   return (
     <div className='datePickerWrapper'>
-      <MyError>{error}</MyError>
+      <RequiredField>{error}</RequiredField>
       <MyLabel>Choose time and date</MyLabel>
       <ReactDatePicker
         {...props}

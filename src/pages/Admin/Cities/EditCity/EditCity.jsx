@@ -2,11 +2,9 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import citiesAPI from '../../../../api/citiesAPI'
 import MyBigButton from '../../../../components/Buttons/BigButton/MyBigButton'
-import MyError from '../../../../components/Error/MyError'
-import MyInput from '../../../../components/Input/MyInput'
-import MyLabel from '../../../../components/Label/MyLabel'
 import MySpan from '../../../../components/Span/MySpan'
 import { formatValueToDecimal, formatValueToInteger } from '../../../../helpers'
+import MyInputItem from '../../../../components/InputItem/MyInputItem'
 
 const EditCity = () => {
   const { id } = useParams()
@@ -15,7 +13,7 @@ const EditCity = () => {
   const [cityName, setCityName] = useState('')
   const [priceForHour, setPriceForHour] = useState('')
   const [cityError, setCityError] = useState('')
-  const [error, setError] = useState('')
+  const [editCityError, setEditCityError] = useState('')
   const [priceForHourError, setPriceForHourError] = useState('')
   const requiredField = 'Required field'
   const priceForHourField = 'Must be not empty and not null'
@@ -30,6 +28,10 @@ const EditCity = () => {
       .then(() => setIsLoadnig(false))
   }, [id])
 
+  const resetError = (setError) => {
+    setError('')
+    setEditCityError('')
+  }
   const changePriceForHour = (event) => {
     let priceForHour = event.target.value
     priceForHour = priceForHour.replace(/,/g, '.')
@@ -58,7 +60,7 @@ const EditCity = () => {
   }
   const editCity = async (e) => {
     e.preventDefault()
-    setError('')
+    setEditCityError('')
     const formattedPriceForHour = formatValueToInteger(priceForHour)
 
     if (!cityName || !priceForHour || formattedPriceForHour === 0) {
@@ -79,7 +81,7 @@ const EditCity = () => {
       await citiesAPI.getCities()
       prevPage(-1)
     } else {
-      setError('A city with that name alredy exist')
+      setEditCityError('A city with that name alredy exist')
     }
   }
   if (isLoading) {
@@ -87,38 +89,28 @@ const EditCity = () => {
   }
   return (
     <form onSubmit={(e) => editCity(e)} className={'form'}>
-      <div className='errorContainer'>
-        <MyError>{cityError || error}</MyError>
-      </div>
-      <MyLabel discription={'Edit city name'} />
-      <MyInput
-        type='text'
-        name='city'
-        placeholder={'Enter the name of the city'}
+      <MyInputItem
         value={cityName}
-        error={cityError || error}
-        onFocus={() => {
-          setCityError('')
-          setError('')
-        }}
-        onChange={(e) => {
-          setCityName(e.target.value)
+        error={cityError || editCityError}
+        onChange={(e) => setCityName(e.target.value)}
+        onFocus={() => resetError(setCityError)}
+        item={{
+          id: 'city',
+          type: 'text',
+          placeholder: 'Enter the name of the city',
+          discription: 'Edit city name'
         }}
       />
-
-      <div className='errorContainer'>
-        <MyError>{priceForHourError}</MyError>
-      </div>
-      <MyLabel discription={'Edit price for hour'} />
-      <MyInput
-        type='text'
-        name='price'
-        placeholder={'Enter the price for hour'}
+      <MyInputItem
         value={priceForHour}
         error={priceForHourError}
-        onFocus={() => setPriceForHourError('')}
-        onChange={(e) => {
-          changePriceForHour(e)
+        onChange={(e) => changePriceForHour(e)}
+        onFocus={() => resetError(setPriceForHourError)}
+        item={{
+          id: 'city',
+          type: 'text',
+          placeholder: 'Enter the price for hour',
+          discription: 'Edit price for hour'
         }}
       />
       <div className='myButtonWrapper'>
