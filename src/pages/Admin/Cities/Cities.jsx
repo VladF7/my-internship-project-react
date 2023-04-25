@@ -7,6 +7,7 @@ import './Cities.css'
 import MySpan from '../../../components/Span/MySpan'
 import { formatValueToDecimal, formatValueToInteger } from '../../../helpers'
 import MyInputItem from '../../../components/InputItem/MyInputItem'
+import AdminNavBar from '../../../components/NavBar/AdminNavBar/AdminNavBar'
 
 const Cities = () => {
   const [city, setCity] = useState('')
@@ -100,66 +101,81 @@ const Cities = () => {
     setCityId(id)
   }
 
-  if (isLoading) return <MySpan>The list of cities is loading...</MySpan>
+  if (isLoading)
+    return (
+      <div className='adminPage'>
+        <div className={'navBar'}>
+          <AdminNavBar />
+        </div>
+        <div className='adminItem'>
+          <MySpan>The list of cities is loading...</MySpan>
+        </div>
+      </div>
+    )
 
   return (
-    <div className={'itemContent'}>
-      <div className='cities'>
-        <ul className={'list'}>
-          {!cities.length ? (
-            <MySpan>The list of cities is empty</MySpan>
-          ) : (
-            cities.map((city) => {
-              return (
-                <li id={city.id} key={city.id} className={'listItem'}>
-                  {cityId === city.id ? <MyError>{cityDeleteError}</MyError> : ''}
-                  <div className='itemInfo'>
-                    <MySpan>City: {city.name},</MySpan>
-                    <MySpan>
-                      Price for hour: {formatValueToDecimal(city.priceForHour)} {currency},
-                    </MySpan>
-                  </div>
-                  <div className='buttons'>
-                    <MySmallButton to={`${city.id}`}>Edit</MySmallButton>
-                    <MySmallButton onClick={() => delCity(city.id)} className='smallButtonDelete'>
-                      Delete
-                    </MySmallButton>
-                  </div>
-                </li>
-              )
-            })
-          )}
-        </ul>
+    <div className='adminPage'>
+      <div className={'navBar'}>
+        <AdminNavBar />
       </div>
-      <form onSubmit={(e) => addCity(e)} className={'form'}>
-        <MyInputItem
-          value={city}
-          error={cityError || addCityerror}
-          onChange={(e) => setCity(e.target.value)}
-          onFocus={() => resetError(setCityError)}
-          item={{
-            id: 'city',
-            type: 'text',
-            placeholder: 'Enter the name of the city',
-            discription: 'Add city to the list'
-          }}
-        />
-        <MyInputItem
-          value={priceForHour}
-          error={priceForHourError}
-          onChange={(e) => changePriceForHour(e)}
-          onFocus={() => resetError(setPriceForHourError)}
-          item={{
-            id: 'city',
-            type: 'text',
-            placeholder: 'Enter the price for hour',
-            discription: 'Add price for hour'
-          }}
-        />
-        <div className='myButtonWrapper'>
-          <MyButton>Add city</MyButton>
+      <div className='adminItem'>
+        <div className='cities'>
+          <ul className={'list'}>
+            {!cities.length ? (
+              <MySpan>The list of cities is empty</MySpan>
+            ) : (
+              cities.map((city) => {
+                return (
+                  <li id={city.id} key={city.id} className={'listItem'}>
+                    {cityId === city.id ? <MyError>{cityDeleteError}</MyError> : ''}
+                    <div className='itemInfo'>
+                      <MySpan>City: {city.name},</MySpan>
+                      <MySpan>
+                        Price for hour: {formatValueToDecimal(city.priceForHour)} {currency},
+                      </MySpan>
+                    </div>
+                    <div className='buttons'>
+                      <MySmallButton to={`${city.id}`}>Edit</MySmallButton>
+                      <MySmallButton onClick={() => delCity(city.id)} className='smallButtonDelete'>
+                        Delete
+                      </MySmallButton>
+                    </div>
+                  </li>
+                )
+              })
+            )}
+          </ul>
         </div>
-      </form>
+        <form onSubmit={(e) => addCity(e)} className={'form'}>
+          <MyInputItem
+            value={city}
+            error={cityError || addCityerror}
+            onChange={(e) => setCity(e.target.value)}
+            onFocus={() => resetError(setCityError)}
+            item={{
+              id: 'city',
+              type: 'text',
+              placeholder: 'Enter the name of the city',
+              discription: 'Add city to the list'
+            }}
+          />
+          <MyInputItem
+            value={priceForHour}
+            error={priceForHourError}
+            onChange={(e) => changePriceForHour(e)}
+            onFocus={() => resetError(setPriceForHourError)}
+            item={{
+              id: 'city',
+              type: 'text',
+              placeholder: 'Enter the price for hour',
+              discription: 'Add price for hour'
+            }}
+          />
+          <div className='myButtonWrapper'>
+            <MyButton>Add city</MyButton>
+          </div>
+        </form>
+      </div>
     </div>
   )
 }

@@ -7,11 +7,15 @@ export const login = (authForm) => {
     try {
       const res = await userAPI.login(authForm)
       if (res) {
-        dispatch(actionLogin(res.user))
-        localStorage.setItem('token', res.token)
-        return true
+        if (res.redirect) {
+          return res
+        } else {
+          dispatch(actionLogin(res.user))
+          localStorage.setItem('token', res.token)
+          return res.user
+        }
       } else {
-        return false
+        return res
       }
     } catch (error) {
       console.log(error)

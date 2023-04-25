@@ -5,6 +5,7 @@ import './Customers.css'
 import MySpan from '../../../components/Span/MySpan'
 import MyError from '../../../components/Error/MyError'
 import MyLinkButton from '../../../components/Buttons/BigButton/MyLinkButton'
+import AdminNavBar from '../../../components/NavBar/AdminNavBar/AdminNavBar'
 
 const Customers = () => {
   const [customers, setCustomers] = useState([])
@@ -48,55 +49,70 @@ const Customers = () => {
     setCustomerId(id)
   }
 
-  if (isLoading) return <MySpan>The list of customers is loading...</MySpan>
+  if (isLoading)
+    return (
+      <div className='adminPage'>
+        <div className={'navBar'}>
+          <AdminNavBar />
+        </div>
+        <div className='adminItem'>
+          <MySpan>The list of customers is loading...</MySpan>
+        </div>
+      </div>
+    )
 
   return (
-    <div className='itemContent'>
-      <div className='customers'>
-        <ul className='list'>
-          {customers.length === 0 ? (
-            <MySpan>The list of customers is empty</MySpan>
-          ) : (
-            customers.map((customer) => {
-              return (
-                <li id={customer.id} key={customer.id} className='listItem'>
-                  {customerId === customer.id ? (
-                    <MyError>{deleteError || resetPasswordError}</MyError>
-                  ) : (
-                    ''
-                  )}
-                  <div className='itemInfo'>
-                    <MySpan>Name: {customer.name},</MySpan>
-                    <MySpan>Email: {customer.email},</MySpan>
-                    {customer.user ? (
-                      <MySpan>Email confirmed: {`${customer.user.isEmailActivated}`}.</MySpan>
-                    ) : (
-                      <MySpan>Customer not registered.</MySpan>
-                    )}
-                  </div>
-                  <div className='buttons'>
-                    {customer.user ? (
-                      <MySmallButton onClick={() => resetPassword(customer.id)}>
-                        Reset password
-                      </MySmallButton>
+    <div className='adminPage'>
+      <div className={'navBar'}>
+        <AdminNavBar />
+      </div>
+      <div className='adminItem'>
+        <div className='customers'>
+          <ul className='list'>
+            {customers.length === 0 ? (
+              <MySpan>The list of customers is empty</MySpan>
+            ) : (
+              customers.map((customer) => {
+                return (
+                  <li id={customer.id} key={customer.id} className='listItem'>
+                    {customerId === customer.id ? (
+                      <MyError>{deleteError || resetPasswordError}</MyError>
                     ) : (
                       ''
                     )}
-                    <MySmallButton
-                      onClick={() => deleteCustomer(customer.id)}
-                      className='smallButtonDelete'
-                    >
-                      Delete
-                    </MySmallButton>
-                  </div>
-                </li>
-              )
-            })
-          )}
-        </ul>
-      </div>
-      <div className='addButtonWrapper form'>
-        <MyLinkButton to='registration'>Add customer</MyLinkButton>
+                    <div className='itemInfo'>
+                      <MySpan>Name: {customer.name},</MySpan>
+                      <MySpan>Email: {customer.email},</MySpan>
+                      {customer.user ? (
+                        <MySpan>Email confirmed: {`${customer.user.isEmailActivated}`}.</MySpan>
+                      ) : (
+                        <MySpan>Customer not registered.</MySpan>
+                      )}
+                    </div>
+                    <div className='buttons'>
+                      {customer.user ? (
+                        <MySmallButton onClick={() => resetPassword(customer.id)}>
+                          Reset password
+                        </MySmallButton>
+                      ) : (
+                        ''
+                      )}
+                      <MySmallButton
+                        onClick={() => deleteCustomer(customer.id)}
+                        className='smallButtonDelete'
+                      >
+                        Delete
+                      </MySmallButton>
+                    </div>
+                  </li>
+                )
+              })
+            )}
+          </ul>
+        </div>
+        <div className='addButtonWrapper form'>
+          <MyLinkButton to='registration'>Add customer</MyLinkButton>
+        </div>
       </div>
     </div>
   )

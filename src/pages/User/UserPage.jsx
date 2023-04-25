@@ -2,9 +2,8 @@
 import './UserPage.css'
 import { useEffect, useState } from 'react'
 import MyInputItem from '../../components/InputItem/MyInputItem'
-import MySizeSelector from '../../components/SizeSelector/MySizeSelector'
 import { useNavigate } from 'react-router-dom'
-import { createUser } from '../../services/user'
+import { saveUserData } from '../../services/user'
 import MyBigButton from '../../components/Buttons/BigButton/MyBigButton'
 import citiesAPI from '../../api/citiesAPI'
 import DatePicker from '../../components/DatePicker/DatePicker'
@@ -13,13 +12,22 @@ import MyLabel from '../../components/Label/MyLabel'
 import clocksAPI from '../../api/clocksAPI'
 import MySelectWithLabel from '../../components/Select/MySelectWithLabel'
 import { formatValueToDecimal } from '../../helpers'
+import userAPI from '../../api/userAPI'
+import { useSelector } from 'react-redux'
 
 const UserForm = () => {
+  const currentUserEmail = useSelector((state) => state.auth.currentUser.email)
+  const currentUserName = useSelector((state) => state.auth.currentUser.name)
+
   const [isLoading, setIsLoading] = useState(true)
   const [cities, setCities] = useState([])
   const [clocks, setClocks] = useState([])
-  const [email, setEmail] = useState(JSON.parse(sessionStorage.getItem('email')) || '')
-  const [name, setName] = useState(JSON.parse(sessionStorage.getItem('name')) || '')
+  const [email, setEmail] = useState(
+    currentUserEmail || JSON.parse(sessionStorage.getItem('email')) || ''
+  )
+  const [name, setName] = useState(
+    currentUserName || JSON.parse(sessionStorage.getItem('name')) || ''
+  )
   const [clock, setClock] = useState(JSON.parse(sessionStorage.getItem('clockId')) || '')
   const [city, setCity] = useState(JSON.parse(sessionStorage.getItem('cityId')) || '')
   const [priceForHour, setPriceForHour] = useState(
@@ -138,8 +146,31 @@ const UserForm = () => {
       return
     } else {
       const startTime = e.target.date.value
-      await createUser(name, email, clock, city, startTime, price, priceForHour, timeToFix)
-      navigate('chooseMaster')
+      await saveUserData(name, email, clock, city, startTime, price, priceForHour, timeToFix)
+
+      const user = await userAPI.getUserByEmail(email)
+      if (!user) {
+        navigate('/user/registration')
+        return
+      }
+      if (user.role !== 'Customer') {
+        setEmailError("order can't be created on this email")
+        return
+      }
+      if (currentUserEmail === user.email && user.isEmailActivated) {
+        if (name !== currentUserName) {
+          navigate(`/user/changeName`, { replace: true })
+          return
+        } else {
+          navigate(`/user/chooseMaster`, { replace: true })
+          return
+        }
+      }
+      if (currentUserEmail !== user.email && user.isEmailActivated) {
+        navigate('/user/auth')
+      } else {
+        navigate('/user/chooseMaster')
+      }
     }
   }
 
@@ -163,6 +194,7 @@ const UserForm = () => {
           }}
         />
         <MyInputItem
+          disabled={currentUserEmail ? true : false}
           name='email'
           value={email}
           error={emailError}

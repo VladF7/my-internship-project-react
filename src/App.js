@@ -9,7 +9,6 @@ import './App.css'
 
 import Layout from './components/Layout/Layout'
 import UserPage from './pages/User/UserPage'
-import AdminPage from './pages/Admin/AdminPage'
 import ChooseMasterForm from './pages/User/ChooseMasterForm/ChooseMasterForm'
 import Orders from './pages/Admin/Orders/Orders'
 import Cities from './pages/Admin/Cities/Cities'
@@ -19,7 +18,7 @@ import EditMaster from './pages/Admin/Masters/EditMaster/EditMaster'
 import SuccessOrder from './pages/User/SuccessOrder/SuccessOrder'
 import Customers from './pages/Admin/Customers/Customers'
 import EditOrder from './pages/Admin/Orders/EditOrder/EditOrder'
-import LoginPage from './pages/LoginPage/LoginPage'
+import LoginPage from './pages/Login/LoginPage'
 import RequireAuth from './hoc/RequireAuth'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -31,6 +30,14 @@ import ConfirmOrder from './pages/User/ConfirmOrder/ConfirmOrder'
 import SignUpPage from './pages/SignUp/SignUpPage'
 import SuccessSignUp from './pages/SignUp/SuccessSignUp/SuccessSignUpPage'
 import AddCustomer from './pages/Admin/Customers/AddCustomer/AddCustomer'
+import MasterPage from './pages/Master/MasterPage'
+import CustomerPage from './pages/Customer/CustomerPage'
+import UserRegistration from './pages/User/UserRegistration/UserRegistration'
+import UserAuthorization from './pages/User/UserAuthorization/UserAuthorization'
+import EmailConfirmedPage from './pages/User/ConfirmedEmailPage/EmailConfirmedPage'
+import ConfirmEmailPage from './pages/Login/ConfirmEmail/ConfirmEmailPage'
+import AwaitAprovePage from './pages/User/AvaitAprove/AvaitAprovePage'
+import ChangeNamePage from './pages/User/ChangeName/ChangeNamePage'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -48,31 +55,55 @@ const App = () => {
     createRoutesFromElements(
       <Route path='/' element={<Layout />}>
         <Route index element={<UserPage />} />
-        <Route path='chooseMaster' element={<ChooseMasterForm />} />
-        <Route path='confirmOrder' element={<ConfirmOrder />} />
-        <Route path='successOrder' element={<SuccessOrder />} />
-        <Route path='auth' element={<LoginPage />} />
-        <Route path='registration' element={<SignUpPage />} />
-        <Route path='successSignUp' element={<SuccessSignUp />} />
+        <Route path='/auth' element={<LoginPage />} />
+        <Route path='/registration' element={<SignUpPage />} />
+
+        <Route path='/user/changeName' element={<ChangeNamePage />} />
+        <Route path='/user/awaitAprove' element={<AwaitAprovePage />} />
+        <Route path='/user/confirmEmail' element={<ConfirmEmailPage />} />
+        <Route path='/user/emailConfirmed' element={<EmailConfirmedPage />} />
+        <Route path='/user/chooseMaster' element={<ChooseMasterForm />} />
+        <Route path='/user/confirmOrder' element={<ConfirmOrder />} />
+        <Route path='/user/successOrder' element={<SuccessOrder />} />
+        <Route path='/user/successSignUp' element={<SuccessSignUp />} />
+        <Route path='/user/registration' element={<UserRegistration />} />
+        <Route path='/user/auth' element={<UserAuthorization />} />
+
+        <Route path='/master' element={<RequireAuth role={'Master'} page={<MasterPage />} />} />
         <Route
-          path='admin'
-          element={
-            <RequireAuth>
-              <AdminPage />
-            </RequireAuth>
-          }
-        >
-          <Route path='/admin' element={<Navigate to='orders' replace />} />
-          <Route path='masters' element={<Masters />} />
-          <Route path='masters/:id' element={<EditMaster />}></Route>
-          <Route path='masters/registration' element={<AddMaster />}></Route>
-          <Route path='cities' element={<Cities />} />
-          <Route path='cities/:id' element={<EditCity />}></Route>
-          <Route path='orders' element={<Orders />}></Route>
-          <Route path='orders/:id' element={<EditOrder />}></Route>
-          <Route path='customers' element={<Customers />}></Route>
-          <Route path='customers/registration' element={<AddCustomer />}></Route>
-        </Route>
+          path='/customer'
+          element={<RequireAuth role={'Customer'} page={<CustomerPage />} />}
+        />
+
+        <Route path='/admin' element={<Navigate to='/admin/orders' replace />} />
+        <Route path='/admin/orders' element={<RequireAuth role='Admin' page={<Orders />} />} />
+        <Route
+          path='/admin/orders/:id'
+          element={<RequireAuth role='Admin' page={<EditOrder />} />}
+        />
+        <Route path='/admin/masters' element={<RequireAuth role='Admin' page={<Masters />} />} />
+        <Route
+          path='/admin/masters/:id'
+          element={<RequireAuth role='Admin' page={<EditMaster />} />}
+        />
+        <Route
+          path='/admin/masters/registration'
+          element={<RequireAuth role='Admin' page={<AddMaster />} />}
+        />
+        <Route path='/admin/cities' element={<RequireAuth role='Admin' page={<Cities />} />} />
+        <Route
+          path='/admin/cities/:id'
+          element={<RequireAuth role='Admin' page={<EditCity />} />}
+        />
+        <Route
+          path='/admin/customers'
+          element={<RequireAuth role='Admin' page={<Customers />} />}
+        />
+        <Route
+          path='/admin/customers/registration'
+          element={<RequireAuth role='Admin' page={<AddCustomer />} />}
+        />
+
         <Route path='*' element={<Navigate to='/' replace />} />
       </Route>
     )

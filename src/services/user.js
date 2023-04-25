@@ -1,6 +1,6 @@
 import ordersAPI from '../api/ordersAPI'
 
-export const createUser = async (
+export const saveUserData = async (
   name,
   email,
   clockId,

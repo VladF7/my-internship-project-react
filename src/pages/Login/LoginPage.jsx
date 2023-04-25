@@ -1,15 +1,13 @@
 import { useState } from 'react'
 import MyInputItem from '../../components/InputItem/MyInputItem'
 import './LoginPage.css'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { login } from '../../services/auth'
 import MyBigButton from '../../components/Buttons/BigButton/MyBigButton'
 
 const LoginPage = () => {
   const navigate = useNavigate()
-  const location = useLocation()
-  const fromPage = location.state?.from?.pathname || '/admin'
   const dispatch = useDispatch()
 
   const [email, setEmail] = useState('')
@@ -24,6 +22,15 @@ const LoginPage = () => {
     setError('')
     setEmailOrPasswordError('')
   }
+  const redirectPath = {
+    awaitAprove: 'awaitAprove',
+    confirmEmail: 'confirmEmail'
+  }
+  const loginPath = {
+    Admin: 'admin',
+    Customer: 'customer',
+    Master: 'master'
+  }
 
   const onBlurEmail = (e) => {
     const re =
@@ -35,6 +42,17 @@ const LoginPage = () => {
       }
     } else {
       setEmailError('')
+    }
+  }
+  const onBlurPassword = (password) => {
+    if (password.length < 3) {
+      setPasswordError('Password must not be less than 3 characters')
+    }
+    if (password.length > 16) {
+      setPasswordError('Password must be 16 or fewer characters long')
+    }
+    if (password.length === 0) {
+      setPasswordError('')
     }
   }
 
@@ -56,8 +74,14 @@ const LoginPage = () => {
     dispatch(login(e)).then((res) => {
       if (!res) {
         setEmailOrPasswordError(textError)
+        return
+      }
+      if (res.redirect) {
+        navigate(`/user/${redirectPath[res.redirectTo]}`)
+        return
       } else {
-        navigate(fromPage, { replace: true })
+        navigate(`/${loginPath[res.role]}`, { replace: true })
+        return
       }
     })
   }
@@ -83,6 +107,7 @@ const LoginPage = () => {
         error={passwordError || emailOrPasswordError}
         onChange={(e) => setPassword(e.target.value)}
         onFocus={() => resetError(setPasswordError)}
+        onBlur={(e) => onBlurPassword(e.target.value)}
         item={{
           id: 'password',
           type: 'password',

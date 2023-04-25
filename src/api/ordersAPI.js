@@ -53,6 +53,27 @@ class OrdersAPI {
     )
     return response
   }
+  async changeStatus(id) {
+    const response = await request(
+      `/api/orders/changeStatus/${id}`,
+      'PUT',
+      null,
+      localStorage.getItem('token')
+    )
+    return response
+  }
+  async setRating(id, rating) {
+    const requestData = {
+      rating
+    }
+    const response = await request(
+      `/api/orders/setRating/${id}`,
+      'PUT',
+      requestData,
+      localStorage.getItem('token')
+    )
+    return response
+  }
 }
 
 const ordersAPI = new OrdersAPI()

@@ -2,7 +2,7 @@ import { Outlet } from 'react-router-dom'
 import NavBar from '../../components/NavBar/NavBar'
 import './AdminPage.css'
 
-const AdminForm = () => {
+const AdminPage = () => {
   const items = [
     { name: 'Orders', path: 'orders' },
     { name: 'Masters', path: 'masters' },
@@ -21,4 +21,4 @@ const AdminForm = () => {
   )
 }
 
-export default AdminForm
+export default AdminPage

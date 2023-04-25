@@ -1,15 +1,17 @@
 import { useSelector } from 'react-redux'
 import { Navigate, useLocation } from 'react-router-dom'
 
-const RequireAuth = ({ children }) => {
+const RequireAuth = ({ page, role }) => {
   const location = useLocation()
   const isAuth = useSelector((state) => state.auth.isAuth)
+  const userRole = useSelector((state) => state.auth.currentUser.role)
+  const token = localStorage.getItem('token')
 
-  if (!isAuth) {
-    return <Navigate to='/auth' state={{ from: location }}></Navigate>
+  if (isAuth && userRole === role && token) {
+    return page
+  } else {
+    return <Navigate to={`/`} state={{ from: location }}></Navigate>
   }
-
-  return children
 }
 
 export default RequireAuth
