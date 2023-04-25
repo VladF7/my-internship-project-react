@@ -6,12 +6,15 @@ import MySpan from '../../components/Span/MySpan'
 import { formatValueToDecimal } from '../../helpers'
 import { Rating } from 'react-simple-star-rating'
 import ordersAPI from '../../api/ordersAPI'
+import { useToasts } from 'react-toast-notifications'
 
 const CustomerPage = () => {
   const [orders, setOrders] = useState([])
   const [orderId, setOrderId] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const id = useSelector((state) => state.auth.currentUser.customerId)
+
+  const { addToast } = useToasts()
 
   useEffect(() => {
     ordersAPI
@@ -21,8 +24,19 @@ const CustomerPage = () => {
   }, [orderId])
 
   const handleRating = async (id, rate) => {
-    await ordersAPI.setRating(id, Number(rate))
-    setOrderId(id)
+    const setRating = await ordersAPI.setRating(id, Number(rate))
+    if (!setRating) {
+      addToast('Rating cannot be set', {
+        transitionState: 'entered',
+        appearance: 'error'
+      })
+    } else {
+      addToast('Rating has been set', {
+        transitionState: 'entered',
+        appearance: 'success'
+      })
+      setOrderId(id)
+    }
   }
 
   if (isLoading) {

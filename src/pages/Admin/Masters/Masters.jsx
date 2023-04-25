@@ -2,19 +2,17 @@ import { useEffect, useState } from 'react'
 import mastersAPI from '../../../api/mastersAPI'
 import MyLinkButton from '../../../components/Buttons/BigButton/MyLinkButton'
 import MySmallButton from '../../../components/Buttons/SmalButton/MySmallButton'
-import MyError from '../../../components/Error/MyError'
 import MySpan from '../../../components/Span/MySpan'
 import './Masters.css'
 import AdminNavBar from '../../../components/NavBar/AdminNavBar/AdminNavBar'
+import { useToasts } from 'react-toast-notifications'
 
 const Masters = () => {
   const [masters, setMasters] = useState([])
-  const [deleteError, setdeleteError] = useState('')
-  const [activateError, setActivateError] = useState('')
-  const [resetPasswordError, setResetPasswordError] = useState('')
   const [currentMasterId, setCurrentMasterId] = useState('')
   const [isLoading, setIsLoading] = useState(true)
-  const textError = 'Master cannot be deleted, used in order'
+
+  const { addToast } = useToasts()
 
   useEffect(() => {
     mastersAPI
@@ -23,41 +21,39 @@ const Masters = () => {
         setMasters(masters)
       })
       .then(() => setIsLoading(false))
-  }, [])
+  }, [currentMasterId])
 
   const activateMaster = async (id) => {
     const activateMaster = await mastersAPI.activateMaster(id)
     if (!activateMaster) {
-      setActivateError("Master can't be activated")
+      addToast('Master cannot be activated', { transitionState: 'entered', appearance: 'error' })
     } else {
-      const masters = await mastersAPI.getMasters()
-      setMasters(masters)
+      addToast('Master has been activated', { transitionState: 'entered', appearance: 'success' })
+      setCurrentMasterId(id)
     }
   }
   const resetPassword = async (id) => {
     const resetPassword = await mastersAPI.resetPassword(id)
     if (!resetPassword) {
-      setResetPasswordError("Password can't be reseted")
+      addToast('Password cannot be reset', { transitionState: 'entered', appearance: 'error' })
     } else {
-      setResetPasswordError('Password has been reset')
-      setTimeout(() => {
-        setResetPasswordError('')
-      }, 1500)
+      addToast('Password has been reset', {
+        transitionState: 'entered',
+        appearance: 'success'
+      })
     }
-    setCurrentMasterId(id)
   }
-
   const deleteMaster = async (id) => {
     const deletedMaster = await mastersAPI.delMaster(id)
     if (!deletedMaster) {
-      setdeleteError(textError)
-      setTimeout(() => {
-        setdeleteError('')
-      }, 1500)
+      addToast('Master cannot be deleted, used in order', {
+        transitionState: 'entered',
+        appearance: 'error'
+      })
+      return
     } else {
       setMasters(masters.filter((master) => master.id !== id))
     }
-    setCurrentMasterId(id)
   }
 
   if (isLoading)
@@ -86,11 +82,6 @@ const Masters = () => {
               masters.map((master) => {
                 return (
                   <li id={master.id} key={master.id} className='listItem'>
-                    {currentMasterId === master.id ? (
-                      <MyError>{deleteError || activateError || resetPasswordError}</MyError>
-                    ) : (
-                      ''
-                    )}
                     <div className='itemInfo'>
                       <MySpan>Name: {master.name},</MySpan>
                       <MySpan>Rating: {master.rating ? master.rating : '0.0'},</MySpan>

@@ -4,18 +4,16 @@ import ordersAPI from '../../../api/ordersAPI'
 import './Orders.css'
 import MySpan from '../../../components/Span/MySpan'
 import { useNavigate } from 'react-router-dom'
-import MyError from '../../../components/Error/MyError'
 import { format } from 'date-fns'
 import { formatValueToDecimal } from '../../../helpers'
 import AdminNavBar from '../../../components/NavBar/AdminNavBar/AdminNavBar'
+import { useToasts } from 'react-toast-notifications'
 
 const Orders = () => {
   const [orders, setOrders] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-  const [editError, setEditError] = useState('')
-  const [currOrderId, setCurrOrderId] = useState('')
   const navigate = useNavigate()
-  const textError = 'Cannot be edited, this order has already been started'
+  const { addToast } = useToasts()
 
   useEffect(() => {
     ordersAPI
@@ -23,21 +21,24 @@ const Orders = () => {
       .then((orders) => setOrders(orders))
       .then(() => setIsLoading(false))
   }, [])
-  const delOrder = (id) => {
-    ordersAPI.delOrder(id)
+  const delOrder = async (id) => {
+    const deletedOrder = await ordersAPI.delOrder(id)
+    if (!deletedOrder) {
+      addToast('Order cannot be deleted', { transitionState: 'entered', appearance: 'error' })
+      return
+    }
     setOrders(orders.filter((order) => order.id !== id))
   }
 
   const goToEdit = (id, start) => {
     if (format(new Date(), 'yyyy.MM.dd, HH:mm') > start) {
-      setEditError(textError)
-      setTimeout(() => {
-        setEditError('')
-      }, 1500)
+      addToast('Cannot be edited, this order has already been started', {
+        transitionState: 'entered',
+        appearance: 'error'
+      })
     } else {
       navigate(`${id}`)
     }
-    setCurrOrderId(id)
   }
 
   if (isLoading === true)
@@ -66,7 +67,6 @@ const Orders = () => {
               orders.map((order) => {
                 return (
                   <li id={order.id} key={order.id} className='listItem'>
-                    {currOrderId === order.id ? <MyError>{editError}</MyError> : ''}
                     <div className='itemInfo'>
                       <MySpan>Name: {order.customer.name},</MySpan>
                       <MySpan>Email: {order.customer.email},</MySpan>

@@ -6,14 +6,15 @@ import MySpan from '../../components/Span/MySpan'
 import { formatValueToDecimal } from '../../helpers'
 import MySmallButton from '../../components/Buttons/SmalButton/MySmallButton'
 import ordersAPI from '../../api/ordersAPI'
-import MyError from '../../components/Error/MyError'
+import { useToasts } from 'react-toast-notifications'
 
 const MasterPage = () => {
   const [orderId, setOrderId] = useState('')
   const [orders, setOrders] = useState([])
-  const [changeStatusError, setChangeStatusError] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const id = useSelector((state) => state.auth.currentUser.masterId)
+
+  const { addToast } = useToasts()
 
   useEffect(() => {
     ordersAPI
@@ -25,12 +26,17 @@ const MasterPage = () => {
   const completeOrder = async (id) => {
     const completedOrder = await ordersAPI.completeOrder(id)
     if (!completedOrder) {
-      setChangeStatusError("Status can't be changed")
-      setTimeout(() => {
-        setChangeStatusError('')
-      }, 1500)
+      addToast('Order status cannot be changed', {
+        transitionState: 'entered',
+        appearance: 'error'
+      })
+    } else {
+      addToast('Order status has been changed', {
+        transitionState: 'entered',
+        appearance: 'success'
+      })
+      setOrderId(id)
     }
-    setOrderId(id)
   }
 
   if (isLoading) {
@@ -49,7 +55,6 @@ const MasterPage = () => {
         orders.map((order) => {
           return (
             <li id={order.id} key={order.id} className='listItem'>
-              {orderId === order.id ? <MyError>{changeStatusError}</MyError> : ''}
               <div className='itemInfo'>
                 <MySpan>Name: {order.customer.name},</MySpan>
                 <MySpan>Clock size: {order.clock.size},</MySpan>

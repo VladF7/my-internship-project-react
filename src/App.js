@@ -38,6 +38,7 @@ import EmailConfirmedPage from './pages/User/ConfirmedEmailPage/EmailConfirmedPa
 import ConfirmEmailPage from './pages/Login/ConfirmEmail/ConfirmEmailPage'
 import AwaitAprovePage from './pages/User/AvaitAprove/AvaitAprovePage'
 import ChangeNamePage from './pages/User/ChangeName/ChangeNamePage'
+import { ToastProvider } from 'react-toast-notifications'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -119,7 +120,15 @@ const App = () => {
 
   return (
     <div className='App'>
-      <RouterProvider router={router} />
+      <ToastProvider
+        autoDismiss={true}
+        autoDismissTimeout={2000}
+        newestOnTop={true}
+        placement={'bottom-right'}
+        transitionDuration={200}
+      >
+        <RouterProvider router={router} />
+      </ToastProvider>
     </div>
   )
 }
