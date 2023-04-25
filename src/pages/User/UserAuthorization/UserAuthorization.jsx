@@ -40,11 +40,7 @@ const UserAuthorization = () => {
   }
   const skipAuthorization = (e) => {
     e.preventDefault()
-    if (name !== currentUserName) {
-      navigate(`/user/changeName`, { replace: true })
-    } else {
-      navigate(`/user/chooseMaster`, { replace: true })
-    }
+    navigate(`/user/chooseMaster`, { replace: true })
   }
 
   const onSubmit = (e) => {
