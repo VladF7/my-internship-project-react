@@ -6,6 +6,7 @@ import MyBigButton from '../../../components/Buttons/BigButton/MyBigButton'
 import MyError from '../../../components/Error/MyError'
 import MyLabel from '../../../components/Label/MyLabel'
 import MySpan from '../../../components/Span/MySpan'
+import '../../../components/SizeSelector/MySizeSelector.css'
 
 const ChooseMasterForm = () => {
   const navigate = useNavigate()
@@ -26,7 +27,7 @@ const ChooseMasterForm = () => {
   }
   const goBack = (e) => {
     e.preventDefault()
-    navigate(-1)
+    navigate('/')
   }
   const onSubmit = async (e) => {
     e.preventDefault()
@@ -35,7 +36,7 @@ const ChooseMasterForm = () => {
       return
     } else {
       sessionStorage.setItem('masterId', JSON.stringify(masterId))
-      navigate('/confirmOrder')
+      navigate('/user/confirmOrder')
     }
   }
 
@@ -66,7 +67,7 @@ const ChooseMasterForm = () => {
                       defaultChecked={master.id === masterId ? true : false}
                     />
                     <MyLabel htmlFor={master.id}>
-                      Name: {master.name}, rating: {master.rating}
+                      Name: {master.name}, rating: {master.rating ? master.rating : '0.0'}
                     </MyLabel>
                   </div>
                 )

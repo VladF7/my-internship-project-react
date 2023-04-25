@@ -5,6 +5,7 @@ import MyBigButton from '../../../../components/Buttons/BigButton/MyBigButton'
 import MySpan from '../../../../components/Span/MySpan'
 import { formatValueToDecimal, formatValueToInteger } from '../../../../helpers'
 import MyInputItem from '../../../../components/InputItem/MyInputItem'
+import AdminNavBar from '../../../../components/NavBar/AdminNavBar/AdminNavBar'
 
 const EditCity = () => {
   const { id } = useParams()
@@ -85,43 +86,59 @@ const EditCity = () => {
     }
   }
   if (isLoading) {
-    return <MySpan>Data is loading, please wait...</MySpan>
+    return (
+      <div className='adminPage'>
+        <div className={'navBar'}>
+          <AdminNavBar />
+        </div>
+        <div className='adminItem'>
+          <MySpan>Data is loading, please wait...</MySpan>
+        </div>
+      </div>
+    )
   }
   return (
-    <form onSubmit={(e) => editCity(e)} className={'form'}>
-      <MyInputItem
-        value={cityName}
-        error={cityError || editCityError}
-        onChange={(e) => setCityName(e.target.value)}
-        onFocus={() => resetError(setCityError)}
-        item={{
-          id: 'city',
-          type: 'text',
-          placeholder: 'Enter the name of the city',
-          discription: 'Edit city name'
-        }}
-      />
-      <MyInputItem
-        value={priceForHour}
-        error={priceForHourError}
-        onChange={(e) => changePriceForHour(e)}
-        onFocus={() => resetError(setPriceForHourError)}
-        item={{
-          id: 'city',
-          type: 'text',
-          placeholder: 'Enter the price for hour',
-          discription: 'Edit price for hour'
-        }}
-      />
-      <div className='myButtonWrapper'>
-        <MyBigButton>Edit city</MyBigButton>
+    <div className='adminPage'>
+      <div className={'navBar'}>
+        <AdminNavBar />
       </div>
-      <div className='myButtonWrapper'>
-        <MyBigButton onClick={(e) => goBack(e)} className='backBigButton'>
-          Cancel
-        </MyBigButton>
+      <div className='adminItem'>
+        <form onSubmit={(e) => editCity(e)} className={'form'}>
+          <MyInputItem
+            value={cityName}
+            error={cityError || editCityError}
+            onChange={(e) => setCityName(e.target.value)}
+            onFocus={() => resetError(setCityError)}
+            item={{
+              id: 'city',
+              type: 'text',
+              placeholder: 'Enter the name of the city',
+              discription: 'Edit city name'
+            }}
+          />
+          <MyInputItem
+            value={priceForHour}
+            error={priceForHourError}
+            onChange={(e) => changePriceForHour(e)}
+            onFocus={() => resetError(setPriceForHourError)}
+            item={{
+              id: 'city',
+              type: 'text',
+              placeholder: 'Enter the price for hour',
+              discription: 'Edit price for hour'
+            }}
+          />
+          <div className='myButtonWrapper'>
+            <MyBigButton>Edit city</MyBigButton>
+          </div>
+          <div className='myButtonWrapper'>
+            <MyBigButton onClick={(e) => goBack(e)} className='backBigButton'>
+              Cancel
+            </MyBigButton>
+          </div>
+        </form>
       </div>
-    </form>
+    </div>
   )
 }
 

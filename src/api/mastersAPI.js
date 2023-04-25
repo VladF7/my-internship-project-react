@@ -30,10 +30,9 @@ class MastersAPI {
     const response = await request(`/api/masters/${id}`)
     return response
   }
-  async editMaster(id, name, rating, cities) {
+  async editMaster(id, name, cities) {
     const requestData = {
       name,
-      rating,
       cities
     }
 

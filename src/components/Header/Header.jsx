@@ -6,9 +6,10 @@ import './Header.css'
 
 const Header = () => {
   const isAuth = useSelector((state) => state.auth.isAuth)
-  const currentUser = useSelector((state) => state.auth.currentUser.email)
+  const currentUserEmail = useSelector((state) => state.auth.currentUser.email)
+  const role = useSelector((state) => state.auth.currentUser.role)
   const regexp = /([^\s]+)@([^\s.]+\.[a-z]+)/
-  const currentUserName = currentUser ? currentUser.match(regexp)[1] : ''
+  const currentUserName = currentUserEmail ? currentUserEmail.match(regexp)[1] : ''
 
   const dispatch = useDispatch()
   const logout = () => {
@@ -26,7 +27,7 @@ const Header = () => {
     ]) ||
     (isAuth && [
       { name: 'Create order', path: '/' },
-      { name: `${currentUserName}`, path: '/admin' }
+      { name: `${currentUserName}`, path: `/${role.toLowerCase()}` }
     ])
 
   return (

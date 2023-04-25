@@ -13,6 +13,7 @@ import MySpan from '../../../../components/Span/MySpan'
 import MySelectWithLabel from '../../../../components/Select/MySelectWithLabel'
 import statusesAPI from '../../../../api/statuses.API'
 import { formatValueToDecimal } from '../../../../helpers'
+import AdminNavBar from '../../../../components/NavBar/AdminNavBar/AdminNavBar'
 
 const EditOrder = () => {
   const [isLoading, setIsLoadnig] = useState(true)
@@ -38,7 +39,10 @@ const EditOrder = () => {
     return { id: clock.id, name: clock.size }
   })
   const mastersOptions = masters.map((master) => {
-    return { id: master.id, label: `Name: ${master.name}, rating: ${master.rating}` }
+    return {
+      id: master.id,
+      label: `Name: ${master.name}, rating: ${master.rating ? master.rating : '0.0'}`
+    }
   })
   const statusesOptions = statuses.map((status) => {
     return { id: status, label: status }
@@ -161,77 +165,93 @@ const EditOrder = () => {
     }
   }
   if (isLoading) {
-    return <MySpan>Data is loading, please wait...</MySpan>
+    return (
+      <div className='adminPage'>
+        <div className={'navBar'}>
+          <AdminNavBar />
+        </div>
+        <div className='adminItem'>
+          <MySpan>Data is loading, please wait...</MySpan>
+        </div>
+      </div>
+    )
   }
 
   return (
-    <form onSubmit={(e) => editOrder(e)} className={'form'}>
-      <DatePicker name='date' value={date} onChange={(date) => setDate(date)} />
-
-      <MySelectWithLabel
-        options={sizeOptions}
-        placeholder='Click to select size'
-        name='clock'
-        labelText='Time to fix'
-        labelValue={timeToFix}
-        labelWord={timeToFix > 1 ? 'hours' : 'hour'}
-        discription={'Choose clock size'}
-        value={clock}
-        onChange={(e) => {
-          setClock(Number(e.target.value))
-        }}
-      />
-      <MySelectWithLabel
-        name='city'
-        value={city}
-        options={cities}
-        labelText='Price for hour'
-        labelValue={formatValueToDecimal(priceForHour)}
-        labelWord={currency}
-        placeholder={'Click to select city'}
-        discription={'Choose city'}
-        onChange={(e) => setCity(Number(e.target.value))}
-      />
-      <MyLabel
-        style={{
-          visibility: price ? '' : 'hidden',
-          paddingLeft: '0px',
-          justifyContent: 'center'
-        }}
-      >
-        Clock repair will cost {formatValueToDecimal(price)} {currency}
-      </MyLabel>
-
-      <MySelect
-        options={mastersOptions}
-        placeholder='Click to select master'
-        name='master'
-        discription={'Choose master'}
-        error={masterError}
-        value={master}
-        onFocus={() => setMasterError('')}
-        onChange={(e) => setMaster(Number(e.target.value))}
-      />
-      <MySelect
-        options={statusesOptions}
-        placeholder='Click to select status'
-        name='status'
-        discription={'Change status'}
-        value={status}
-        onChange={(e) => setStatus(e.target.value)}
-      />
-
-      <div className='buttonBoxWrapper'>
-        <div className='buttonBox'>
-          <MyBigButton onClick={(e) => goBack(e)} className='backBigButton'>
-            Cancel
-          </MyBigButton>
-        </div>
-        <div className='buttonBox'>
-          <MyBigButton>Edit order</MyBigButton>
-        </div>
+    <div className='adminPage'>
+      <div className={'navBar'}>
+        <AdminNavBar />
       </div>
-    </form>
+      <div className='adminItem'>
+        <form onSubmit={(e) => editOrder(e)} className={'form'}>
+          <DatePicker name='date' value={date} onChange={(date) => setDate(date)} />
+
+          <MySelectWithLabel
+            options={sizeOptions}
+            placeholder='Click to select size'
+            name='clock'
+            labelText='Time to fix'
+            labelValue={timeToFix}
+            labelWord={timeToFix > 1 ? 'hours' : 'hour'}
+            discription={'Choose clock size'}
+            value={clock}
+            onChange={(e) => {
+              setClock(Number(e.target.value))
+            }}
+          />
+          <MySelectWithLabel
+            name='city'
+            value={city}
+            options={cities}
+            labelText='Price for hour'
+            labelValue={formatValueToDecimal(priceForHour)}
+            labelWord={currency}
+            placeholder={'Click to select city'}
+            discription={'Choose city'}
+            onChange={(e) => setCity(Number(e.target.value))}
+          />
+          <MyLabel
+            style={{
+              visibility: price ? '' : 'hidden',
+              paddingLeft: '0px',
+              justifyContent: 'center'
+            }}
+          >
+            Clock repair will cost {formatValueToDecimal(price)} {currency}
+          </MyLabel>
+
+          <MySelect
+            options={mastersOptions}
+            placeholder='Click to select master'
+            name='master'
+            discription={'Choose master'}
+            error={masterError}
+            value={master}
+            onFocus={() => setMasterError('')}
+            onChange={(e) => setMaster(Number(e.target.value))}
+          />
+          <MySelect
+            options={statusesOptions}
+            placeholder='Click to select status'
+            name='status'
+            discription={'Change status'}
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+          />
+
+          <div className='buttonBoxWrapper'>
+            <div className='buttonBox'>
+              <MyBigButton onClick={(e) => goBack(e)} className='backBigButton'>
+                Cancel
+              </MyBigButton>
+            </div>
+            <div className='buttonBox'>
+              <MyBigButton>Edit order</MyBigButton>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
   )
 }
 

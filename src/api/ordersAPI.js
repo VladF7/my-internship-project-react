@@ -53,6 +53,45 @@ class OrdersAPI {
     )
     return response
   }
+  async completeOrder(id) {
+    const response = await request(
+      `/api/orders/completeOrder/${id}`,
+      'PUT',
+      null,
+      localStorage.getItem('token')
+    )
+    return response
+  }
+  async setRating(id, rating) {
+    const requestData = {
+      rating
+    }
+    const response = await request(
+      `/api/orders/setRating/${id}`,
+      'PUT',
+      requestData,
+      localStorage.getItem('token')
+    )
+    return response
+  }
+  async getOrdersForMastrerById(masterId) {
+    const response = await request(
+      `/api/orders/master/${masterId}`,
+      'GET',
+      null,
+      localStorage.getItem('token')
+    )
+    return response
+  }
+  async getOrdersForCustomerById(customerId) {
+    const response = await request(
+      `/api/orders/customer/${customerId}`,
+      'GET',
+      null,
+      localStorage.getItem('token')
+    )
+    return response
+  }
 }
 
 const ordersAPI = new OrdersAPI()

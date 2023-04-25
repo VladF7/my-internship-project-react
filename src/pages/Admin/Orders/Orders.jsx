@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import MyError from '../../../components/Error/MyError'
 import { format } from 'date-fns'
 import { formatValueToDecimal } from '../../../helpers'
+import AdminNavBar from '../../../components/NavBar/AdminNavBar/AdminNavBar'
 
 const Orders = () => {
   const [orders, setOrders] = useState([])
@@ -39,48 +40,66 @@ const Orders = () => {
     setCurrOrderId(id)
   }
 
-  if (isLoading === true) return <MySpan>The list of orders is loading...</MySpan>
+  if (isLoading === true)
+    return (
+      <div className='adminPage'>
+        <div className={'navBar'}>
+          <AdminNavBar />
+        </div>
+        <div className='adminItem'>
+          <MySpan>The list of orders is loading...</MySpan>
+        </div>
+      </div>
+    )
 
   return (
-    <div className='itemContent'>
-      <div className='orders'>
-        <ul className='list'>
-          {orders.length === 0 ? (
-            <MySpan>The list of orders is empty</MySpan>
-          ) : (
-            orders.map((order) => {
-              return (
-                <li id={order.id} key={order.id} className='listItem'>
-                  {currOrderId === order.id ? <MyError>{editError}</MyError> : ''}
-                  <div className='itemInfo'>
-                    <MySpan>Name: {order.customer.name},</MySpan>
-                    <MySpan>Email: {order.customer.email},</MySpan>
-                    <MySpan>Clock size: {order.clock.size},</MySpan>
-                    <MySpan>Time to fix: {order.clock.timeToFix},</MySpan>
-                    <MySpan>Master name: {order.master.name},</MySpan>
-                    <MySpan>City: {order.city.name},</MySpan>
-                    <MySpan>Order start time: {order.startTime},</MySpan>
-                    <MySpan>Order end time: {order.endTime}</MySpan>
-                    <MySpan>Order price: {formatValueToDecimal(order.price)}</MySpan>
-                    <MySpan>Order status: {order.status}</MySpan>
-                  </div>
-                  <div className='buttons'>
-                    {format(new Date(), 'yyyy.MM.dd, HH:mm') < order.startTime ? (
-                      <MySmallButton onClick={() => goToEdit(order.id, order.startTime)}>
-                        Edit
+    <div className='adminPage'>
+      <div className={'navBar'}>
+        <AdminNavBar />
+      </div>
+      <div className='adminItem'>
+        <div className='orders'>
+          <ul className='list'>
+            {orders.length === 0 ? (
+              <MySpan>The list of orders is empty</MySpan>
+            ) : (
+              orders.map((order) => {
+                return (
+                  <li id={order.id} key={order.id} className='listItem'>
+                    {currOrderId === order.id ? <MyError>{editError}</MyError> : ''}
+                    <div className='itemInfo'>
+                      <MySpan>Name: {order.customer.name},</MySpan>
+                      <MySpan>Email: {order.customer.email},</MySpan>
+                      <MySpan>Clock size: {order.clock.size},</MySpan>
+                      <MySpan>Time to fix: {order.clock.timeToFix},</MySpan>
+                      <MySpan>Master name: {order.master.name},</MySpan>
+                      <MySpan>City: {order.city.name},</MySpan>
+                      <MySpan>Order start time: {order.startTime},</MySpan>
+                      <MySpan>Order end time: {order.endTime}</MySpan>
+                      <MySpan>Order price: {formatValueToDecimal(order.price)}</MySpan>
+                      <MySpan>Order status: {order.status}</MySpan>
+                    </div>
+                    <div className='buttons'>
+                      {format(new Date(), 'yyyy.MM.dd, HH:mm') < order.startTime ? (
+                        <MySmallButton onClick={() => goToEdit(order.id, order.startTime)}>
+                          Edit
+                        </MySmallButton>
+                      ) : (
+                        ''
+                      )}
+                      <MySmallButton
+                        onClick={() => delOrder(order.id)}
+                        className='smallButtonDelete'
+                      >
+                        Delete
                       </MySmallButton>
-                    ) : (
-                      ''
-                    )}
-                    <MySmallButton onClick={() => delOrder(order.id)} className='smallButtonDelete'>
-                      Delete
-                    </MySmallButton>
-                  </div>
-                </li>
-              )
-            })
-          )}
-        </ul>
+                    </div>
+                  </li>
+                )
+              })
+            )}
+          </ul>
+        </div>
       </div>
     </div>
   )

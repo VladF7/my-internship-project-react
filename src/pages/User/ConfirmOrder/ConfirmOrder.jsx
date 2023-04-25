@@ -50,7 +50,7 @@ const ConfirmOrder = () => {
     e.preventDefault()
     const order = await ordersAPI.addOrder(masterId)
     if (order) {
-      navigate('/successOrder', { replace: true })
+      navigate('/user/successOrder', { replace: true })
     }
   }
 

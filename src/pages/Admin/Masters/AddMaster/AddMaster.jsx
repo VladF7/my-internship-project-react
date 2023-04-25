@@ -6,6 +6,7 @@ import userAPI from '../../../../api/userAPI'
 import MyBigButton from '../../../../components/Buttons/BigButton/MyBigButton'
 import MyInputItem from '../../../../components/InputItem/MyInputItem'
 import CitiesSelect from '../../../../components/React-select/React-select'
+import AdminNavBar from '../../../../components/NavBar/AdminNavBar/AdminNavBar'
 
 const AddMaster = () => {
   const loadOptions = async () => {
@@ -103,67 +104,75 @@ const AddMaster = () => {
     }
     setRegistrationError('User with this email is alredy exist')
   }
+
   return (
-    <form onSubmit={(e) => addMaster(e)} className={'form'}>
-      <MyInputItem
-        name='name'
-        value={name}
-        error={nameError}
-        onChange={(e) => setName(e.target.value)}
-        onBlur={(e) => onBlurName(e)}
-        onFocus={() => resetError(setNameError)}
-        item={{
-          id: 'name',
-          type: 'text',
-          placeholder: 'Must not be less than 3 characters',
-          discription: 'Enter master name'
-        }}
-      />
-      <MyInputItem
-        name='email'
-        value={email}
-        error={emailError || registrationError}
-        onChange={(e) => setEmail(e.target.value)}
-        onFocus={() => resetError(setEmailError)}
-        onBlur={(e) => onBlurEmail(e.target.value)}
-        item={{
-          id: 'email',
-          type: 'text',
-          placeholder: 'Enter your email',
-          discription: 'Enter email'
-        }}
-      />
-      <MyInputItem
-        name='password'
-        value={password}
-        error={passwordError}
-        onChange={(e) => setPassword(e.target.value)}
-        onFocus={() => resetError(setPasswordError)}
-        onBlur={(e) => onBlurPassword(e.target.value)}
-        item={{
-          id: 'password',
-          type: 'password',
-          placeholder: 'Enter your password',
-          discription: 'Enter password'
-        }}
-      />
-      <CitiesSelect
-        value={cities}
-        error={citiesError}
-        name='cities'
-        loadOptions={loadOptions}
-        onChange={(e) => setCities(e)}
-        onFocus={() => resetError(setCitiesError)}
-      />
-      <div className='myButtonWrapper'>
-        <MyBigButton>Add master</MyBigButton>
+    <div className='adminPage'>
+      <div className={'navBar'}>
+        <AdminNavBar />
       </div>
-      <div className='myButtonWrapper'>
-        <MyBigButton onClick={(e) => goBack(e)} className='backBigButton'>
-          Cancel
-        </MyBigButton>
+      <div className='adminItem'>
+        <form onSubmit={(e) => addMaster(e)} className={'form'}>
+          <MyInputItem
+            name='name'
+            value={name}
+            error={nameError}
+            onChange={(e) => setName(e.target.value)}
+            onBlur={(e) => onBlurName(e)}
+            onFocus={() => resetError(setNameError)}
+            item={{
+              id: 'name',
+              type: 'text',
+              placeholder: 'Must not be less than 3 characters',
+              discription: 'Enter master name'
+            }}
+          />
+          <MyInputItem
+            name='email'
+            value={email}
+            error={emailError || registrationError}
+            onChange={(e) => setEmail(e.target.value)}
+            onFocus={() => resetError(setEmailError)}
+            onBlur={(e) => onBlurEmail(e.target.value)}
+            item={{
+              id: 'email',
+              type: 'text',
+              placeholder: 'Enter your email',
+              discription: 'Enter email'
+            }}
+          />
+          <MyInputItem
+            name='password'
+            value={password}
+            error={passwordError}
+            onChange={(e) => setPassword(e.target.value)}
+            onFocus={() => resetError(setPasswordError)}
+            onBlur={(e) => onBlurPassword(e.target.value)}
+            item={{
+              id: 'password',
+              type: 'password',
+              placeholder: 'Enter your password',
+              discription: 'Enter password'
+            }}
+          />
+          <CitiesSelect
+            value={cities}
+            error={citiesError}
+            name='cities'
+            loadOptions={loadOptions}
+            onChange={(e) => setCities(e)}
+            onFocus={() => resetError(setCitiesError)}
+          />
+          <div className='myButtonWrapper'>
+            <MyBigButton>Add master</MyBigButton>
+          </div>
+          <div className='myButtonWrapper'>
+            <MyBigButton onClick={(e) => goBack(e)} className='backBigButton'>
+              Cancel
+            </MyBigButton>
+          </div>
+        </form>
       </div>
-    </form>
+    </div>
   )
 }
 

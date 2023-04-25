@@ -38,8 +38,8 @@
   display: flex;
   align-items: stretch;
   justify-content: space-between;
+  padding: 20px 0;
 }
 .buttonBox {
   width: 48%;
-  padding: 10px 0;
 }
