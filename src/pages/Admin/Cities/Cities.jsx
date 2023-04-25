@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react'
 import citiesAPI from '../../../api/citiesAPI'
 import MyButton from '../../../components/Buttons/BigButton/MyBigButton'
 import MySmallButton from '../../../components/Buttons/SmalButton/MySmallButton'
-import MyError from '../../../components/Error/MyError'
 import './Cities.css'
 import MySpan from '../../../components/Span/MySpan'
 import { formatValueToDecimal, formatValueToInteger } from '../../../helpers'
 import MyInputItem from '../../../components/InputItem/MyInputItem'
 import AdminNavBar from '../../../components/NavBar/AdminNavBar/AdminNavBar'
+import { useToasts } from 'react-toast-notifications'
 
 const Cities = () => {
   const [city, setCity] = useState('')
@@ -15,11 +15,10 @@ const Cities = () => {
   const [cities, setCities] = useState([])
   const [cityError, setCityError] = useState('')
   const [priceForHourError, setPriceForHourError] = useState('')
-  const [cityId, setCityId] = useState('')
   const [addCityerror, setAddCityError] = useState('')
-  const [cityDeleteError, setCityDeleteError] = useState('')
 
   const [isLoading, setIsLoading] = useState(true)
+  const { addToast } = useToasts()
 
   const requiredField = 'Required field'
   const priceForHourField = 'Must be not empty and not null'
@@ -90,15 +89,15 @@ const Cities = () => {
   const delCity = (id) => {
     citiesAPI.delCity(id).then((city) => {
       if (!city) {
-        setCityDeleteError('Cannot be deleted, city is in use')
-        setTimeout(() => {
-          setCityDeleteError('')
-        }, 1500)
+        addToast('City cannot be deleted, city is in use', {
+          transitionState: 'entered',
+          appearance: 'error'
+        })
+        return
       } else {
         setCities(cities.filter((city) => city.id !== id))
       }
     })
-    setCityId(id)
   }
 
   if (isLoading)
@@ -127,7 +126,6 @@ const Cities = () => {
               cities.map((city) => {
                 return (
                   <li id={city.id} key={city.id} className={'listItem'}>
-                    {cityId === city.id ? <MyError>{cityDeleteError}</MyError> : ''}
                     <div className='itemInfo'>
                       <MySpan>City: {city.name},</MySpan>
                       <MySpan>

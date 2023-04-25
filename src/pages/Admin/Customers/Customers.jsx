@@ -3,17 +3,14 @@ import MySmallButton from '../../../components/Buttons/SmalButton/MySmallButton'
 import customersAPI from '../../../api/customersAPI'
 import './Customers.css'
 import MySpan from '../../../components/Span/MySpan'
-import MyError from '../../../components/Error/MyError'
 import MyLinkButton from '../../../components/Buttons/BigButton/MyLinkButton'
 import AdminNavBar from '../../../components/NavBar/AdminNavBar/AdminNavBar'
+import { useToasts } from 'react-toast-notifications'
 
 const Customers = () => {
   const [customers, setCustomers] = useState([])
-  const [deleteError, setdeleteError] = useState('')
-  const [resetPasswordError, setResetPasswordError] = useState('')
-  const [customerId, setCustomerId] = useState('')
   const [isLoading, setIsLoading] = useState(true)
-  const textError = 'Customer cannot be deleted, used in order'
+  const { addToast } = useToasts()
 
   useEffect(() => {
     customersAPI
@@ -25,28 +22,27 @@ const Customers = () => {
   const resetPassword = async (id) => {
     const resetPassword = await customersAPI.resetPassword(id)
     if (!resetPassword) {
-      setResetPasswordError("Password can't be reseted")
+      addToast('Password cannot be reset', { transitionState: 'entered', appearance: 'error' })
     } else {
-      setResetPasswordError('Password has been reset')
-      setTimeout(() => {
-        setResetPasswordError('')
-      }, 1500)
+      addToast('Password has been reset', {
+        transitionState: 'entered',
+        appearance: 'success'
+      })
     }
-    setCustomerId(id)
   }
 
   const deleteCustomer = (id) => {
     customersAPI.delCustomer(id).then((customer) => {
       if (!customer) {
-        setdeleteError(textError)
-        setTimeout(() => {
-          setdeleteError('')
-        }, 1500)
+        addToast('Customer cannot be deleted, used in order', {
+          transitionState: 'entered',
+          appearance: 'error'
+        })
+        return
       } else {
         setCustomers(customers.filter((customer) => customer.id !== id))
       }
     })
-    setCustomerId(id)
   }
 
   if (isLoading)
@@ -75,11 +71,6 @@ const Customers = () => {
               customers.map((customer) => {
                 return (
                   <li id={customer.id} key={customer.id} className='listItem'>
-                    {customerId === customer.id ? (
-                      <MyError>{deleteError || resetPasswordError}</MyError>
-                    ) : (
-                      ''
-                    )}
                     <div className='itemInfo'>
                       <MySpan>Name: {customer.name},</MySpan>
                       <MySpan>Email: {customer.email},</MySpan>
