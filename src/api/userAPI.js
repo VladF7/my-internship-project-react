@@ -76,19 +76,6 @@ class UserAPI {
     )
     return response
   }
-  async getOrdersForMastrerByUserId(id) {
-    const response = await request(`/api/master/${id}`, 'GET', null, localStorage.getItem('token'))
-    return response
-  }
-  async getOrdersForCustomerByUserId(id) {
-    const response = await request(
-      `/api/customer/${id}`,
-      'GET',
-      null,
-      localStorage.getItem('token')
-    )
-    return response
-  }
   async getUserByEmail(email) {
     const requestData = {
       email

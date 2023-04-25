@@ -2,7 +2,6 @@ import { useSelector } from 'react-redux'
 import './MasterPage.css'
 import '../Admin/AdminPage.css'
 import { useEffect, useState } from 'react'
-import userAPI from '../../api/userAPI'
 import MySpan from '../../components/Span/MySpan'
 import { formatValueToDecimal } from '../../helpers'
 import MySmallButton from '../../components/Buttons/SmalButton/MySmallButton'
@@ -14,18 +13,18 @@ const MasterPage = () => {
   const [orders, setOrders] = useState([])
   const [changeStatusError, setChangeStatusError] = useState('')
   const [isLoading, setIsLoading] = useState(true)
-  const id = useSelector((state) => state.auth.currentUser.id)
+  const id = useSelector((state) => state.auth.currentUser.masterId)
 
   useEffect(() => {
-    userAPI
-      .getOrdersForMastrerByUserId(id)
+    ordersAPI
+      .getOrdersForMastrerById(id)
       .then((orders) => setOrders(orders))
       .then(() => setIsLoading(false))
   }, [orderId])
 
-  const changeOrderStatus = async (id) => {
-    const changedStatus = await ordersAPI.changeStatus(id)
-    if (!changedStatus) {
+  const completeOrder = async (id) => {
+    const completedOrder = await ordersAPI.completeOrder(id)
+    if (!completedOrder) {
       setChangeStatusError("Status can't be changed")
       setTimeout(() => {
         setChangeStatusError('')
@@ -65,9 +64,9 @@ const MasterPage = () => {
                 <div className='buttons'>
                   <MySmallButton
                     style={{ background: 'green' }}
-                    onClick={() => changeOrderStatus(order.id)}
+                    onClick={() => completeOrder(order.id)}
                   >
-                    To complete
+                    Complete order
                   </MySmallButton>
                 </div>
               )}

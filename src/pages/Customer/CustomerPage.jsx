@@ -2,7 +2,6 @@ import { useSelector } from 'react-redux'
 import './CustomerPage.css'
 import '../Admin/AdminPage.css'
 import { useEffect, useState } from 'react'
-import userAPI from '../../api/userAPI'
 import MySpan from '../../components/Span/MySpan'
 import { formatValueToDecimal } from '../../helpers'
 import { Rating } from 'react-simple-star-rating'
@@ -12,11 +11,11 @@ const CustomerPage = () => {
   const [orders, setOrders] = useState([])
   const [orderId, setOrderId] = useState('')
   const [isLoading, setIsLoading] = useState(true)
-  const id = useSelector((state) => state.auth.currentUser.id)
+  const id = useSelector((state) => state.auth.currentUser.customerId)
 
   useEffect(() => {
-    userAPI
-      .getOrdersForCustomerByUserId(id)
+    ordersAPI
+      .getOrdersForCustomerById(id)
       .then((orders) => setOrders(orders))
       .then(() => setIsLoading(false))
   }, [orderId])
