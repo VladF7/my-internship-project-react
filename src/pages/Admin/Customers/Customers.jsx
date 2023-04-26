@@ -10,6 +10,8 @@ import { useToasts } from 'react-toast-notifications'
 const Customers = () => {
   const [customers, setCustomers] = useState([])
   const [isLoading, setIsLoading] = useState(true)
+  const [currentId, setCurrentId] = useState('')
+  const [showActions, setShowActions] = useState(false)
   const { addToast } = useToasts()
 
   useEffect(() => {
@@ -29,6 +31,10 @@ const Customers = () => {
         appearance: 'success'
       })
     }
+  }
+  const changeShowActions = (id) => {
+    setShowActions(!showActions)
+    setCurrentId(id)
   }
 
   const deleteCustomer = (id) => {
@@ -81,18 +87,27 @@ const Customers = () => {
                       )}
                     </div>
                     <div className='buttons'>
-                      {customer.user ? (
-                        <MySmallButton onClick={() => resetPassword(customer.id)}>
-                          Reset password
-                        </MySmallButton>
-                      ) : (
-                        ''
-                      )}
-                      <MySmallButton
-                        onClick={() => deleteCustomer(customer.id)}
-                        className='smallButtonDelete'
+                      <div
+                        className={
+                          currentId === customer.id && showActions ? 'showButtons' : 'hideButtons'
+                        }
                       >
-                        Delete
+                        {customer.user ? (
+                          <MySmallButton onClick={() => resetPassword(customer.id)}>
+                            Reset password
+                          </MySmallButton>
+                        ) : (
+                          ''
+                        )}
+                        <MySmallButton
+                          onClick={() => deleteCustomer(customer.id)}
+                          className='smallButtonDelete'
+                        >
+                          Delete
+                        </MySmallButton>
+                      </div>
+                      <MySmallButton onClick={() => changeShowActions(customer.id)}>
+                        {currentId === customer.id && showActions ? 'Hide actions' : 'Show actions'}
                       </MySmallButton>
                     </div>
                   </li>

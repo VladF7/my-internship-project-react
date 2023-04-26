@@ -16,7 +16,8 @@ const Cities = () => {
   const [cityError, setCityError] = useState('')
   const [priceForHourError, setPriceForHourError] = useState('')
   const [addCityerror, setAddCityError] = useState('')
-
+  const [currentId, setCurrentId] = useState('')
+  const [showActions, setShowActions] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const { addToast } = useToasts()
 
@@ -34,6 +35,10 @@ const Cities = () => {
   const resetError = (setError) => {
     setError('')
     setAddCityError('')
+  }
+  const changeShowActions = (id) => {
+    setShowActions(!showActions)
+    setCurrentId(id)
   }
 
   const changePriceForHour = (event) => {
@@ -133,9 +138,21 @@ const Cities = () => {
                       </MySpan>
                     </div>
                     <div className='buttons'>
-                      <MySmallButton to={`${city.id}`}>Edit</MySmallButton>
-                      <MySmallButton onClick={() => delCity(city.id)} className='smallButtonDelete'>
-                        Delete
+                      <div
+                        className={
+                          currentId === city.id && showActions ? 'showButtons' : 'hideButtons'
+                        }
+                      >
+                        <MySmallButton to={`${city.id}`}>Edit</MySmallButton>
+                        <MySmallButton
+                          onClick={() => delCity(city.id)}
+                          className='smallButtonDelete'
+                        >
+                          Delete
+                        </MySmallButton>
+                      </div>
+                      <MySmallButton onClick={() => changeShowActions(city.id)}>
+                        {currentId === city.id && showActions ? 'Hide actions' : 'Show actions'}
                       </MySmallButton>
                     </div>
                   </li>

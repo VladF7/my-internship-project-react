@@ -10,6 +10,8 @@ import { useToasts } from 'react-toast-notifications'
 const Masters = () => {
   const [masters, setMasters] = useState([])
   const [currentMasterId, setCurrentMasterId] = useState('')
+  const [currentId, setCurrentId] = useState('')
+  const [showActions, setShowActions] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
 
   const { addToast } = useToasts()
@@ -23,6 +25,10 @@ const Masters = () => {
       .then(() => setIsLoading(false))
   }, [currentMasterId])
 
+  const changeShowActions = (id) => {
+    setShowActions(!showActions)
+    setCurrentId(id)
+  }
   const activateMaster = async (id) => {
     const activateMaster = await mastersAPI.activateMaster(id)
     if (!activateMaster) {
@@ -91,25 +97,34 @@ const Masters = () => {
                       <MySpan>Profile activated: {`${master.isActivated}`}.</MySpan>
                     </div>
                     <div className='buttons'>
-                      <MySmallButton
-                        style={{
-                          display: !master.isActivated ? '' : 'none'
-                        }}
-                        className='smallButtonActivate'
-                        onClick={() => activateMaster(master.id)}
+                      <div
+                        className={
+                          currentId === master.id && showActions ? 'showButtons' : 'hideButtons'
+                        }
                       >
-                        Activate profile
-                      </MySmallButton>
+                        <MySmallButton
+                          style={{
+                            display: !master.isActivated ? '' : 'none'
+                          }}
+                          className='smallButtonActivate'
+                          onClick={() => activateMaster(master.id)}
+                        >
+                          Activate profile
+                        </MySmallButton>
 
-                      <MySmallButton to={`${master.id}`}>Edit</MySmallButton>
-                      <MySmallButton onClick={() => resetPassword(master.id)}>
-                        Reset password
-                      </MySmallButton>
-                      <MySmallButton
-                        onClick={() => deleteMaster(master.id)}
-                        className='smallButtonDelete'
-                      >
-                        Delete
+                        <MySmallButton to={`${master.id}`}>Edit</MySmallButton>
+                        <MySmallButton onClick={() => resetPassword(master.id)}>
+                          Reset password
+                        </MySmallButton>
+                        <MySmallButton
+                          onClick={() => deleteMaster(master.id)}
+                          className='smallButtonDelete'
+                        >
+                          Delete
+                        </MySmallButton>
+                      </div>
+                      <MySmallButton onClick={() => changeShowActions(master.id)}>
+                        {currentId === master.id && showActions ? 'Hide actions' : 'Show actions'}
                       </MySmallButton>
                     </div>
                   </li>

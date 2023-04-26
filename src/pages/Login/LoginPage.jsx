@@ -23,8 +23,8 @@ const LoginPage = () => {
     setEmailOrPasswordError('')
   }
   const redirectPath = {
-    awaitAprove: 'awaitAprove',
-    confirmEmail: 'confirmEmail'
+    awaitApprove: 'master/awaitApprove',
+    confirmEmail: 'user/confirmEmail'
   }
   const loginPath = {
     Admin: 'admin',
@@ -77,7 +77,7 @@ const LoginPage = () => {
         return
       }
       if (res.redirect) {
-        navigate(`/user/${redirectPath[res.redirectTo]}`)
+        navigate(`/${redirectPath[res.redirectTo]}`)
         return
       } else {
         navigate(`/${loginPath[res.role]}`, { replace: true })

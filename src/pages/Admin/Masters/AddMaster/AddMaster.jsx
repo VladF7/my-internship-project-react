@@ -7,6 +7,7 @@ import MyBigButton from '../../../../components/Buttons/BigButton/MyBigButton'
 import MyInputItem from '../../../../components/InputItem/MyInputItem'
 import CitiesSelect from '../../../../components/React-select/React-select'
 import AdminNavBar from '../../../../components/NavBar/AdminNavBar/AdminNavBar'
+import { passwordMatchCheck } from '../../../../helpers'
 
 const AddMaster = () => {
   const loadOptions = async () => {
@@ -21,11 +22,13 @@ const AddMaster = () => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [verificationPassword, setVerificationPassword] = useState('')
   const [emailError, setEmailError] = useState('')
   const [cities, setCities] = useState([])
 
   const [nameError, setNameError] = useState('')
   const [passwordError, setPasswordError] = useState('')
+  const [verificationPasswordError, setVerificationPasswordError] = useState('')
   const [registrationError, setRegistrationError] = useState('')
   const [citiesError, setCitiesError] = useState('')
   const requiredField = 'Required field'
@@ -66,30 +69,55 @@ const AddMaster = () => {
     if (password.length === 0) {
       setPasswordError('')
     }
+    passwordMatchCheck(
+      verificationPassword,
+      password,
+      setVerificationPasswordError,
+      'Passwords must match'
+    )
+  }
+  const onBlurVerificationPassword = (verificationPassword) => {
+    passwordMatchCheck(
+      verificationPassword,
+      password,
+      setVerificationPasswordError,
+      'Passwords must match'
+    )
   }
 
   const goBack = (e) => {
     e.preventDefault()
     prevPage(-1)
   }
-
   const addMaster = async (e) => {
     e.preventDefault()
+    if (
+      nameError ||
+      emailError ||
+      passwordError ||
+      registrationError ||
+      citiesError ||
+      verificationPasswordError
+    ) {
+      return
+    }
+
     if (!name || !cities.length || !email || !password) {
       if (!name) {
         setNameError(requiredField)
       }
-      if (!cities.length) {
-        setCitiesError(requiredField)
+      if (!email) {
+        setEmailError(requiredField)
       }
       if (!password) {
         setPasswordError(requiredField)
       }
-      if (!email) {
-        setEmailError(requiredField)
+      if (!cities.length) {
+        setCitiesError(requiredField)
       }
       return
     }
+
     const citiesId = cities.map((city) => city.value)
 
     const successMasterRegistration = await userAPI.masterRegistrationFromAdminPage(
@@ -152,6 +180,20 @@ const AddMaster = () => {
               type: 'password',
               placeholder: 'Enter your password',
               discription: 'Enter password'
+            }}
+          />
+          <MyInputItem
+            name='confirmPassword'
+            value={verificationPassword}
+            error={verificationPasswordError}
+            onChange={(e) => setVerificationPassword(e.target.value)}
+            onFocus={() => resetError(setVerificationPasswordError)}
+            onBlur={(e) => onBlurVerificationPassword(e.target.value)}
+            item={{
+              id: 'confirmPassword',
+              type: 'password',
+              placeholder: 'Confirm password',
+              discription: 'Confirm password'
             }}
           />
           <CitiesSelect

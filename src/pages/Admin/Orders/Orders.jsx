@@ -12,6 +12,8 @@ import { useToasts } from 'react-toast-notifications'
 const Orders = () => {
   const [orders, setOrders] = useState([])
   const [isLoading, setIsLoading] = useState(true)
+  const [currentId, setCurrentId] = useState('')
+  const [showActions, setShowActions] = useState(false)
   const navigate = useNavigate()
   const { addToast } = useToasts()
 
@@ -29,7 +31,10 @@ const Orders = () => {
     }
     setOrders(orders.filter((order) => order.id !== id))
   }
-
+  const changeShowActions = (id) => {
+    setShowActions(!showActions)
+    setCurrentId(id)
+  }
   const goToEdit = (id, start) => {
     if (format(new Date(), 'yyyy.MM.dd, HH:mm') > start) {
       addToast('Cannot be edited, this order has already been started', {
@@ -80,18 +85,27 @@ const Orders = () => {
                       <MySpan>Order status: {order.status}</MySpan>
                     </div>
                     <div className='buttons'>
-                      {format(new Date(), 'yyyy.MM.dd, HH:mm') < order.startTime ? (
-                        <MySmallButton onClick={() => goToEdit(order.id, order.startTime)}>
-                          Edit
-                        </MySmallButton>
-                      ) : (
-                        ''
-                      )}
-                      <MySmallButton
-                        onClick={() => delOrder(order.id)}
-                        className='smallButtonDelete'
+                      <div
+                        className={
+                          currentId === order.id && showActions ? 'showButtons' : 'hideButtons'
+                        }
                       >
-                        Delete
+                        {format(new Date(), 'yyyy.MM.dd, HH:mm') < order.startTime ? (
+                          <MySmallButton onClick={() => goToEdit(order.id, order.startTime)}>
+                            Edit
+                          </MySmallButton>
+                        ) : (
+                          ''
+                        )}
+                        <MySmallButton
+                          onClick={() => delOrder(order.id)}
+                          className='smallButtonDelete'
+                        >
+                          Delete
+                        </MySmallButton>
+                      </div>
+                      <MySmallButton onClick={() => changeShowActions(order.id)}>
+                        {currentId === order.id && showActions ? 'Hide actions' : 'Show actions'}
                       </MySmallButton>
                     </div>
                   </li>

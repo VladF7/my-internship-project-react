@@ -7,6 +7,7 @@ import MyLabel from '../../components/Label/MyLabel'
 import CitiesSelect from '../../components/React-select/React-select'
 import citiesAPI from '../../api/citiesAPI'
 import userAPI from '../../api/userAPI'
+import { passwordMatchCheck } from '../../helpers'
 
 const SignUpPage = () => {
   const navigate = useNavigate()
@@ -14,6 +15,7 @@ const SignUpPage = () => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [verificationPassword, setVerificationPassword] = useState('')
   const [confirmRules, setConfirmRules] = useState('')
   const [signUpAsMaster, setSignUpAsMaster] = useState(false)
   const [formHeigth, setFormHeigth] = useState('')
@@ -23,6 +25,7 @@ const SignUpPage = () => {
   const [nameError, setNameError] = useState('')
   const [emailError, setEmailError] = useState('')
   const [passwordError, setPasswordError] = useState('')
+  const [verificationPasswordError, setVerificationPasswordError] = useState('')
   const [registrationError, setRegistrationError] = useState('')
 
   const loadOptions = async () => {
@@ -71,11 +74,26 @@ const SignUpPage = () => {
     if (password.length === 0) {
       setPasswordError('')
     }
+    passwordMatchCheck(
+      verificationPassword,
+      password,
+      setVerificationPasswordError,
+      'Passwords must match'
+    )
   }
+  const onBlurVerificationPassword = (verificationPassword) => {
+    passwordMatchCheck(
+      verificationPassword,
+      password,
+      setVerificationPasswordError,
+      'Passwords must match'
+    )
+  }
+
   const checkMasterSignUp = (checked) => {
     if (checked) {
       setSignUpAsMaster(true)
-      setFormHeigth('475px')
+      setFormHeigth('575px')
     } else {
       setSignUpAsMaster(false)
       setFormHeigth('')
@@ -85,13 +103,19 @@ const SignUpPage = () => {
   }
   const onSubmit = async (e) => {
     e.preventDefault()
-
-    if (nameError || emailError || passwordError || registrationError || citiesError) {
+    if (
+      nameError ||
+      emailError ||
+      passwordError ||
+      registrationError ||
+      citiesError ||
+      verificationPasswordError
+    ) {
       return
     }
     if (!name || !email || !password) {
       if (!name) {
-        setEmailError(requiredField)
+        setNameError(requiredField)
       }
       if (!email) {
         setEmailError(requiredField)
@@ -117,14 +141,14 @@ const SignUpPage = () => {
       if (!successMasterRegistration) {
         setRegistrationError('User with this email is alredy exist')
       } else {
-        navigate('/successSignUp')
+        navigate('/user/successSignUp')
       }
     } else {
       const successCustomerRegistration = await userAPI.customerRegistration(name, email, password)
       if (!successCustomerRegistration) {
         setRegistrationError('User with this email is alredy exist')
       } else {
-        navigate('/successSignUp')
+        navigate('/user/successSignUp')
       }
     }
   }
@@ -173,6 +197,20 @@ const SignUpPage = () => {
           discription: 'Enter password'
         }}
       />
+      <MyInputItem
+        name='confirmPassword'
+        value={verificationPassword}
+        error={verificationPasswordError}
+        onChange={(e) => setVerificationPassword(e.target.value)}
+        onFocus={() => resetError(setVerificationPasswordError)}
+        onBlur={(e) => onBlurVerificationPassword(e.target.value)}
+        item={{
+          id: 'confirmPassword',
+          type: 'password',
+          placeholder: 'Confirm password',
+          discription: 'Confirm password'
+        }}
+      />
       <div style={{ display: signUpAsMaster ? '' : 'none' }}>
         <CitiesSelect
           value={cities}
@@ -184,7 +222,7 @@ const SignUpPage = () => {
         />
       </div>
 
-      <div style={{ display: 'flex' }}>
+      <div style={{ display: 'flex', alignItems: 'flex-start' }}>
         <MyLabel htmlFor='rules'>I have read and agree to all rules </MyLabel>
         <input
           style={{ marginLeft: '8px' }}
@@ -195,12 +233,12 @@ const SignUpPage = () => {
           onChange={(e) => (e.target.checked ? setConfirmRules(true) : setConfirmRules(false))}
         ></input>
       </div>
-      <div style={{ display: 'flex' }}>
-        <MyLabel htmlFor='rules'>Sign up as master </MyLabel>
+      <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+        <MyLabel htmlFor='signUpAsMaster'>Sign up as master </MyLabel>
         <input
           style={{ marginLeft: '8px' }}
-          id='rules'
-          name='rules'
+          id='signUpAsMaster'
+          name='signUpAsMaster'
           type='checkbox'
           value='checked'
           onChange={(e) => checkMasterSignUp(e.target.checked)}
