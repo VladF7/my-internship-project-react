@@ -1,17 +1,19 @@
 import { useEffect, useState } from 'react'
-import MySmallButton from '../../../components/Buttons/SmalButton/MySmallButton'
 import customersAPI from '../../../api/customersAPI'
 import './Customers.css'
 import MySpan from '../../../components/Span/MySpan'
 import MyLinkButton from '../../../components/Buttons/BigButton/MyLinkButton'
 import AdminNavBar from '../../../components/NavBar/AdminNavBar/AdminNavBar'
 import { useToasts } from 'react-toast-notifications'
+import { RiDeleteBin5Line } from 'react-icons/ri'
+import { MdLockReset } from 'react-icons/md'
+import ThreeDotsMenu from '../../../components/ThreeDotsMenu/ThreeDotsMenu'
+import { changeShowActionsFor } from '../../../helpers'
 
 const Customers = () => {
   const [customers, setCustomers] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-  const [currentId, setCurrentId] = useState('')
-  const [showActions, setShowActions] = useState(false)
+  const [showActionsFor, setShowActionsFor] = useState(false)
   const { addToast } = useToasts()
 
   useEffect(() => {
@@ -32,11 +34,6 @@ const Customers = () => {
       })
     }
   }
-  const changeShowActions = (id) => {
-    setShowActions(!showActions)
-    setCurrentId(id)
-  }
-
   const deleteCustomer = (id) => {
     customersAPI.delCustomer(id).then((customer) => {
       if (!customer) {
@@ -87,28 +84,27 @@ const Customers = () => {
                       )}
                     </div>
                     <div className='buttons'>
-                      <div
-                        className={
-                          currentId === customer.id && showActions ? 'showButtons' : 'hideButtons'
+                      <ThreeDotsMenu
+                        click={() =>
+                          changeShowActionsFor(customer.id, showActionsFor, setShowActionsFor)
                         }
-                      >
-                        {customer.user ? (
-                          <MySmallButton onClick={() => resetPassword(customer.id)}>
-                            Reset password
-                          </MySmallButton>
-                        ) : (
-                          ''
-                        )}
-                        <MySmallButton
-                          onClick={() => deleteCustomer(customer.id)}
-                          className='smallButtonDelete'
-                        >
-                          Delete
-                        </MySmallButton>
-                      </div>
-                      <MySmallButton onClick={() => changeShowActions(customer.id)}>
-                        {currentId === customer.id && showActions ? 'Hide actions' : 'Show actions'}
-                      </MySmallButton>
+                        showActionsFor={showActionsFor}
+                        id={customer.id}
+                        elements={[
+                          {
+                            iconType: <MdLockReset color='lightsalmon' />,
+                            action: () => resetPassword(customer.id),
+                            label: 'Reset password',
+                            disabled: customer.user ? false : true
+                          },
+                          {
+                            iconType: <RiDeleteBin5Line color='red' />,
+                            action: () => deleteCustomer(customer.id),
+                            label: 'Delete',
+                            disabled: false
+                          }
+                        ]}
+                      />
                     </div>
                   </li>
                 )

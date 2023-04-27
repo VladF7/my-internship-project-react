@@ -12,3 +12,6 @@ export const passwordMatchCheck = (verificationPassword, password, setError, tex
     setError('')
   }
 }
+export const changeShowActionsFor = (id, showActionsFor, setShowActionsFor) => {
+  showActionsFor === id ? setShowActionsFor(!showActionsFor) : setShowActionsFor(id)
+}
