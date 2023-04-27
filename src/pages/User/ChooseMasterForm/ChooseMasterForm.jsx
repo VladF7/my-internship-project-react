@@ -7,6 +7,7 @@ import MyError from '../../../components/Error/MyError'
 import MyLabel from '../../../components/Label/MyLabel'
 import MySpan from '../../../components/Span/MySpan'
 import '../../../components/SizeSelector/MySizeSelector.css'
+import { useToasts } from 'react-toast-notifications'
 
 const ChooseMasterForm = () => {
   const navigate = useNavigate()
@@ -14,6 +15,7 @@ const ChooseMasterForm = () => {
   const [masterId, setMasterId] = useState(JSON.parse(sessionStorage.getItem('masterId')) || '')
   const [masterIdError, setMasterIdError] = useState('')
   const [isLoading, setIsLoading] = useState(true)
+  const { addToast } = useToasts()
 
   useEffect(() => {
     mastersAPI
@@ -32,7 +34,7 @@ const ChooseMasterForm = () => {
   const onSubmit = async (e) => {
     e.preventDefault()
     if (!masterId) {
-      setMasterIdError('Please choose master')
+      addToast('Please choose master', { transitionState: 'entered', appearance: 'error' })
       return
     } else {
       sessionStorage.setItem('masterId', JSON.stringify(masterId))

@@ -1,16 +1,24 @@
 import { useEffect, useState } from 'react'
 import mastersAPI from '../../../api/mastersAPI'
 import MyLinkButton from '../../../components/Buttons/BigButton/MyLinkButton'
-import MySmallButton from '../../../components/Buttons/SmalButton/MySmallButton'
 import MySpan from '../../../components/Span/MySpan'
 import './Masters.css'
 import AdminNavBar from '../../../components/NavBar/AdminNavBar/AdminNavBar'
 import { useToasts } from 'react-toast-notifications'
+import ThreeDotsMenu from '../../../components/ThreeDotsMenu/ThreeDotsMenu'
+import { GiConfirmed } from 'react-icons/gi'
+import { RiDeleteBin5Line } from 'react-icons/ri'
+import { MdLockReset } from 'react-icons/md'
+import { FiEdit } from 'react-icons/fi'
+import { useNavigate } from 'react-router-dom'
+import { changeShowActionsFor } from '../../../helpers'
 
 const Masters = () => {
   const [masters, setMasters] = useState([])
   const [currentMasterId, setCurrentMasterId] = useState('')
+  const [showActionsFor, setShowActionsFor] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
+  const navigate = useNavigate()
 
   const { addToast } = useToasts()
 
@@ -42,6 +50,9 @@ const Masters = () => {
         appearance: 'success'
       })
     }
+  }
+  const goToEdit = (id) => {
+    navigate(`${id}`)
   }
   const deleteMaster = async (id) => {
     const deletedMaster = await mastersAPI.delMaster(id)
@@ -90,27 +101,41 @@ const Masters = () => {
                       <MySpan>Email confirmed: {`${master.user.isEmailActivated}`},</MySpan>
                       <MySpan>Profile activated: {`${master.isActivated}`}.</MySpan>
                     </div>
-                    <div className='buttons'>
-                      <MySmallButton
-                        style={{
-                          display: !master.isActivated ? '' : 'none'
-                        }}
-                        className='smallButtonActivate'
-                        onClick={() => activateMaster(master.id)}
-                      >
-                        Activate profile
-                      </MySmallButton>
 
-                      <MySmallButton to={`${master.id}`}>Edit</MySmallButton>
-                      <MySmallButton onClick={() => resetPassword(master.id)}>
-                        Reset password
-                      </MySmallButton>
-                      <MySmallButton
-                        onClick={() => deleteMaster(master.id)}
-                        className='smallButtonDelete'
-                      >
-                        Delete
-                      </MySmallButton>
+                    <div className='buttons'>
+                      <ThreeDotsMenu
+                        click={() =>
+                          changeShowActionsFor(master.id, showActionsFor, setShowActionsFor)
+                        }
+                        showActionsFor={showActionsFor}
+                        id={master.id}
+                        elements={[
+                          {
+                            iconType: <GiConfirmed color='green' />,
+                            action: () => activateMaster(master.id),
+                            label: 'Activate master',
+                            disabled: master.isActivated
+                          },
+                          {
+                            iconType: <FiEdit color='lightsalmon' />,
+                            action: () => goToEdit(master.id),
+                            label: 'Edit master',
+                            disabled: false
+                          },
+                          {
+                            iconType: <MdLockReset color='lightsalmon' />,
+                            action: () => resetPassword(master.id),
+                            label: 'Reset password',
+                            disabled: false
+                          },
+                          {
+                            iconType: <RiDeleteBin5Line color='red' />,
+                            action: () => deleteMaster(master.id),
+                            label: 'Delete',
+                            disabled: false
+                          }
+                        ]}
+                      />
                     </div>
                   </li>
                 )

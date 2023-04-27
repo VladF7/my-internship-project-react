@@ -11,7 +11,8 @@ const ChangeNamePage = () => {
   const name = JSON.parse(sessionStorage.getItem('name'))
 
   const message = `
-  the profile with email ${currentUserEmail} was saved with the name ${currentUserName}. When placing an order, the name ${name} was specified, do you want to change the name of the profile? `
+  The profile with email ${currentUserEmail} has name ${currentUserName}. 
+  When placing an order, was specified different name - ${name}, do you want to change the name of the profile? `
 
   const changeName = (e) => {
     e.preventDefault()

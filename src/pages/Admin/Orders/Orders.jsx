@@ -1,17 +1,20 @@
 import { useEffect, useState } from 'react'
-import MySmallButton from '../../../components/Buttons/SmalButton/MySmallButton'
 import ordersAPI from '../../../api/ordersAPI'
 import './Orders.css'
 import MySpan from '../../../components/Span/MySpan'
 import { useNavigate } from 'react-router-dom'
 import { format } from 'date-fns'
-import { formatValueToDecimal } from '../../../helpers'
+import { changeShowActionsFor, formatValueToDecimal } from '../../../helpers'
 import AdminNavBar from '../../../components/NavBar/AdminNavBar/AdminNavBar'
 import { useToasts } from 'react-toast-notifications'
+import ThreeDotsMenu from '../../../components/ThreeDotsMenu/ThreeDotsMenu'
+import { RiDeleteBin5Line } from 'react-icons/ri'
+import { FiEdit } from 'react-icons/fi'
 
 const Orders = () => {
   const [orders, setOrders] = useState([])
   const [isLoading, setIsLoading] = useState(true)
+  const [showActionsFor, setShowActionsFor] = useState(false)
   const navigate = useNavigate()
   const { addToast } = useToasts()
 
@@ -21,7 +24,7 @@ const Orders = () => {
       .then((orders) => setOrders(orders))
       .then(() => setIsLoading(false))
   }, [])
-  const delOrder = async (id) => {
+  const deleteOrder = async (id) => {
     const deletedOrder = await ordersAPI.delOrder(id)
     if (!deletedOrder) {
       addToast('Order cannot be deleted', { transitionState: 'entered', appearance: 'error' })
@@ -29,7 +32,6 @@ const Orders = () => {
     }
     setOrders(orders.filter((order) => order.id !== id))
   }
-
   const goToEdit = (id, start) => {
     if (format(new Date(), 'yyyy.MM.dd, HH:mm') > start) {
       addToast('Cannot be edited, this order has already been started', {
@@ -80,19 +82,30 @@ const Orders = () => {
                       <MySpan>Order status: {order.status}</MySpan>
                     </div>
                     <div className='buttons'>
-                      {format(new Date(), 'yyyy.MM.dd, HH:mm') < order.startTime ? (
-                        <MySmallButton onClick={() => goToEdit(order.id, order.startTime)}>
-                          Edit
-                        </MySmallButton>
-                      ) : (
-                        ''
-                      )}
-                      <MySmallButton
-                        onClick={() => delOrder(order.id)}
-                        className='smallButtonDelete'
-                      >
-                        Delete
-                      </MySmallButton>
+                      <ThreeDotsMenu
+                        click={() =>
+                          changeShowActionsFor(order.id, showActionsFor, setShowActionsFor)
+                        }
+                        showActionsFor={showActionsFor}
+                        id={order.id}
+                        elements={[
+                          {
+                            iconType: <FiEdit color='lightsalmon' />,
+                            action: () => goToEdit(order.id, order.startTime),
+                            label: 'Edit order',
+                            disabled:
+                              format(new Date(), 'yyyy.MM.dd, HH:mm') < order.startTime
+                                ? false
+                                : true
+                          },
+                          {
+                            iconType: <RiDeleteBin5Line color='red' />,
+                            action: () => deleteOrder(order.id),
+                            label: 'Delete',
+                            disabled: false
+                          }
+                        ]}
+                      />
                     </div>
                   </li>
                 )

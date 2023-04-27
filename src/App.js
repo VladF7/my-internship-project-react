@@ -36,7 +36,7 @@ import UserRegistration from './pages/User/UserRegistration/UserRegistration'
 import UserAuthorization from './pages/User/UserAuthorization/UserAuthorization'
 import EmailConfirmedPage from './pages/User/ConfirmedEmailPage/EmailConfirmedPage'
 import ConfirmEmailPage from './pages/Login/ConfirmEmail/ConfirmEmailPage'
-import AwaitAprovePage from './pages/User/AvaitAprove/AvaitAprovePage'
+import AwaitApprovePage from './pages/Master/AvaitApprove/AvaitApprovePage'
 import ChangeNamePage from './pages/User/ChangeName/ChangeNamePage'
 import { ToastProvider } from 'react-toast-notifications'
 
@@ -60,7 +60,7 @@ const App = () => {
         <Route path='/registration' element={<SignUpPage />} />
 
         <Route path='/user/changeName' element={<ChangeNamePage />} />
-        <Route path='/user/awaitAprove' element={<AwaitAprovePage />} />
+
         <Route path='/user/confirmEmail' element={<ConfirmEmailPage />} />
         <Route path='/user/emailConfirmed' element={<EmailConfirmedPage />} />
         <Route path='/user/chooseMaster' element={<ChooseMasterForm />} />
@@ -71,6 +71,7 @@ const App = () => {
         <Route path='/user/auth' element={<UserAuthorization />} />
 
         <Route path='/master' element={<RequireAuth role={'Master'} page={<MasterPage />} />} />
+        <Route path='/master/awaitApprove' element={<AwaitApprovePage />} />
         <Route
           path='/customer'
           element={<RequireAuth role={'Customer'} page={<CustomerPage />} />}

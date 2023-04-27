@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react'
 import citiesAPI from '../../../api/citiesAPI'
 import MyButton from '../../../components/Buttons/BigButton/MyBigButton'
-import MySmallButton from '../../../components/Buttons/SmalButton/MySmallButton'
 import './Cities.css'
 import MySpan from '../../../components/Span/MySpan'
-import { formatValueToDecimal, formatValueToInteger } from '../../../helpers'
+import { changeShowActionsFor, formatValueToDecimal, formatValueToInteger } from '../../../helpers'
 import MyInputItem from '../../../components/InputItem/MyInputItem'
 import AdminNavBar from '../../../components/NavBar/AdminNavBar/AdminNavBar'
 import { useToasts } from 'react-toast-notifications'
+import ThreeDotsMenu from '../../../components/ThreeDotsMenu/ThreeDotsMenu'
+import { RiDeleteBin5Line } from 'react-icons/ri'
+import { FiEdit } from 'react-icons/fi'
+import { useNavigate } from 'react-router-dom'
 
 const Cities = () => {
   const [city, setCity] = useState('')
@@ -16,9 +19,10 @@ const Cities = () => {
   const [cityError, setCityError] = useState('')
   const [priceForHourError, setPriceForHourError] = useState('')
   const [addCityerror, setAddCityError] = useState('')
-
+  const [showActionsFor, setShowActionsFor] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const { addToast } = useToasts()
+  const navigate = useNavigate()
 
   const requiredField = 'Required field'
   const priceForHourField = 'Must be not empty and not null'
@@ -35,7 +39,6 @@ const Cities = () => {
     setError('')
     setAddCityError('')
   }
-
   const changePriceForHour = (event) => {
     let priceForHour = event.target.value
     priceForHour = priceForHour.replace(/,/g, '.')
@@ -85,8 +88,11 @@ const Cities = () => {
       setAddCityError('A city with that name alredy exist')
     }
   }
+  const goToEdit = (id) => {
+    navigate(`${id}`)
+  }
 
-  const delCity = (id) => {
+  const deleteCity = (id) => {
     citiesAPI.delCity(id).then((city) => {
       if (!city) {
         addToast('City cannot be deleted, city is in use', {
@@ -133,10 +139,27 @@ const Cities = () => {
                       </MySpan>
                     </div>
                     <div className='buttons'>
-                      <MySmallButton to={`${city.id}`}>Edit</MySmallButton>
-                      <MySmallButton onClick={() => delCity(city.id)} className='smallButtonDelete'>
-                        Delete
-                      </MySmallButton>
+                      <ThreeDotsMenu
+                        click={() =>
+                          changeShowActionsFor(city.id, showActionsFor, setShowActionsFor)
+                        }
+                        showActionsFor={showActionsFor}
+                        id={city.id}
+                        elements={[
+                          {
+                            iconType: <FiEdit color='lightsalmon' />,
+                            action: () => goToEdit(city.id),
+                            label: 'Edit city',
+                            disabled: false
+                          },
+                          {
+                            iconType: <RiDeleteBin5Line color='red' />,
+                            action: () => deleteCity(city.id),
+                            label: 'Delete',
+                            disabled: false
+                          }
+                        ]}
+                      />
                     </div>
                   </li>
                 )

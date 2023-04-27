@@ -5,6 +5,7 @@ import MyBigButton from '../../../../components/Buttons/BigButton/MyBigButton'
 import MyInputItem from '../../../../components/InputItem/MyInputItem'
 import customersAPI from '../../../../api/customersAPI'
 import AdminNavBar from '../../../../components/NavBar/AdminNavBar/AdminNavBar'
+import { passwordMatchCheck } from '../../../../helpers'
 
 const AddCustomer = () => {
   const prevPage = useNavigate()
@@ -12,10 +13,12 @@ const AddCustomer = () => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [verificationPassword, setVerificationPassword] = useState('')
 
   const [nameError, setNameError] = useState('')
   const [emailError, setEmailError] = useState('')
   const [passwordError, setPasswordError] = useState('')
+  const [verificationPasswordError, setVerificationPasswordError] = useState('')
   const [registrationError, setRegistrationError] = useState('')
   const requiredField = 'Required field'
 
@@ -45,16 +48,34 @@ const AddCustomer = () => {
       setEmailError('')
     }
   }
+
   const onBlurPassword = (password) => {
     if (password.length < 3) {
       setPasswordError('Password must not be less than 3 characters')
+      return
     }
     if (password.length > 16) {
       setPasswordError('Password must be 16 or fewer characters long')
+      return
     }
     if (password.length === 0) {
       setPasswordError('')
+      return
     }
+    passwordMatchCheck(
+      verificationPassword,
+      password,
+      setVerificationPasswordError,
+      'Passwords must match'
+    )
+  }
+  const onBlurVerificationPassword = (verificationPassword) => {
+    passwordMatchCheck(
+      verificationPassword,
+      password,
+      setVerificationPasswordError,
+      'Passwords must match'
+    )
   }
 
   const goBack = (e) => {
@@ -64,6 +85,15 @@ const AddCustomer = () => {
 
   const addCustomer = async (e) => {
     e.preventDefault()
+    if (
+      nameError ||
+      emailError ||
+      passwordError ||
+      registrationError ||
+      verificationPasswordError
+    ) {
+      return
+    }
     if (!name || !email || !password) {
       if (!name) {
         setNameError(requiredField)
@@ -76,6 +106,7 @@ const AddCustomer = () => {
       }
       return
     }
+
     const successCustomerRegistration = await userAPI.customerRegistrationFromAdminPage(
       name,
       email,
@@ -134,6 +165,20 @@ const AddCustomer = () => {
               type: 'password',
               placeholder: 'Enter your password',
               discription: 'Enter password'
+            }}
+          />
+          <MyInputItem
+            name='confirmPassword'
+            value={verificationPassword}
+            error={verificationPasswordError}
+            onChange={(e) => setVerificationPassword(e.target.value)}
+            onFocus={() => resetError(setVerificationPasswordError)}
+            onBlur={(e) => onBlurVerificationPassword(e.target.value)}
+            item={{
+              id: 'confirmPassword',
+              type: 'password',
+              placeholder: 'Confirm password',
+              discription: 'Confirm password'
             }}
           />
           <div className='myButtonWrapper'>
