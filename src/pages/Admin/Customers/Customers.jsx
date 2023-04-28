@@ -8,12 +8,10 @@ import { useToasts } from 'react-toast-notifications'
 import { RiDeleteBin5Line } from 'react-icons/ri'
 import { MdLockReset } from 'react-icons/md'
 import ThreeDotsMenu from '../../../components/ThreeDotsMenu/ThreeDotsMenu'
-import { changeShowActionsFor } from '../../../helpers'
 
 const Customers = () => {
   const [customers, setCustomers] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-  const [showActionsFor, setShowActionsFor] = useState(false)
   const { addToast } = useToasts()
 
   useEffect(() => {
@@ -85,22 +83,19 @@ const Customers = () => {
                     </div>
                     <div className='buttons'>
                       <ThreeDotsMenu
-                        click={() =>
-                          changeShowActionsFor(customer.id, showActionsFor, setShowActionsFor)
-                        }
-                        showActionsFor={showActionsFor}
-                        id={customer.id}
                         elements={[
                           {
                             iconType: <MdLockReset color='lightsalmon' />,
                             action: () => resetPassword(customer.id),
                             label: 'Reset password',
-                            disabled: customer.user ? false : true
+                            hidden: customer.user ? false : true,
+                            disabled: false
                           },
                           {
                             iconType: <RiDeleteBin5Line color='red' />,
                             action: () => deleteCustomer(customer.id),
                             label: 'Delete',
+                            hidden: false,
                             disabled: false
                           }
                         ]}

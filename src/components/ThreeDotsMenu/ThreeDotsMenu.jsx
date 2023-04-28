@@ -1,33 +1,55 @@
 import { IconContext } from 'react-icons'
 import { BsThreeDotsVertical } from 'react-icons/bs'
 import './ThreeDotsMenu.css'
+import { useEffect, useRef, useState } from 'react'
 
-const ThreeDotsMenu = ({ showActionsFor, id, click, elements }) => {
+const ThreeDotsMenu = ({ elements }) => {
+  const [isOpen, setIsOpen] = useState(false)
+  const ref = useRef()
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (ref.current && !ref.current.contains(event.target)) {
+        setIsOpen(false)
+      }
+    }
+    document.addEventListener('click', handleClickOutside)
+    return () => {
+      document.removeEventListener('click', handleClickOutside)
+    }
+  }, [])
+
+  const clickHandler = () => {
+    setIsOpen(!isOpen)
+  }
+
   return (
-    <IconContext.Provider value={{ size: '1.2em' }}>
-      <div className='wrapper'>
-        <div className={id === showActionsFor ? 'showActionsMenu' : 'hideActionsMenu'}>
-          {elements.map((element) => {
-            return (
-              <div
-                key={element.label}
-                onClick={element.action}
-                style={{
-                  display: element.disabled ? 'none' : 'flex'
-                }}
-                className='element'
-              >
-                <span>{element.label}</span>
-                <div className='icon'>{element.iconType}</div>
-              </div>
-            )
-          })}
+    <div ref={ref} className='wrapper'>
+      <IconContext.Provider value={{ size: '1.2em' }}>
+        <div className={isOpen ? 'showActionsMenu' : 'hideActionsMenu'}>
+          <div className='menu'>
+            {elements.map((element) => {
+              return (
+                <div
+                  key={element.label}
+                  onClick={element.action}
+                  style={{
+                    display: element.hidden ? 'none' : 'flex'
+                  }}
+                  className='element'
+                >
+                  <div className='elementIcon'>{element.iconType}</div>
+                  <div className='elementLabel'>{element.label}</div>
+                </div>
+              )
+            })}
+          </div>
         </div>
-        <div onClick={click} className='threeDotsMenu'>
+        <div onClick={clickHandler} className='threeDotsMenu'>
           <BsThreeDotsVertical color='lightsalmon' cursor='pointer' />
         </div>
-      </div>
-    </IconContext.Provider>
+      </IconContext.Provider>
+    </div>
   )
 }
 

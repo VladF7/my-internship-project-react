@@ -3,27 +3,27 @@ import MyLinkButton from '../../../components/Buttons/BigButton/MyLinkButton'
 import MySpan from '../../../components/Span/MySpan'
 import MyLabel from '../../../components/Label/MyLabel'
 
-const SuccessSignUp = () => {
+const SuccessEmailConfirmPage = () => {
   const navigate = useNavigate()
 
-  const message = `Sign up has been successfully.
-  For login you need confirm your email, follow the activation link from your email message.`
+  const message = `This email has been successfully confirmed`
 
   const goBack = (e) => {
     e.preventDefault()
-    navigate('/login')
+    navigate('/')
   }
+
   return (
     <div className='userPage'>
       <div className='content'>
-        <MyLabel>Successfully sign up </MyLabel>
+        <MyLabel>Email Confirmed</MyLabel>
         <MySpan>{message}</MySpan>
       </div>
       <div className='myButtonWrapper'>
-        <MyLinkButton onClick={(e) => goBack(e)}>Done</MyLinkButton>
+        <MyLinkButton onClick={(e) => goBack(e)}>Go to main page</MyLinkButton>
       </div>
     </div>
   )
 }
 
-export default SuccessSignUp
+export default SuccessEmailConfirmPage

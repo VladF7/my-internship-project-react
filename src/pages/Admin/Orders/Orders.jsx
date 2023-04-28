@@ -4,7 +4,7 @@ import './Orders.css'
 import MySpan from '../../../components/Span/MySpan'
 import { useNavigate } from 'react-router-dom'
 import { format } from 'date-fns'
-import { changeShowActionsFor, formatValueToDecimal } from '../../../helpers'
+import { formatValueToDecimal } from '../../../helpers'
 import AdminNavBar from '../../../components/NavBar/AdminNavBar/AdminNavBar'
 import { useToasts } from 'react-toast-notifications'
 import ThreeDotsMenu from '../../../components/ThreeDotsMenu/ThreeDotsMenu'
@@ -14,7 +14,6 @@ import { FiEdit } from 'react-icons/fi'
 const Orders = () => {
   const [orders, setOrders] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-  const [showActionsFor, setShowActionsFor] = useState(false)
   const navigate = useNavigate()
   const { addToast } = useToasts()
 
@@ -83,25 +82,22 @@ const Orders = () => {
                     </div>
                     <div className='buttons'>
                       <ThreeDotsMenu
-                        click={() =>
-                          changeShowActionsFor(order.id, showActionsFor, setShowActionsFor)
-                        }
-                        showActionsFor={showActionsFor}
-                        id={order.id}
                         elements={[
                           {
                             iconType: <FiEdit color='lightsalmon' />,
                             action: () => goToEdit(order.id, order.startTime),
                             label: 'Edit order',
-                            disabled:
+                            hidden:
                               format(new Date(), 'yyyy.MM.dd, HH:mm') < order.startTime
                                 ? false
-                                : true
+                                : true,
+                            disabled: false
                           },
                           {
                             iconType: <RiDeleteBin5Line color='red' />,
                             action: () => deleteOrder(order.id),
                             label: 'Delete',
+                            hidden: false,
                             disabled: false
                           }
                         ]}

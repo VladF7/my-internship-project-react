@@ -27,9 +27,9 @@ export const request = async (url, method = 'GET', data = null, token = null) =>
       return await response.json()
     } else {
       const res = await response
-      throw res
+      throw await res.text()
     }
   } catch (error) {
-    console.warn('Error message: ' + error)
+    console.warn('Error: ' + error)
   }
 }
