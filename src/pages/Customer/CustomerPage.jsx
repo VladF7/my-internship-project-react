@@ -13,19 +13,20 @@ const CustomerPage = () => {
   const [orderId, setOrderId] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const id = useSelector((state) => state.auth.currentUser.customerId)
+  const userId = useSelector((state) => state.auth.currentUser.id)
   const currency = 'USD'
 
   const { addToast } = useToasts()
 
   useEffect(() => {
     ordersAPI
-      .getOrdersForCustomerById(id)
+      .getOrdersForCustomerById(id, userId)
       .then((orders) => setOrders(orders))
       .then(() => setIsLoading(false))
   }, [orderId])
 
   const handleRating = async (id, rate) => {
-    const setRating = await ordersAPI.setRating(id, Number(rate))
+    const setRating = await ordersAPI.setRating(id, Number(rate), userId)
     if (!setRating) {
       addToast('Rating cannot be set', {
         transitionState: 'entered',
@@ -63,7 +64,9 @@ const CustomerPage = () => {
                 <MySpan>City: {order.city.name},</MySpan>
                 <MySpan>Order start time: {order.startTime},</MySpan>
                 <MySpan>Order end time: {order.endTime}</MySpan>
-                <MySpan>Order price: {formatValueToDecimal(order.price)} {currency}</MySpan>
+                <MySpan>
+                  Order price: {formatValueToDecimal(order.price)} {currency}
+                </MySpan>
                 <MySpan>Order status: {order.status}</MySpan>
                 {order.status === 'Completed' && (
                   <MySpan style={{ position: 'relative' }}>
