@@ -16,6 +16,7 @@ const Orders = () => {
   const [isLoading, setIsLoading] = useState(true)
   const navigate = useNavigate()
   const { addToast } = useToasts()
+  const currency = 'USD'
 
   useEffect(() => {
     ordersAPI
@@ -77,7 +78,9 @@ const Orders = () => {
                       <MySpan>City: {order.city.name},</MySpan>
                       <MySpan>Order start time: {order.startTime},</MySpan>
                       <MySpan>Order end time: {order.endTime}</MySpan>
-                      <MySpan>Order price: {formatValueToDecimal(order.price)}</MySpan>
+                      <MySpan>
+                        Order price: {formatValueToDecimal(order.price)} {currency}
+                      </MySpan>
                       <MySpan>Order status: {order.status}</MySpan>
                     </div>
                     <div className='buttons'>

@@ -29,6 +29,8 @@ const EditOrder = () => {
   const [priceForHour, setPriceForHour] = useState('')
   const [timeToFix, setTimeToFix] = useState('')
   const [price, setPrice] = useState('')
+  const [currentPrice, setCurrentPrice] = useState('')
+  const [currentPriceForHour, setCurrentPriceForHour] = useState('')
   const [status, setStatus] = useState()
 
   const [masterError, setMasterError] = useState('')
@@ -67,6 +69,7 @@ const EditOrder = () => {
         setEndTime(order.endTime)
         setMaster(order.masterId)
         setStatus(order.status)
+        setCurrentPrice(order.price)
       })
       .then(() => setIsLoadnig(false))
   }, [id])
@@ -81,13 +84,14 @@ const EditOrder = () => {
       getFreeMastersList(id, city, date, endTime)
     }
   }, [endTime, city])
-
-  useEffect(() => {
-    getPriceForHour(city)
-  }, [city])
   useEffect(() => {
     getTimeToFix(clock)
   }, [clock])
+  useEffect(() => {
+    if (!priceForHour) {
+      getCurrentPriceForHour(currentPrice, timeToFix)
+    }
+  }, [currentPrice, timeToFix])
   useEffect(() => {
     getPrice(timeToFix, priceForHour)
   }, [priceForHour, timeToFix])
@@ -103,6 +107,10 @@ const EditOrder = () => {
     } else {
       setPriceForHour('')
     }
+  }
+  const getCurrentPriceForHour = (price, timeToFix) => {
+    const currentPrice = price / timeToFix
+    setCurrentPriceForHour(currentPrice)
   }
   const getTimeToFix = (clockId) => {
     const [clock] = clocks.filter((c) => c.id === clockId)
@@ -155,8 +163,8 @@ const EditOrder = () => {
       clock,
       startTime,
       endTime,
-      priceForHour,
-      price,
+      priceForHour ? priceForHour : currentPriceForHour,
+      price ? price : currentPrice,
       status
     )
     if (editedOrder) {
@@ -197,6 +205,7 @@ const EditOrder = () => {
             value={clock}
             onChange={(e) => {
               setClock(Number(e.target.value))
+              getPriceForHour(city)
             }}
           />
           <MySelectWithLabel
@@ -204,20 +213,26 @@ const EditOrder = () => {
             value={city}
             options={cities}
             labelText='Price for hour'
-            labelValue={formatValueToDecimal(priceForHour)}
+            labelValue={
+              priceForHour
+                ? formatValueToDecimal(priceForHour)
+                : formatValueToDecimal(currentPriceForHour)
+            }
             labelWord={currency}
             placeholder={'Click to select city'}
             discription={'Choose city'}
-            onChange={(e) => setCity(Number(e.target.value))}
+            onChange={(e) => {
+              setCity(Number(e.target.value))
+              getPriceForHour(Number(e.target.value))
+            }}
           />
           <MyLabel
             style={{
-              visibility: price ? '' : 'hidden',
               paddingLeft: '0px',
               justifyContent: 'center'
             }}
           >
-            Clock repair will cost {formatValueToDecimal(price)} {currency}
+            Clock repair will cost {formatValueToDecimal(price ? price : currentPrice)} {currency}
           </MyLabel>
 
           <MySelect
