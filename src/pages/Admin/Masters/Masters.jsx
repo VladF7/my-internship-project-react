@@ -11,12 +11,10 @@ import { RiDeleteBin5Line } from 'react-icons/ri'
 import { MdLockReset } from 'react-icons/md'
 import { FiEdit } from 'react-icons/fi'
 import { useNavigate } from 'react-router-dom'
-import { changeShowActionsFor } from '../../../helpers'
 
 const Masters = () => {
   const [masters, setMasters] = useState([])
   const [currentMasterId, setCurrentMasterId] = useState('')
-  const [showActionsFor, setShowActionsFor] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const navigate = useNavigate()
 
@@ -104,34 +102,33 @@ const Masters = () => {
 
                     <div className='buttons'>
                       <ThreeDotsMenu
-                        click={() =>
-                          changeShowActionsFor(master.id, showActionsFor, setShowActionsFor)
-                        }
-                        showActionsFor={showActionsFor}
-                        id={master.id}
                         elements={[
                           {
                             iconType: <GiConfirmed color='green' />,
                             action: () => activateMaster(master.id),
                             label: 'Activate master',
-                            disabled: master.isActivated
+                            hidden: master.isActivated,
+                            disabled: false
                           },
                           {
                             iconType: <FiEdit color='lightsalmon' />,
                             action: () => goToEdit(master.id),
                             label: 'Edit master',
+                            hidden: false,
                             disabled: false
                           },
                           {
                             iconType: <MdLockReset color='lightsalmon' />,
                             action: () => resetPassword(master.id),
                             label: 'Reset password',
+                            hidden: false,
                             disabled: false
                           },
                           {
                             iconType: <RiDeleteBin5Line color='red' />,
                             action: () => deleteMaster(master.id),
                             label: 'Delete',
+                            hidden: false,
                             disabled: false
                           }
                         ]}

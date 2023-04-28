@@ -167,7 +167,7 @@ const UserForm = () => {
         }
       }
       if (currentUserEmail !== user.email && user.isEmailActivated) {
-        navigate('/user/auth')
+        navigate('/user/login')
       } else {
         navigate('/user/chooseMaster')
       }

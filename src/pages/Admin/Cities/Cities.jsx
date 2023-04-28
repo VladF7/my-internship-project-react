@@ -3,7 +3,7 @@ import citiesAPI from '../../../api/citiesAPI'
 import MyButton from '../../../components/Buttons/BigButton/MyBigButton'
 import './Cities.css'
 import MySpan from '../../../components/Span/MySpan'
-import { changeShowActionsFor, formatValueToDecimal, formatValueToInteger } from '../../../helpers'
+import { formatValueToDecimal, formatValueToInteger } from '../../../helpers'
 import MyInputItem from '../../../components/InputItem/MyInputItem'
 import AdminNavBar from '../../../components/NavBar/AdminNavBar/AdminNavBar'
 import { useToasts } from 'react-toast-notifications'
@@ -19,7 +19,6 @@ const Cities = () => {
   const [cityError, setCityError] = useState('')
   const [priceForHourError, setPriceForHourError] = useState('')
   const [addCityerror, setAddCityError] = useState('')
-  const [showActionsFor, setShowActionsFor] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const { addToast } = useToasts()
   const navigate = useNavigate()
@@ -140,22 +139,19 @@ const Cities = () => {
                     </div>
                     <div className='buttons'>
                       <ThreeDotsMenu
-                        click={() =>
-                          changeShowActionsFor(city.id, showActionsFor, setShowActionsFor)
-                        }
-                        showActionsFor={showActionsFor}
-                        id={city.id}
                         elements={[
                           {
                             iconType: <FiEdit color='lightsalmon' />,
                             action: () => goToEdit(city.id),
                             label: 'Edit city',
+                            hidden: false,
                             disabled: false
                           },
                           {
                             iconType: <RiDeleteBin5Line color='red' />,
                             action: () => deleteCity(city.id),
                             label: 'Delete',
+                            hidden: false,
                             disabled: false
                           }
                         ]}

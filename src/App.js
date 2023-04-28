@@ -39,6 +39,7 @@ import ConfirmEmailPage from './pages/Login/ConfirmEmail/ConfirmEmailPage'
 import AwaitApprovePage from './pages/Master/AvaitApprove/AvaitApprovePage'
 import ChangeNamePage from './pages/User/ChangeName/ChangeNamePage'
 import { ToastProvider } from 'react-toast-notifications'
+import SuccessEmailConfirmPage from './pages/User/SuccessEmailConfirm/SuccessEmailConfirmPage'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -56,19 +57,20 @@ const App = () => {
     createRoutesFromElements(
       <Route path='/' element={<Layout />}>
         <Route index element={<UserPage />} />
-        <Route path='/auth' element={<LoginPage />} />
+        <Route path='/login' element={<LoginPage />} />
         <Route path='/registration' element={<SignUpPage />} />
 
         <Route path='/user/changeName' element={<ChangeNamePage />} />
 
         <Route path='/user/confirmEmail' element={<ConfirmEmailPage />} />
+        <Route path='/user/successEmailConfirm' element={<SuccessEmailConfirmPage />} />
         <Route path='/user/emailConfirmed' element={<EmailConfirmedPage />} />
         <Route path='/user/chooseMaster' element={<ChooseMasterForm />} />
         <Route path='/user/confirmOrder' element={<ConfirmOrder />} />
         <Route path='/user/successOrder' element={<SuccessOrder />} />
         <Route path='/user/successSignUp' element={<SuccessSignUp />} />
         <Route path='/user/registration' element={<UserRegistration />} />
-        <Route path='/user/auth' element={<UserAuthorization />} />
+        <Route path='/user/login' element={<UserAuthorization />} />
 
         <Route path='/master' element={<RequireAuth role={'Master'} page={<MasterPage />} />} />
         <Route path='/master/awaitApprove' element={<AwaitApprovePage />} />
