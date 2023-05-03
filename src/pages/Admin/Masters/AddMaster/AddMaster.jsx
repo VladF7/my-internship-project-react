@@ -204,13 +204,15 @@ const AddMaster = () => {
             onChange={(e) => setCities(e)}
             onFocus={() => resetError(setCitiesError)}
           />
-          <div className='myButtonWrapper'>
-            <MyBigButton>Add master</MyBigButton>
-          </div>
-          <div className='myButtonWrapper'>
-            <MyBigButton onClick={(e) => goBack(e)} className='backBigButton'>
-              Cancel
-            </MyBigButton>
+          <div className='buttonBoxWrapper'>
+            <div className='buttonBox'>
+              <MyBigButton onClick={(e) => goBack(e)} className='backBigButton'>
+                Cancel
+              </MyBigButton>
+            </div>
+            <div className='buttonBox'>
+              <MyBigButton>Add master</MyBigButton>
+            </div>
           </div>
         </form>
       </div>
