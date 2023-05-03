@@ -53,43 +53,39 @@ class OrdersAPI {
     )
     return response
   }
-  async completeOrder(id, userId) {
-    const queryParams = { id: userId }
+  async completeOrder(id) {
     const response = await request(
-      `/api/orders/completeOrder/${id}` + '?' + new URLSearchParams(queryParams),
+      `/api/orders/completeOrder/${id}`,
       'PUT',
       null,
       localStorage.getItem('token')
     )
     return response
   }
-  async setRating(id, rating, userId) {
-    const queryParams = { id: userId }
+  async setRating(id, rating) {
     const requestData = {
       rating
     }
     const response = await request(
-      `/api/orders/setRating/${id}` + '?' + new URLSearchParams(queryParams),
+      `/api/orders/setRating/${id}`,
       'PUT',
       requestData,
       localStorage.getItem('token')
     )
     return response
   }
-  async getOrdersForMastrerById(masterId, userId) {
-    const queryParams = { id: userId }
+  async getOrdersForMastrerById(masterId) {
     const response = await request(
-      `/api/orders/master/${masterId}` + '?' + new URLSearchParams(queryParams),
+      `/api/orders/master/${masterId}`,
       'GET',
       null,
       localStorage.getItem('token')
     )
     return response
   }
-  async getOrdersForCustomerById(customerId, userId) {
-    const queryParams = { id: userId }
+  async getOrdersForCustomerById(customerId) {
     const response = await request(
-      `/api/orders/customer/${customerId}` + '?' + new URLSearchParams(queryParams),
+      `/api/orders/customer/${customerId}`,
       'GET',
       null,
       localStorage.getItem('token')

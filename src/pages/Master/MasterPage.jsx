@@ -13,20 +13,19 @@ const MasterPage = () => {
   const [orders, setOrders] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const id = useSelector((state) => state.auth.currentUser.masterId)
-  const userId = useSelector((state) => state.auth.currentUser.id)
   const currency = 'USD'
 
   const { addToast } = useToasts()
 
   useEffect(() => {
     ordersAPI
-      .getOrdersForMastrerById(id, userId)
+      .getOrdersForMastrerById(id)
       .then((orders) => setOrders(orders))
       .then(() => setIsLoading(false))
   }, [orderId])
 
   const completeOrder = async (id) => {
-    const completedOrder = await ordersAPI.completeOrder(id, userId)
+    const completedOrder = await ordersAPI.completeOrder(id)
     if (!completedOrder) {
       addToast('Order status cannot be changed', {
         transitionState: 'entered',

@@ -13,20 +13,19 @@ const CustomerPage = () => {
   const [orderId, setOrderId] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const id = useSelector((state) => state.auth.currentUser.customerId)
-  const userId = useSelector((state) => state.auth.currentUser.id)
   const currency = 'USD'
 
   const { addToast } = useToasts()
 
   useEffect(() => {
     ordersAPI
-      .getOrdersForCustomerById(id, userId)
+      .getOrdersForCustomerById(id)
       .then((orders) => setOrders(orders))
       .then(() => setIsLoading(false))
   }, [orderId])
 
   const handleRating = async (id, rate) => {
-    const setRating = await ordersAPI.setRating(id, Number(rate), userId)
+    const setRating = await ordersAPI.setRating(id, Number(rate))
     if (!setRating) {
       addToast('Rating cannot be set', {
         transitionState: 'entered',
