@@ -1,3 +1,4 @@
+import { format } from 'date-fns'
 import { request } from '../api/requestAPI'
 
 class MastersAPI {
@@ -13,7 +14,12 @@ class MastersAPI {
     )
     return response
   }
-  async getFreeMastersForCurrOrder(orderId, requestData) {
+  async getFreeMastersForCurrOrder(orderId, cityId, startTime, endTime) {
+    const requestData = {
+      cityId,
+      startTime: format(new Date(startTime), 'yyyy.MM.dd, HH:mm'),
+      endTime
+    }
     const response = await request(
       `/api/masters/freeMastersForOrder/${orderId}` + '?' + new URLSearchParams(requestData),
       'GET',
@@ -30,12 +36,7 @@ class MastersAPI {
     const response = await request(`/api/masters/${id}`)
     return response
   }
-  async editMaster(id, name, cities) {
-    const requestData = {
-      name,
-      cities
-    }
-
+  async editMaster(id, requestData) {
     const response = await request(
       `/api/masters/${id}`,
       'PUT',

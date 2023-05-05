@@ -3,7 +3,6 @@
   min-height: 252px;
   width: 100%;
   overflow: auto;
-  margin-bottom: 20px;
 }
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {

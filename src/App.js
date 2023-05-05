@@ -40,6 +40,7 @@ import AwaitApprovePage from './pages/Master/AvaitApprove/AvaitApprovePage'
 import ChangeNamePage from './pages/User/ChangeName/ChangeNamePage'
 import { ToastProvider } from 'react-toast-notifications'
 import SuccessEmailConfirmPage from './pages/User/SuccessEmailConfirm/SuccessEmailConfirmPage'
+import AddCity from './pages/Admin/Cities/AddCity/AddCity'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -95,6 +96,7 @@ const App = () => {
           element={<RequireAuth role='Admin' page={<AddMaster />} />}
         />
         <Route path='/admin/cities' element={<RequireAuth role='Admin' page={<Cities />} />} />
+        <Route path='/admin/cities/add' element={<RequireAuth role='Admin' page={<AddCity />} />} />
         <Route
           path='/admin/cities/:id'
           element={<RequireAuth role='Admin' page={<EditCity />} />}
