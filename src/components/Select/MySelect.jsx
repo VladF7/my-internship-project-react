@@ -1,16 +1,15 @@
-import RequiredField from '../Error/RequiredField'
-import MyLabel from '../Label/MyLabel'
+import { forwardRef } from 'react'
 import './MySelect.css'
-const MySelect = ({ discription, name, placeholder, options, ...props }) => {
+const MySelect = ({ name, placeholder, options, error, onChange, ...props }, ref) => {
   return (
     <div className='mySelect'>
-      <MyLabel discription={discription}></MyLabel>
-      <RequiredField>{props.error}</RequiredField>
       <select
         {...props}
+        ref={ref}
         name={name}
         id={name}
-        className={props.error ? 'select' + ' ' + 'errorField' : 'select'}
+        onChange={onChange}
+        className={error ? 'select' + ' ' + 'errorField' : 'select'}
       >
         <option value={''} disabled>
           {placeholder}
@@ -27,4 +26,4 @@ const MySelect = ({ discription, name, placeholder, options, ...props }) => {
   )
 }
 
-export default MySelect
+export default forwardRef(MySelect)

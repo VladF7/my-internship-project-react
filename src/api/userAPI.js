@@ -1,14 +1,8 @@
 import { request } from './requestAPI'
 
 class UserAPI {
-  async login(authForm) {
-    const formData = new FormData(authForm.target)
-
-    const loginForm = {
-      email: formData.get('email'),
-      password: formData.get('password')
-    }
-    const response = await request(`/api/login`, 'POST', loginForm)
+  async login(requestData) {
+    const response = await request(`/api/login`, 'POST', requestData)
     return response
   }
   async auth() {
@@ -19,32 +13,15 @@ class UserAPI {
       localStorage.removeItem('token')
     }
   }
-  async masterRegistration(name, email, password, cities) {
-    const requestData = {
-      name,
-      email,
-      password,
-      cities
-    }
+  async masterRegistration(requestData) {
     const response = await request(`/api/master/registration`, 'POST', requestData)
     return response
   }
-  async customerRegistration(name, email, password) {
-    const requestData = {
-      name,
-      email,
-      password
-    }
+  async customerRegistration(requestData) {
     const response = await request(`/api/customer/registration`, 'POST', requestData)
     return response
   }
-  async masterRegistrationFromAdminPage(name, email, password, cities) {
-    const requestData = {
-      name,
-      email,
-      password,
-      cities
-    }
+  async masterRegistrationFromAdminPage(requestData) {
     const response = await request(
       `/api/admin/master/registration`,
       'POST',
@@ -53,12 +30,7 @@ class UserAPI {
     )
     return response
   }
-  async customerRegistrationFromAdminPage(name, email, password) {
-    const requestData = {
-      name,
-      email,
-      password
-    }
+  async customerRegistrationFromAdminPage(requestData) {
     const response = await request(
       `/api/admin/customer/registration`,
       'POST',

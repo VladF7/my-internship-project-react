@@ -2,9 +2,7 @@
   height: 90%;
   min-height: 252px;
   width: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
-  margin-bottom: 20px;
+  overflow: auto;
 }
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {

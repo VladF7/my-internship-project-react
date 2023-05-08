@@ -1,20 +1,9 @@
 import ordersAPI from '../api/ordersAPI'
 
-export const saveUserData = async (
-  name,
-  email,
-  clockId,
-  cityId,
-  startTime,
-  price,
-  priceForHour,
-  timeToFix
-) => {
-  const requestData = {
-    clockId,
-    startTime
-  }
-  const endTime = await ordersAPI.getOrderEndTime(requestData)
+export const saveUserData = async (formData) => {
+  const { name, email, clockId, cityId, date, startTime, price, priceForHour, timeToFix } = formData
+
+  const endTime = await ordersAPI.getOrderEndTime(clockId, date)
 
   sessionStorage.setItem('name', JSON.stringify(name))
   sessionStorage.setItem('email', JSON.stringify(email))

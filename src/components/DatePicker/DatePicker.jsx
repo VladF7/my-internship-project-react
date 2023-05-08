@@ -1,13 +1,10 @@
 import ReactDatePicker from 'react-datepicker'
-
 import 'react-datepicker/dist/react-datepicker.css'
 import './DatePicker.css'
-
-import MyLabel from '../Label/MyLabel'
 import { setHours, setMinutes } from 'date-fns'
-import RequiredField from '../Error/RequiredField'
+import { forwardRef } from 'react'
 
-const DatePicker = ({ value, onChange, error, ...props }) => {
+const DatePicker = ({ value, onChange, className, ...props }, ref) => {
   const changeValue = (date) => {
     if (date < new Date()) {
       onChange(setHours(setMinutes(new Date(), 0), new Date().getHours() + 1))
@@ -23,17 +20,16 @@ const DatePicker = ({ value, onChange, error, ...props }) => {
 
   return (
     <div className='datePickerWrapper'>
-      <RequiredField>{error}</RequiredField>
-      <MyLabel>Choose time and date</MyLabel>
       <ReactDatePicker
         {...props}
+        ref={ref}
+        className={className}
         autoComplete='false'
-        className={error ? 'myInput' + ' ' + 'errorField' : 'myInput'}
         timeFormat='HH:mm'
         dateFormat='yyyy.MM.dd, HH:00'
         placeholderText='Choose time and date'
         selected={value}
-        onChange={changeValue}
+        onChange={(e) => changeValue(e)}
         showTimeSelect
         timeIntervals={60}
         onKeyDown={(e) => e.preventDefault()}
@@ -44,4 +40,4 @@ const DatePicker = ({ value, onChange, error, ...props }) => {
   )
 }
 
-export default DatePicker
+export default forwardRef(DatePicker)

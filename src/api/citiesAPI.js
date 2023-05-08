@@ -5,11 +5,7 @@ class CitiesAPI {
     const response = await request('/api/cities')
     return response
   }
-  async addCity(name, priceForHour) {
-    const requestData = {
-      name,
-      priceForHour
-    }
+  async addCity(requestData) {
     const response = await request(
       '/api/cities',
       'POST',
@@ -18,11 +14,7 @@ class CitiesAPI {
     )
     return response
   }
-  async editCity(id, name, priceForHour) {
-    const requestData = {
-      name,
-      priceForHour
-    }
+  async editCity(id, requestData) {
     const response = await request(
       `/api/cities/${id}`,
       'PUT',

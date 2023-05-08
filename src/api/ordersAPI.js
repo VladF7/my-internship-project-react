@@ -1,3 +1,4 @@
+import { format } from 'date-fns'
 import { request } from '../api/requestAPI'
 
 class OrdersAPI {
@@ -17,29 +18,22 @@ class OrdersAPI {
     const response = await request(`/api/orders/${id}`, 'GET', null, localStorage.getItem('token'))
     return response
   }
-  async getOrderEndTime(requestData) {
+  async getOrderEndTime(clockId, date) {
+    const requestData = {
+      clockId,
+      startTime: format(new Date(date), 'yyyy.MM.dd, HH:mm')
+    }
     const response = await request(
       '/api/orders/orderEndTime' + '?' + new URLSearchParams(requestData),
       'GET'
     )
     return response
   }
-  async editOrder(id, cityId, masterId, clockId, startTime, endTime, priceForHour, price, status) {
-    const editedOrder = {
-      id,
-      cityId,
-      masterId,
-      clockId,
-      startTime,
-      endTime,
-      priceForHour,
-      price,
-      status
-    }
+  async editOrder(id, requestData) {
     const response = await request(
       `/api/orders/${id}`,
       'PUT',
-      editedOrder,
+      requestData,
       localStorage.getItem('token')
     )
     return response
