@@ -172,7 +172,7 @@ const EditOrderForm = ({ formFields, onSubmit, currentOrderInfo }) => {
     setEndTime(endTime)
   }
   const getFreeMastersList = async (id, cityId, startTime, endTime) => {
-    const masters = await mastersAPI.getFreeMastersForCurrOrder(id, cityId, startTime, endTime)
+    const masters = await mastersAPI.getFreeMastersForCurrentOrder(id, cityId, startTime, endTime)
     setMasters(masters)
   }
   const goBack = (event) => {

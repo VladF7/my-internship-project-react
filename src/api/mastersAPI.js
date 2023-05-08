@@ -14,7 +14,7 @@ class MastersAPI {
     )
     return response
   }
-  async getFreeMastersForCurrOrder(orderId, cityId, startTime, endTime) {
+  async getFreeMastersForCurrentOrder(orderId, cityId, startTime, endTime) {
     const requestData = {
       cityId,
       startTime: format(new Date(startTime), 'yyyy.MM.dd, HH:mm'),
