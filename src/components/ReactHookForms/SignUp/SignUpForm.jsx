@@ -60,8 +60,6 @@ const SignUpForm = ({ onSubmit, submitError }) => {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const signUpAsMaster = useWatch({ control, name: 'signUpAsMaster' })
-  // const passwordRef = useRef()
-  // const confirmPasswordRef = useRef()
 
   useEffect(() => {
     if (!signUpAsMaster) {
