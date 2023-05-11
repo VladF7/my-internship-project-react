@@ -2,7 +2,18 @@ import { createSlice } from '@reduxjs/toolkit'
 import { createOrderStepOneThunk, createOrderStepTwoThunk } from './thunk'
 
 const initialState = {
-  data: {},
+  data: {
+    name: '',
+    email: '',
+    startTime: '',
+    clockId: '',
+    cityId: '',
+    price: '',
+    priceForHour: '',
+    timeToFix: '',
+    endTime: '',
+    masterId: ''
+  },
   error: null,
   isLoading: false,
   inProcess: false
@@ -28,7 +39,7 @@ export const createOrderDataSlice = createSlice({
       state.inProcess = true
     })
     builder.addCase(createOrderStepOneThunk.fulfilled, (state, action) => {
-      state.data = action.payload
+      state.data = { ...state.data, ...action.payload }
       state.inProcess = false
     })
     builder.addCase(createOrderStepOneThunk.rejected, (state, action) => {
