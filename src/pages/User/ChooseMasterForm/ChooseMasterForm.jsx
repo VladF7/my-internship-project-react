@@ -8,21 +8,36 @@ import MyLabel from '../../../components/Label/MyLabel'
 import MySpan from '../../../components/Span/MySpan'
 import '../../../components/SizeSelector/MySizeSelector.css'
 import { useToasts } from 'react-toast-notifications'
+import { useDispatch, useSelector } from 'react-redux'
+import { addMasterIdToCreateOrderData } from '../../../store/createOrder/slice'
 
 const ChooseMasterForm = () => {
-  const navigate = useNavigate()
+  const {
+    masterId: currentMasterId,
+    cityId,
+    startTime,
+    endTime,
+    email
+  } = useSelector((state) => state.createOrder.data)
+
   const [freeMastersList, setFreeMastersList] = useState([])
-  const [masterId, setMasterId] = useState(JSON.parse(sessionStorage.getItem('masterId')) || '')
+  const [masterId, setMasterId] = useState(currentMasterId || '')
   const [masterIdError, setMasterIdError] = useState('')
   const [isLoading, setIsLoading] = useState(true)
-  const { addToast } = useToasts()
 
   useEffect(() => {
     mastersAPI
-      .getFreeMasters()
+      .getFreeMasters({ cityId, startTime, endTime, email })
       .then((res) => setFreeMastersList(res))
       .then(() => setIsLoading(false))
   }, [])
+
+  const dispatch = useDispatch()
+
+  const navigate = useNavigate()
+
+  const { addToast } = useToasts()
+
   const getMasterId = (masterId) => {
     setMasterId(Number(masterId))
     setMasterIdError('')
@@ -37,7 +52,7 @@ const ChooseMasterForm = () => {
       addToast('Please choose master', { transitionState: 'entered', appearance: 'error' })
       return
     } else {
-      sessionStorage.setItem('masterId', JSON.stringify(masterId))
+      dispatch(addMasterIdToCreateOrderData(masterId))
       navigate('/user/confirmOrder')
     }
   }

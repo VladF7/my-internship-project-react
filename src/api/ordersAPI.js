@@ -2,11 +2,7 @@ import { format } from 'date-fns'
 import { request } from '../api/requestAPI'
 
 class OrdersAPI {
-  async addOrder() {
-    const requestData = {}
-    Object.keys(sessionStorage).forEach((key) => {
-      requestData[key] = JSON.parse(sessionStorage.getItem(key))
-    })
+  async addOrder(requestData) {
     const response = await request(`/api/orders`, 'POST', requestData)
     return response
   }
@@ -38,7 +34,7 @@ class OrdersAPI {
     )
     return response
   }
-  async delOrder(id) {
+  async deleteOrder(id) {
     const response = await request(
       `/api/orders/${id}`,
       'DELETE',

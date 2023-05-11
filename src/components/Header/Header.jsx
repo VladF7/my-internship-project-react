@@ -1,22 +1,17 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { ClockLoader } from 'react-spinners'
-import { actionLogout } from '../../reducers/authReducer'
+import { actionLogout } from '../../store/auth/slice'
 import NavBar from '../NavBar/NavBar'
 import './Header.css'
 
 const Header = () => {
   const isAuth = useSelector((state) => state.auth.isAuth)
-  const currentUserEmail = useSelector((state) => state.auth.currentUser.email)
-  const currentUserName = useSelector((state) => state.auth.currentUser.name)
-  const role = useSelector((state) => state.auth.currentUser.role)
+  const { email, name, role } = useSelector((state) => state.auth.currentUser)
   const regexp = /([^\s]+)@([^\s.]+\.[a-z]+)/
-  const currentNameInHeader = currentUserName
-    ? currentUserName
-    : currentUserEmail
-    ? currentUserEmail.match(regexp)[1]
-    : ''
+  const currentNameInHeader = name || email?.match(regexp)[1] || ''
 
   const dispatch = useDispatch()
+
   const logout = () => {
     const isLogout = window.confirm('Are you sure you want to log out of your account?')
     if (isLogout) {

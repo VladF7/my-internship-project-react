@@ -3,35 +3,31 @@ import { useNavigate } from 'react-router-dom'
 import citiesAPI from '../../../api/citiesAPI'
 import clocksAPI from '../../../api/clocksAPI'
 import mastersAPI from '../../../api/mastersAPI'
-import ordersAPI from '../../../api/ordersAPI'
 import MyBigButton from '../../../components/Buttons/BigButton/MyBigButton'
 import MyLabel from '../../../components/Label/MyLabel'
 import MySpan from '../../../components/Span/MySpan'
 import { formatValueToDecimal } from '../../../helpers'
+import { useDispatch, useSelector } from 'react-redux'
+import { createOrderStepTwoThunk } from '../../../store/createOrder/thunk'
+import { isFulfilled, isRejected } from '@reduxjs/toolkit'
+import { useToasts } from 'react-toast-notifications'
+import { PulseLoader } from 'react-spinners'
 
 const ConfirmOrder = () => {
-  const email = JSON.parse(sessionStorage.getItem('email'))
-  const name = JSON.parse(sessionStorage.getItem('name'))
-  const clockId = JSON.parse(sessionStorage.getItem('clockId'))
-  const cityId = JSON.parse(sessionStorage.getItem('cityId'))
-  const masterId = JSON.parse(sessionStorage.getItem('masterId'))
-  const priceForHour = JSON.parse(sessionStorage.getItem('priceForHour'))
-  const price = JSON.parse(sessionStorage.getItem('price'))
-  const startTime = JSON.parse(sessionStorage.getItem('startTime'))
-  const endTime = JSON.parse(sessionStorage.getItem('endTime'))
-
   const [isLoading, setIsLoading] = useState(true)
   const [city, setCity] = useState('')
   const [clock, setClock] = useState('')
   const [master, setMaster] = useState('')
   const currency = 'USD'
+  const loader = <PulseLoader color='lightsalmon' size='10px' />
 
-  const navigate = useNavigate()
+  const { inProcess, data } = useSelector((state) => state.createOrder)
+
   useEffect(() => {
     Promise.all([
-      citiesAPI.getCityById(cityId),
-      clocksAPI.getClockById(clockId),
-      mastersAPI.getMasterById(masterId)
+      citiesAPI.getCityById(data.cityId),
+      clocksAPI.getClockById(data.clockId),
+      mastersAPI.getMasterById(data.masterId)
     ])
       .then((result) => {
         const [city, clock, master] = result
@@ -42,15 +38,26 @@ const ConfirmOrder = () => {
       .then(() => setIsLoading(false))
   }, [])
 
+  const dispatch = useDispatch()
+
+  const navigate = useNavigate()
+
+  const { addToast } = useToasts()
+
   const goBack = (e) => {
     e.preventDefault()
     navigate(-1)
   }
   const onSubmit = async (e) => {
     e.preventDefault()
-    const order = await ordersAPI.addOrder(masterId)
-    if (order) {
+    const stepTwo = await dispatch(createOrderStepTwoThunk(data))
+    if (isFulfilled(stepTwo)) {
       navigate('/user/successOrder', { replace: true })
+    } else if (isRejected(stepTwo)) {
+      addToast('Order cannot be created', {
+        transitionState: 'entered',
+        appearance: 'error'
+      })
     }
   }
 
@@ -63,21 +70,21 @@ const ConfirmOrder = () => {
             <MySpan>Data is loading, please wait...</MySpan>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <MySpan>Email: {email},</MySpan>
-              <MySpan>Name: {name},</MySpan>
+              <MySpan>Email: {data.email},</MySpan>
+              <MySpan>Name: {data.name},</MySpan>
               <MySpan>City: {city.name},</MySpan>
               <MySpan>
-                Price for hour: {formatValueToDecimal(priceForHour)} {currency},
+                Price for hour: {formatValueToDecimal(data.priceForHour)} {currency},
               </MySpan>
               <MySpan>Clock size: {clock.size},</MySpan>
               <MySpan>
                 Time to fix: {clock.timeToFix} {clock.timeToFix > 1 ? 'hours' : 'hour'},
               </MySpan>
               <MySpan>Master name: {master.name},</MySpan>
-              <MySpan>Start time: {startTime},</MySpan>
-              <MySpan>End time: {endTime},</MySpan>
+              <MySpan>Start time: {data.startTime},</MySpan>
+              <MySpan>End time: {data.endTime},</MySpan>
               <MySpan>
-                Total price: {formatValueToDecimal(price)} {currency}
+                Total price: {formatValueToDecimal(data.price)} {currency}
               </MySpan>
             </div>
           )}
@@ -89,7 +96,9 @@ const ConfirmOrder = () => {
             </MyBigButton>
           </div>
           <div className='buttonBox'>
-            <MyBigButton>Create order</MyBigButton>
+            <MyBigButton disabled={inProcess}>
+              {(inProcess && loader) || 'Create order'}
+            </MyBigButton>
           </div>
         </div>
       </form>

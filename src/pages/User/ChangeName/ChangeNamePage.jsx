@@ -1,14 +1,18 @@
 import { useNavigate } from 'react-router-dom'
 import MySpan from '../../../components/Span/MySpan'
 import MyLabel from '../../../components/Label/MyLabel'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import MyBigButton from '../../../components/Buttons/BigButton/MyBigButton'
+import { leaveNameForCreateOrderData } from '../../../store/createOrder/slice'
 
 const ChangeNamePage = () => {
+  const { name: currentUserName, email: currentUserEmail } = useSelector(
+    (state) => state.auth.currentUser
+  )
+  const { name } = useSelector((state) => state.createOrder.data)
+
+  const dispatch = useDispatch()
   const navigate = useNavigate()
-  const currentUserEmail = useSelector((state) => state.auth.currentUser.email)
-  const currentUserName = useSelector((state) => state.auth.currentUser.name)
-  const name = JSON.parse(sessionStorage.getItem('name'))
 
   const message = `
   The profile with email ${currentUserEmail} has name ${currentUserName}. 
@@ -20,7 +24,7 @@ const ChangeNamePage = () => {
   }
   const leaveName = (e) => {
     e.preventDefault()
-    sessionStorage.setItem('name', JSON.stringify(currentUserName))
+    dispatch(leaveNameForCreateOrderData(currentUserName))
     navigate(`/user/chooseMaster`, { replace: true })
   }
 

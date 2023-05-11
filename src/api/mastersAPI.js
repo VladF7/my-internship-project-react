@@ -2,12 +2,7 @@ import { format } from 'date-fns'
 import { request } from '../api/requestAPI'
 
 class MastersAPI {
-  async getFreeMasters() {
-    const requestData = {}
-    Object.keys(sessionStorage).forEach((key) => {
-      requestData[key] = JSON.parse(sessionStorage.getItem(key))
-    })
-
+  async getFreeMasters(requestData) {
     const response = await request(
       `/api/masters/getFreeMasters/` + '?' + new URLSearchParams(requestData),
       'GET'
@@ -45,7 +40,7 @@ class MastersAPI {
     )
     return response
   }
-  async delMaster(id) {
+  async deleteMaster(id) {
     const response = await request(
       `/api/masters/${id}`,
       'DELETE',

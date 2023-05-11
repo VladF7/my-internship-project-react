@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react'
-import ordersAPI from '../../../api/ordersAPI'
+import { useEffect } from 'react'
 import './Orders.css'
 import MySpan from '../../../components/Span/MySpan'
 import { useNavigate } from 'react-router-dom'
@@ -10,28 +9,33 @@ import { useToasts } from 'react-toast-notifications'
 import ThreeDotsMenu from '../../../components/ThreeDotsMenu/ThreeDotsMenu'
 import { RiDeleteBin5Line } from 'react-icons/ri'
 import { FiEdit } from 'react-icons/fi'
+import { useDispatch, useSelector } from 'react-redux'
+import { deleteOrderThunk, getOrdersThunk } from '../../../store/orders/thunk'
+import { isFulfilled, isRejected } from '@reduxjs/toolkit'
 
 const Orders = () => {
-  const [orders, setOrders] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
-  const navigate = useNavigate()
-  const { addToast } = useToasts()
+  const { orders, isLoading } = useSelector((state) => state.orders)
   const currency = 'USD'
 
+  const dispatch = useDispatch()
+
   useEffect(() => {
-    ordersAPI
-      .getOrders()
-      .then((orders) => setOrders(orders))
-      .then(() => setIsLoading(false))
+    dispatch(getOrdersThunk())
   }, [])
+
+  const navigate = useNavigate()
+
+  const { addToast } = useToasts()
+
   const deleteOrder = async (id) => {
-    const deletedOrder = await ordersAPI.delOrder(id)
-    if (!deletedOrder) {
+    const deletedOrder = await dispatch(deleteOrderThunk(id))
+    if (isFulfilled(deletedOrder)) {
+      addToast('Order has been deleted', { transitionState: 'entered', appearance: 'success' })
+    } else if (isRejected(deletedOrder)) {
       addToast('Order cannot be deleted', { transitionState: 'entered', appearance: 'error' })
-      return
     }
-    setOrders(orders.filter((order) => order.id !== id))
   }
+
   const goToEdit = (id, start) => {
     if (format(new Date(), 'yyyy.MM.dd, HH:mm') > start) {
       addToast('Cannot be edited, this order has already been started', {
@@ -43,75 +47,67 @@ const Orders = () => {
     }
   }
 
-  if (isLoading === true)
-    return (
-      <div className='adminPage'>
-        <div className={'navBar'}>
-          <AdminNavBar />
-        </div>
-        <div className='adminItem'>
-          <MySpan>The list of orders is loading...</MySpan>
-        </div>
-      </div>
-    )
-
   return (
     <div className='adminPage'>
       <div className={'navBar'}>
         <AdminNavBar />
       </div>
       <div className='adminItem'>
-        <div className='orders'>
-          <ul className='list'>
-            {orders.length === 0 ? (
-              <MySpan>The list of orders is empty</MySpan>
-            ) : (
-              orders.map((order) => {
-                return (
-                  <li id={order.id} key={order.id} className='listItem'>
-                    <div className='itemInfo'>
-                      <MySpan>Name: {order.customer.name},</MySpan>
-                      <MySpan>Email: {order.customer.email},</MySpan>
-                      <MySpan>Clock size: {order.clock.size},</MySpan>
-                      <MySpan>Time to fix: {order.clock.timeToFix},</MySpan>
-                      <MySpan>Master name: {order.master.name},</MySpan>
-                      <MySpan>City: {order.city.name},</MySpan>
-                      <MySpan>Order start time: {order.startTime},</MySpan>
-                      <MySpan>Order end time: {order.endTime}</MySpan>
-                      <MySpan>
-                        Order price: {formatValueToDecimal(order.price)} {currency}
-                      </MySpan>
-                      <MySpan>Order status: {order.status}</MySpan>
-                    </div>
-                    <div className='buttons'>
-                      <ThreeDotsMenu
-                        elements={[
-                          {
-                            iconType: <FiEdit color='lightsalmon' />,
-                            action: () => goToEdit(order.id, order.startTime),
-                            label: 'Edit order',
-                            hidden:
-                              format(new Date(), 'yyyy.MM.dd, HH:mm') < order.startTime
-                                ? false
-                                : true,
-                            disabled: false
-                          },
-                          {
-                            iconType: <RiDeleteBin5Line color='red' />,
-                            action: () => deleteOrder(order.id),
-                            label: 'Delete',
-                            hidden: false,
-                            disabled: false
-                          }
-                        ]}
-                      />
-                    </div>
-                  </li>
-                )
-              })
-            )}
-          </ul>
-        </div>
+        {isLoading ? (
+          <MySpan>The list of orders is loading...</MySpan>
+        ) : (
+          <div className='orders'>
+            <ul className='list'>
+              {!orders.length ? (
+                <MySpan>The list of orders is empty</MySpan>
+              ) : (
+                orders.map((order) => {
+                  return (
+                    <li id={order.id} key={order.id} className='listItem'>
+                      <div className='itemInfo'>
+                        <MySpan>Name: {order.customer.name},</MySpan>
+                        <MySpan>Email: {order.customer.email},</MySpan>
+                        <MySpan>Clock size: {order.clock.size},</MySpan>
+                        <MySpan>Time to fix: {order.clock.timeToFix},</MySpan>
+                        <MySpan>Master name: {order.master.name},</MySpan>
+                        <MySpan>City: {order.city.name},</MySpan>
+                        <MySpan>Order start time: {order.startTime},</MySpan>
+                        <MySpan>Order end time: {order.endTime}</MySpan>
+                        <MySpan>
+                          Order price: {formatValueToDecimal(order.price)} {currency}
+                        </MySpan>
+                        <MySpan>Order status: {order.status}</MySpan>
+                      </div>
+                      <div className='buttons'>
+                        <ThreeDotsMenu
+                          elements={[
+                            {
+                              iconType: <FiEdit color='lightsalmon' />,
+                              action: () => goToEdit(order.id, order.startTime),
+                              label: 'Edit order',
+                              hidden:
+                                format(new Date(), 'yyyy.MM.dd, HH:mm') < order.startTime
+                                  ? false
+                                  : true,
+                              disabled: false
+                            },
+                            {
+                              iconType: <RiDeleteBin5Line color='red' />,
+                              action: () => deleteOrder(order.id),
+                              label: 'Delete',
+                              hidden: false,
+                              disabled: false
+                            }
+                          ]}
+                        />
+                      </div>
+                    </li>
+                  )
+                })
+              )}
+            </ul>
+          </div>
+        )}
       </div>
     </div>
   )
