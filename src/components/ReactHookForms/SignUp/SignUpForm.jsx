@@ -36,7 +36,7 @@ const SignUpSchema = z
     message: 'Required field'
   })
 
-const SignUpForm = ({ onSubmit, submitError }) => {
+const SignUpForm = ({ onSubmit, submitError, inProcess, loader }) => {
   const {
     register,
     handleSubmit,
@@ -166,7 +166,12 @@ const SignUpForm = ({ onSubmit, submitError }) => {
       />
 
       <div className='myButtonWrapper'>
-        <MyBigButton disabled={!confirmRules}>Sign up</MyBigButton>
+        <MyBigButton
+          style={{ background: !confirmRules && 'rgba(255, 255, 255, 0.499)' }}
+          disabled={!confirmRules || inProcess}
+        >
+          {(inProcess && loader) || 'Sign up'}
+        </MyBigButton>
       </div>
     </form>
   )

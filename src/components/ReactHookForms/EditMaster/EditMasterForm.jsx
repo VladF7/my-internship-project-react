@@ -18,7 +18,7 @@ const editMasterSchema = z.object({
     .nonempty({ message: 'Required field' })
 })
 
-const EditMasterForm = ({ formFields, onSubmit }) => {
+const EditMasterForm = ({ formFields, onSubmit, loader, inProcess }) => {
   const {
     register,
     control,
@@ -89,7 +89,7 @@ const EditMasterForm = ({ formFields, onSubmit }) => {
           </MyBigButton>
         </div>
         <div className='buttonBox'>
-          <MyBigButton>Edit master</MyBigButton>
+          <MyBigButton disabled={inProcess}>{(inProcess && loader) || 'Edit master'}</MyBigButton>
         </div>
       </div>
     </form>

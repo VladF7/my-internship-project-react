@@ -1,12 +1,17 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './LoginPage.css'
-import { useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
-import { login } from '../../services/auth'
+import { useDispatch, useSelector } from 'react-redux'
+import { loginThunk } from '../../store/auth/thunk'
 import LoginForm from '../../components/ReactHookForms/Login/LoginForm'
+import { PulseLoader } from 'react-spinners'
+import { isFulfilled, isRejected } from '@reduxjs/toolkit'
+import { useNavigate } from 'react-router-dom'
 
 const LoginPage = () => {
   const [submitError, setSubmitError] = useState('')
+
+  const { inProcess } = useSelector((state) => state.auth)
+  useEffect(() => {}, [])
 
   const dispatch = useDispatch()
 
@@ -23,22 +28,26 @@ const LoginPage = () => {
   }
 
   const onSubmit = async (formData) => {
-    const successLogin = await dispatch(login(formData))
-    if (!successLogin) {
+    const successLogin = await dispatch(loginThunk(formData))
+    if (isFulfilled(successLogin)) {
+      if (successLogin.payload.redirect) {
+        navigate(`/${redirectPath[successLogin.payload.redirectTo]}`)
+      } else {
+        navigate(`/${loginPath[successLogin.payload.role]}`, { replace: true })
+      }
+    } else if (isRejected(successLogin)) {
       setSubmitError(Date.now)
-      return
-    }
-    if (successLogin.redirect) {
-      navigate(`/${redirectPath[successLogin.redirectTo]}`)
-      return
-    } else {
-      navigate(`/${loginPath[successLogin.role]}`, { replace: true })
-      return
     }
   }
+
   return (
     <div className='loginPage'>
-      <LoginForm onSubmit={onSubmit} submitError={submitError} />
+      <LoginForm
+        onSubmit={onSubmit}
+        submitError={submitError}
+        inProcess={inProcess}
+        loader={<PulseLoader color='lightsalmon' size='10px' />}
+      />
     </div>
   )
 }

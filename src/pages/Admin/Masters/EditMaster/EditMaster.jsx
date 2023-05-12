@@ -5,6 +5,10 @@ import MySpan from '../../../../components/Span/MySpan'
 import AdminNavBar from '../../../../components/NavBar/AdminNavBar/AdminNavBar'
 import EditMasterForm from '../../../../components/ReactHookForms/EditMaster/EditMasterForm'
 import { useToasts } from 'react-toast-notifications'
+import { editMasterThunk } from '../../../../store/masters/thunk'
+import { useDispatch, useSelector } from 'react-redux'
+import { isFulfilled, isRejected } from '@reduxjs/toolkit'
+import { PulseLoader } from 'react-spinners'
 
 const EditMaster = () => {
   const { id } = useParams()
@@ -27,34 +31,29 @@ const EditMaster = () => {
       .then(() => setIsLoadnig(false))
   }, [id])
 
+  const { inProcess } = useSelector((state) => state.masters)
+
+  const dispatch = useDispatch()
+
   const navigate = useNavigate()
 
   const { addToast } = useToasts()
 
   const onSubmit = async (formData) => {
-    const editedMaster = await mastersAPI.editMaster(id, formData)
-    if (editedMaster) {
-      await mastersAPI.getMasters()
+    const editedMaster = await dispatch(editMasterThunk({ id, formData }))
+
+    if (isFulfilled(editedMaster)) {
+      addToast('Master has been edited', {
+        transitionState: 'entered',
+        appearance: 'success'
+      })
       navigate('/admin/masters')
-    } else {
-      addToast("Master can't be edited", {
+    } else if (isRejected(editedMaster)) {
+      addToast('Master cannot be edited', {
         transitionState: 'entered',
         appearance: 'error'
       })
     }
-  }
-
-  if (isLoading) {
-    return (
-      <div className='adminPage'>
-        <div className={'navBar'}>
-          <AdminNavBar />
-        </div>
-        <div className='adminItem'>
-          <MySpan>Data is loading, please wait...</MySpan>
-        </div>
-      </div>
-    )
   }
 
   return (
@@ -63,7 +62,16 @@ const EditMaster = () => {
         <AdminNavBar />
       </div>
       <div className='adminItem'>
-        <EditMasterForm formFields={{ name, cities }} onSubmit={onSubmit}></EditMasterForm>
+        {isLoading ? (
+          <MySpan>Data is loading, please wait...</MySpan>
+        ) : (
+          <EditMasterForm
+            formFields={{ name, cities }}
+            onSubmit={onSubmit}
+            inProcess={inProcess}
+            loader={<PulseLoader color='lightsalmon' size='10px' />}
+          />
+        )}
       </div>
     </div>
   )

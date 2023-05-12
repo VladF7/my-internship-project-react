@@ -14,7 +14,7 @@ const AddEditCitySchema = z.object({
     .positive()
 })
 
-const AddEditCityForm = ({ formFields, onSubmit, submitError }) => {
+const AddEditCityForm = ({ formFields, onSubmit, submitError, inProcess, loader }) => {
   const {
     register,
     handleSubmit,
@@ -91,7 +91,9 @@ const AddEditCityForm = ({ formFields, onSubmit, submitError }) => {
           </MyBigButton>
         </div>
         <div className='buttonBox'>
-          <MyBigButton>{formFields ? 'Edit City ' : 'Add city'}</MyBigButton>
+          <MyBigButton disabled={inProcess}>
+            {(inProcess && loader) || (formFields && 'Edit city') || 'Add city'}
+          </MyBigButton>
         </div>
       </div>
     </form>

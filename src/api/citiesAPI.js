@@ -27,7 +27,7 @@ class CitiesAPI {
     const response = await request(`/api/cities/${id}`)
     return response
   }
-  async delCity(id) {
+  async deleteCity(id) {
     const response = await request(
       `/api/cities/${id}`,
       'DELETE',

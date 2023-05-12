@@ -22,8 +22,6 @@ import LoginPage from './pages/Login/LoginPage'
 import RequireAuth from './hoc/RequireAuth'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { checkAuth } from './services/auth'
-import { actionLoaded } from './reducers/loadReducer'
 import { ClockLoader } from 'react-spinners'
 import EditCity from './pages/Admin/Cities/EditCity/EditCity'
 import ConfirmOrder from './pages/User/ConfirmOrder/ConfirmOrder'
@@ -41,17 +39,13 @@ import ChangeNamePage from './pages/User/ChangeName/ChangeNamePage'
 import { ToastProvider } from 'react-toast-notifications'
 import SuccessEmailConfirmPage from './pages/User/SuccessEmailConfirm/SuccessEmailConfirmPage'
 import AddCity from './pages/Admin/Cities/AddCity/AddCity'
+import { checkAuthThunk } from './store/auth/thunk'
 
 const App = () => {
   const dispatch = useDispatch()
-  const isLoading = useSelector((state) => state.load.isLoading)
-
+  const { isLoading } = useSelector((state) => state.preloader)
   useEffect(() => {
-    if (localStorage.getItem('token')) {
-      dispatch(checkAuth())
-    } else {
-      dispatch(actionLoaded())
-    }
+    dispatch(checkAuthThunk())
   }, [])
 
   const router = createBrowserRouter(

@@ -25,7 +25,7 @@ const AddCustomerSchema = z
     message: "Passwords don't match"
   })
 
-const AddCustomerForm = ({ onSubmit, submitError }) => {
+const AddCustomerForm = ({ onSubmit, submitError, loader, inProcess }) => {
   const {
     register,
     handleSubmit,
@@ -115,7 +115,7 @@ const AddCustomerForm = ({ onSubmit, submitError }) => {
           </MyBigButton>
         </div>
         <div className='buttonBox'>
-          <MyBigButton>Add customer</MyBigButton>
+          <MyBigButton disabled={inProcess}> {(inProcess && loader) || 'Add customer'}</MyBigButton>
         </div>
       </div>
     </form>

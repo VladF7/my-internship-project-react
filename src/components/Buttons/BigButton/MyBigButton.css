@@ -28,7 +28,7 @@
   background: rgb(124, 204, 124);
 }
 .bigButton:disabled {
-  background: rgba(255, 255, 255, 0.499);
+  background: rgba(124, 204, 124, 0.9);
 }
 .backBigButton:active {
   background: rgb(214, 77, 105);

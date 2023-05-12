@@ -7,11 +7,7 @@ class UserAPI {
   }
   async auth() {
     const response = await request(`/api/auth`, 'GET', null, localStorage.getItem('token'))
-    if (response) {
-      return response
-    } else {
-      localStorage.removeItem('token')
-    }
+    return response
   }
   async masterRegistration(requestData) {
     const response = await request(`/api/master/registration`, 'POST', requestData)

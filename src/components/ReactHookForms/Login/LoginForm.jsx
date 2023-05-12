@@ -15,7 +15,7 @@ const LoginSchema = z.object({
     .max(16, { message: 'Password must be 16 or fewer characters long' })
 })
 
-const LoginForm = ({ formFields, onSubmit, submitError }) => {
+const LoginForm = ({ formFields, onSubmit, submitError, inProcess, loader }) => {
   const {
     register,
     handleSubmit,
@@ -64,6 +64,7 @@ const LoginForm = ({ formFields, onSubmit, submitError }) => {
           <div className='fieldWrapper'>
             <label className='formLabel'>Enter email</label>
             <input
+              disabled={formFields?.email}
               className={
                 errors?.email?.message ? 'formInput' + ' ' + 'formErrorField' : 'formInput'
               }
@@ -92,9 +93,10 @@ const LoginForm = ({ formFields, onSubmit, submitError }) => {
         </div>
         {!formFields && (
           <div className='myButtonWrapper'>
-            <MyBigButton>Log in</MyBigButton>
+            <MyBigButton disabled={inProcess}>{(inProcess && loader) || 'Log in'}</MyBigButton>
           </div>
         )}
+
         {formFields && (
           <div className='buttonBoxWrapper'>
             <div className='buttonBox'>
@@ -103,7 +105,7 @@ const LoginForm = ({ formFields, onSubmit, submitError }) => {
               </MyBigButton>
             </div>
             <div className='buttonBox'>
-              <MyBigButton>Next</MyBigButton>
+              <MyBigButton disabled={inProcess}>{(inProcess && loader) || 'Next'}</MyBigButton>
             </div>
           </div>
         )}

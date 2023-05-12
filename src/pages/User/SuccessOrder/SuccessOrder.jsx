@@ -2,11 +2,14 @@ import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import MyLinkButton from '../../../components/Buttons/BigButton/MyLinkButton'
 import MySpan from '../../../components/Span/MySpan'
+import { useDispatch } from 'react-redux'
+import { clearCreateOrderData } from '../../../store/createOrder/slice'
 
 const SuccessOrder = () => {
+  const dispatch = useDispatch()
   const navigate = useNavigate()
   useEffect(() => {
-    sessionStorage.clear()
+    dispatch(clearCreateOrderData())
   }, [])
   const message = `Your order has been successfully created.
   An email will be sent to you with additional information.`

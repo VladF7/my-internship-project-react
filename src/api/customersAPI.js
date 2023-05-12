@@ -28,7 +28,7 @@ class CustomersAPI {
     )
     return response
   }
-  async delCustomer(id) {
+  async deleteCustomer(id) {
     const response = await request(
       `/api/customers/${id}`,
       'DELETE',

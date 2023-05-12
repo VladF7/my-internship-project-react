@@ -16,7 +16,7 @@ const addOrderSchema = z.object({
     .min(1, { message: 'Required field' })
     .min(3, { message: 'Name must be be 3 or more characters long' }),
   email: z.string().min(1, { message: 'Required field' }).email().nonempty(),
-  date: z.date({
+  startTime: z.date({
     invalid_type_error: 'Required field'
   }),
   clockId: z
@@ -33,7 +33,15 @@ const addOrderSchema = z.object({
     .positive()
 })
 
-const AddOrderForm = ({ formFields, onSubmit, currentPriceInfo, submitError, disableEmail }) => {
+const AddOrderForm = ({
+  formFields,
+  onSubmit,
+  currentPriceInfo,
+  submitError,
+  disableEmail,
+  inProcess,
+  loader
+}) => {
   const {
     register,
     handleSubmit,
@@ -64,7 +72,7 @@ const AddOrderForm = ({ formFields, onSubmit, currentPriceInfo, submitError, dis
     reset({
       name: formFields.name,
       email: formFields.email,
-      date: formFields.date,
+      startTime: formFields.startTime,
       cityId: formFields.cityId,
       clockId: formFields.clockId
     })
@@ -104,8 +112,8 @@ const AddOrderForm = ({ formFields, onSubmit, currentPriceInfo, submitError, dis
   const currency = 'USD'
 
   const submit = (formData) => {
-    const startTime = format(formData.date, 'yyyy.MM.dd, HH:mm')
-    return onSubmit({ ...formData, startTime, price, priceForHour, timeToFix })
+    formData.startTime = format(formData.startTime, 'yyyy.MM.dd, HH:mm')
+    return onSubmit({ ...formData, price, priceForHour, timeToFix })
   }
 
   if (isLoading) return <div className='formWrapper'></div>
@@ -136,16 +144,20 @@ const AddOrderForm = ({ formFields, onSubmit, currentPriceInfo, submitError, dis
       <div className='fieldWrapper'>
         <label className='formLabel'>Choose time and date</label>
         <Controller
-          name='date'
+          name='startTime'
           control={control}
           render={({ field }) => (
             <DatePicker
               {...field}
-              className={errors?.date?.message ? 'formInput' + ' ' + 'formErrorField' : 'formInput'}
+              className={
+                errors?.startTime?.message ? 'formInput' + ' ' + 'formErrorField' : 'formInput'
+              }
             />
           )}
         />
-        {errors?.date?.message && <div className='formRequiredField'>{errors?.date?.message}</div>}
+        {errors?.startTime?.message && (
+          <div className='formRequiredField'>{errors?.startTime?.message}</div>
+        )}
       </div>
       <div className='fieldWrapper'>
         <label className='formLabel'>Choose clock size</label>
@@ -189,7 +201,7 @@ const AddOrderForm = ({ formFields, onSubmit, currentPriceInfo, submitError, dis
       </label>
 
       <div className='addButtonWrapper'>
-        <MyBigButton>Next</MyBigButton>
+        <MyBigButton disabled={inProcess}>{(inProcess && loader) || 'Next'}</MyBigButton>
       </div>
     </form>
   )

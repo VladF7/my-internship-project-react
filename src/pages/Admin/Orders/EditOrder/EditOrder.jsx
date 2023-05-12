@@ -1,10 +1,15 @@
 import { parse } from 'date-fns'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import ordersAPI from '../../../../api/ordersAPI'
 import MySpan from '../../../../components/Span/MySpan'
 import AdminNavBar from '../../../../components/NavBar/AdminNavBar/AdminNavBar'
 import EditOrderForm from '../../../../components/ReactHookForms/EditOrder/EditOrderForm'
+import { useDispatch, useSelector } from 'react-redux'
+import { PulseLoader } from 'react-spinners'
+import ordersAPI from '../../../../api/ordersAPI'
+import { editOrderThunk } from '../../../../store/orders/thunk'
+import { isFulfilled, isRejected } from '@reduxjs/toolkit'
+import { useToasts } from 'react-toast-notifications'
 
 const EditOrder = () => {
   const [isLoading, setIsLoadnig] = useState(true)
@@ -33,27 +38,28 @@ const EditOrder = () => {
       .then(() => setIsLoadnig(false))
   }, [id])
 
+  const { inProcess } = useSelector((state) => state.orders)
+
+  const dispatch = useDispatch()
+
   const navigate = useNavigate()
 
+  const { addToast } = useToasts()
+
   const onSubmit = async (formData) => {
-    const editedOrder = await ordersAPI.editOrder(id, formData)
-    if (!editedOrder) {
-      return
+    const editedOrder = await dispatch(editOrderThunk({ id, formData }))
+    if (isFulfilled(editedOrder)) {
+      addToast('Order has been edited', {
+        transitionState: 'entered',
+        appearance: 'success'
+      })
+      navigate('/admin/orders')
+    } else if (isRejected(editedOrder)) {
+      addToast('Order cannot be edited', {
+        transitionState: 'entered',
+        appearance: 'error'
+      })
     }
-    await ordersAPI.getOrders()
-    navigate('/admin/orders')
-  }
-  if (isLoading) {
-    return (
-      <div className='adminPage'>
-        <div className={'navBar'}>
-          <AdminNavBar />
-        </div>
-        <div className='adminItem'>
-          <MySpan>Data is loading, please wait...</MySpan>
-        </div>
-      </div>
-    )
   }
 
   return (
@@ -62,11 +68,23 @@ const EditOrder = () => {
         <AdminNavBar />
       </div>
       <div className='adminItem'>
-        <EditOrderForm
-          formFields={{ cityId, clockId, masterId, date, status }}
-          currentOrderInfo={{ id, endTime, currentPrice }}
-          onSubmit={onSubmit}
-        ></EditOrderForm>
+        {isLoading ? (
+          <MySpan>Data is loading, please wait...</MySpan>
+        ) : (
+          <EditOrderForm
+            formFields={{
+              cityId,
+              clockId,
+              masterId,
+              date,
+              status
+            }}
+            inProcess={inProcess}
+            currentOrderInfo={{ id, endTime, currentPrice }}
+            onSubmit={onSubmit}
+            loader={<PulseLoader color='lightsalmon' size='10px' />}
+          ></EditOrderForm>
+        )}
       </div>
     </div>
   )

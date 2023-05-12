@@ -31,5 +31,6 @@ export const request = async (url, method = 'GET', data = null, token = null) =>
     }
   } catch (error) {
     console.warn('Error: ' + error)
+    throw error
   }
 }

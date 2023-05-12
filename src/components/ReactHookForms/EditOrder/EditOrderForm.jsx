@@ -48,7 +48,7 @@ const editOrdderSchema = z.object({
   status: z.string().nonempty({ message: 'Required field' })
 })
 
-const EditOrderForm = ({ formFields, onSubmit, currentOrderInfo }) => {
+const EditOrderForm = ({ formFields, onSubmit, currentOrderInfo, inProcess, loader }) => {
   const {
     control,
     handleSubmit,
@@ -291,7 +291,7 @@ const EditOrderForm = ({ formFields, onSubmit, currentOrderInfo }) => {
           </MyBigButton>
         </div>
         <div className='buttonBox'>
-          <MyBigButton>Edit order</MyBigButton>
+          <MyBigButton disabled={inProcess}>{(inProcess && loader) || 'Edit order'}</MyBigButton>
         </div>
       </div>
     </form>

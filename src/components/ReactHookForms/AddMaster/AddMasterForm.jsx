@@ -31,7 +31,7 @@ const AddMasterSchema = z
     message: "Passwords don't match"
   })
 
-const AddMasterForm = ({ onSubmit, submitError }) => {
+const AddMasterForm = ({ onSubmit, submitError, loader, inProcess }) => {
   const {
     register,
     control,
@@ -151,7 +151,7 @@ const AddMasterForm = ({ onSubmit, submitError }) => {
           </MyBigButton>
         </div>
         <div className='buttonBox'>
-          <MyBigButton>Add master</MyBigButton>
+          <MyBigButton disabled={inProcess}>{(inProcess && loader) || 'Add master'}</MyBigButton>
         </div>
       </div>
     </form>
