@@ -63,7 +63,9 @@ const CustomerPage = () => {
                 <MySpan>City: {order.city.name},</MySpan>
                 <MySpan>Order start time: {order.startTime},</MySpan>
                 <MySpan>Order end time: {order.endTime}</MySpan>
-                <MySpan>Order price: {formatValueToDecimal(order.price)} {currency}</MySpan>
+                <MySpan>
+                  Order price: {formatValueToDecimal(order.price)} {currency}
+                </MySpan>
                 <MySpan>Order status: {order.status}</MySpan>
                 {order.status === 'Completed' && (
                   <MySpan style={{ position: 'relative' }}>
