@@ -7,6 +7,7 @@ import '../ReactHookForms.css'
 import citiesAPI from '../../../api/citiesAPI'
 import CitiesSelect from '../../React-select/React-select'
 import Checkbox from '../../CheckBox/Checkbox'
+import ShowPasswordButton from '../../ShowPasswordButton/ShowPasswordButton'
 
 const SignUpSchema = z
   .object({
@@ -56,6 +57,8 @@ const SignUpForm = ({ onSubmit, submitError, inProcess, loader }) => {
     }
   })
   const [confirmRules, setConfirmRules] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const signUpAsMaster = useWatch({ control, name: 'signUpAsMaster' })
 
   useEffect(() => {
@@ -110,27 +113,31 @@ const SignUpForm = ({ onSubmit, submitError, inProcess, loader }) => {
         <label className='formLabel'>Enter password</label>
         <input
           className={errors?.password?.message ? 'formInput' + ' ' + 'formErrorField' : 'formInput'}
-          type='password'
+          type={showPassword ? 'text' : 'password'}
           {...register('password')}
           placeholder='Enter your password'
         ></input>
+
         {errors?.password?.message && (
           <div className='formRequiredField'>{errors?.password?.message}</div>
         )}
+        <ShowPasswordButton value={showPassword} setValue={setShowPassword} />
       </div>
+
       <div className='fieldWrapper'>
         <label className='formLabel'>Confirm password</label>
         <input
           className={
             errors?.confirmPassword?.message ? 'formInput' + ' ' + 'formErrorField' : 'formInput'
           }
-          type='password'
+          type={showConfirmPassword ? 'text' : 'password'}
           {...register('confirmPassword')}
           placeholder='Passwords must match'
         ></input>
         {errors?.confirmPassword?.message && (
           <div className='formRequiredField'>{errors?.confirmPassword?.message}</div>
         )}
+        <ShowPasswordButton value={showConfirmPassword} setValue={setShowConfirmPassword} />
       </div>
       {signUpAsMaster && (
         <div className='fieldWrapper'>
@@ -147,7 +154,6 @@ const SignUpForm = ({ onSubmit, submitError, inProcess, loader }) => {
           )}
         </div>
       )}
-
       <Controller
         name='signUpAsMaster'
         control={control}
@@ -159,12 +165,10 @@ const SignUpForm = ({ onSubmit, submitError, inProcess, loader }) => {
           />
         )}
       />
-
       <Checkbox
         label={'I have read and agree to all rules'}
         onChange={(e) => setConfirmRules(e.target.checked)}
       />
-
       <div className='myButtonWrapper'>
         <MyBigButton
           style={{ background: !confirmRules && 'rgba(255, 255, 255, 0.499)' }}
