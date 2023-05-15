@@ -5,7 +5,7 @@ export const getOrdersThunk = createAsyncThunk(
   'orders/getOrders',
   async (data, { rejectWithValue }) => {
     try {
-      const response = await ordersAPI.getOrders()
+      const response = await ordersAPI.getOrders(data)
       return response
     } catch (error) {
       return rejectWithValue(error)

@@ -4,7 +4,6 @@ import MySpan from '../../../components/Span/MySpan'
 import { formatValueToDecimal } from '../../../helpers'
 import AdminNavBar from '../../../components/NavBar/AdminNavBar/AdminNavBar'
 import { useToasts } from 'react-toast-notifications'
-import ThreeDotsMenu from '../../../components/ThreeDotsMenu/ThreeDotsMenu'
 import { RiDeleteBin5Line } from 'react-icons/ri'
 import { FiEdit } from 'react-icons/fi'
 import { useNavigate } from 'react-router-dom'
@@ -12,6 +11,7 @@ import MyLinkButton from '../../../components/Buttons/BigButton/MyLinkButton'
 import { deleteCityThunk, getCitiesThunk } from '../../../store/cities/thunk'
 import { useDispatch, useSelector } from 'react-redux'
 import { isFulfilled, isRejected } from '@reduxjs/toolkit'
+import DropDownMenu from '../../../components/DropDownMenu/DropDownMenu'
 
 const Cities = () => {
   const { isLoading, cities } = useSelector((state) => state.cities)
@@ -70,7 +70,7 @@ const Cities = () => {
                         </MySpan>
                       </div>
                       <div className='buttons'>
-                        <ThreeDotsMenu
+                        <DropDownMenu
                           elements={[
                             {
                               iconType: <FiEdit color='lightsalmon' />,

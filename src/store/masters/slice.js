@@ -1,8 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { addMasterThunk, deleteMasterThunk, editMasterThunk, getMastersThunk } from './thunk'
+import {
+  activateMasterThunk,
+  addMasterThunk,
+  deleteMasterThunk,
+  editMasterThunk,
+  getMastersThunk
+} from './thunk'
 
 const initialState = {
   masters: [],
+  count: 0,
   error: null,
   isLoading: false,
   inProcess: false
@@ -19,7 +26,8 @@ export const mastersSlice = createSlice({
     })
     builder.addCase(getMastersThunk.fulfilled, (state, action) => {
       state.isLoading = false
-      state.masters = action.payload
+      state.masters = action.payload.rows
+      state.count = action.payload.count
     })
     builder.addCase(getMastersThunk.rejected, (state, action) => {
       state.isLoading = false
@@ -57,6 +65,19 @@ export const mastersSlice = createSlice({
       state.inProcess = false
     })
     builder.addCase(addMasterThunk.rejected, (state, action) => {
+      state.inProcess = false
+      state.error = action.payload.message
+    })
+    builder.addCase(activateMasterThunk.pending, (state) => {
+      state.inProcess = true
+      state.error = null
+    })
+    builder.addCase(activateMasterThunk.fulfilled, (state, action) => {
+      state.inProcess = false
+      const index = state.masters.findIndex((master) => master.id === action.payload.id)
+      state.masters[index].isActivated = true
+    })
+    builder.addCase(activateMasterThunk.rejected, (state, action) => {
       state.inProcess = false
       state.error = action.payload.message
     })

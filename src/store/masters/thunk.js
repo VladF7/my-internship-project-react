@@ -6,7 +6,7 @@ export const getMastersThunk = createAsyncThunk(
   'masters/getMasters',
   async (data, { rejectWithValue }) => {
     try {
-      const response = await mastersAPI.getMasters()
+      const response = await mastersAPI.getMasters(data)
       return response
     } catch (error) {
       return rejectWithValue(error)
@@ -30,6 +30,17 @@ export const editMasterThunk = createAsyncThunk(
     try {
       const { id, formData } = data
       const response = await mastersAPI.editMaster(id, formData)
+      return response
+    } catch (error) {
+      return rejectWithValue(error)
+    }
+  }
+)
+export const activateMasterThunk = createAsyncThunk(
+  'masters/activateMaster',
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await mastersAPI.activateMaster(data)
       return response
     } catch (error) {
       return rejectWithValue(error)

@@ -7,10 +7,10 @@ import AdminNavBar from '../../../components/NavBar/AdminNavBar/AdminNavBar'
 import { useToasts } from 'react-toast-notifications'
 import { RiDeleteBin5Line } from 'react-icons/ri'
 import { MdLockReset } from 'react-icons/md'
-import ThreeDotsMenu from '../../../components/ThreeDotsMenu/ThreeDotsMenu'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteCustomerThunk, getCustomersThunk } from '../../../store/customers/thunk'
 import { isFulfilled, isRejected } from '@reduxjs/toolkit'
+import DropDownMenu from '../../../components/DropDownMenu/DropDownMenu'
 
 const Customers = () => {
   const { isLoading, customers } = useSelector((state) => state.customers)
@@ -76,7 +76,7 @@ const Customers = () => {
                         )}
                       </div>
                       <div className='buttons'>
-                        <ThreeDotsMenu
+                        <DropDownMenu
                           elements={[
                             {
                               iconType: <MdLockReset color='lightsalmon' />,

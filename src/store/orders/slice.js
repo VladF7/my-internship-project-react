@@ -3,6 +3,7 @@ import { deleteOrderThunk, editOrderThunk, getOrdersThunk } from './thunk'
 
 const initialState = {
   orders: [],
+  count: 0,
   error: null,
   isLoading: false,
   inProcess: false
@@ -19,7 +20,8 @@ export const ordersSlice = createSlice({
     })
     builder.addCase(getOrdersThunk.fulfilled, (state, action) => {
       state.isLoading = false
-      state.orders = action.payload
+      state.orders = action.payload.rows
+      state.count = action.payload.count
     })
     builder.addCase(getOrdersThunk.rejected, (state, action) => {
       state.isLoading = false

@@ -6,8 +6,13 @@ class OrdersAPI {
     const response = await request(`/api/orders`, 'POST', requestData)
     return response
   }
-  async getOrders() {
-    const response = await request('/api/orders', 'GET', null, localStorage.getItem('token'))
+  async getOrders(requestData) {
+    const response = await request(
+      '/api/orders' + '?' + new URLSearchParams(requestData),
+      'GET',
+      null,
+      localStorage.getItem('token')
+    )
     return response
   }
   async getOrderById(id) {
