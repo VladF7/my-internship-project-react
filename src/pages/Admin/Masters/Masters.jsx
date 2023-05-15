@@ -21,7 +21,7 @@ import MyTable from '../../../components/Table/MyTable'
 
 const Masters = () => {
   const [page, setPage] = useState(0)
-  const [mastersPerPage, setMastersPerPage] = useState(10)
+  const [limit, setLimit] = useState(10)
   const rowsPerPageOptions = [10, 25, 50]
   const labelRowsPerPage = 'Masters per page'
 
@@ -30,8 +30,8 @@ const Masters = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(getMastersThunk({ page, mastersPerPage }))
-  }, [page, mastersPerPage])
+    dispatch(getMastersThunk({ page, limit }))
+  }, [page, limit])
 
   const navigate = useNavigate()
 
@@ -62,7 +62,7 @@ const Masters = () => {
   const deleteMaster = async (id) => {
     const deletedMaster = await dispatch(deleteMasterThunk(id))
     if (isFulfilled(deletedMaster)) {
-      dispatch(getMastersThunk({ page, mastersPerPage }))
+      dispatch(getMastersThunk({ page, limit }))
 
       addToast('Master has been deleted', {
         transitionState: 'entered',
@@ -155,9 +155,9 @@ const Masters = () => {
           count={count}
           isLoading={isLoading}
           page={page}
-          rowsPerPage={mastersPerPage}
+          rowsPerPage={limit}
           setPage={setPage}
-          setRowsPerPage={setMastersPerPage}
+          setRowsPerPage={setLimit}
           rowsPerPageOptions={rowsPerPageOptions}
           labelRowsPerPage={labelRowsPerPage}
           button={<MyLinkButton to='registration'>Add master</MyLinkButton>}

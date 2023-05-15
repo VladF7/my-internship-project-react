@@ -15,7 +15,7 @@ import MyTable from '../../../components/Table/MyTable'
 
 const Orders = () => {
   const [page, setPage] = useState(0)
-  const [ordersPerPage, setOrdersPerPage] = useState(10)
+  const [limit, setLimit] = useState(10)
   const rowsPerPageOptions = [10, 25, 50]
   const labelRowsPerPage = 'Orders per page'
 
@@ -23,8 +23,8 @@ const Orders = () => {
   const currency = 'USD'
 
   useEffect(() => {
-    dispatch(getOrdersThunk({ page, ordersPerPage }))
-  }, [page, ordersPerPage])
+    dispatch(getOrdersThunk({ page, limit }))
+  }, [page, limit])
 
   const dispatch = useDispatch()
 
@@ -35,7 +35,7 @@ const Orders = () => {
   const deleteOrder = async (id) => {
     const deletedOrder = await dispatch(deleteOrderThunk(id))
     if (isFulfilled(deletedOrder)) {
-      dispatch(getOrdersThunk({ page, ordersPerPage }))
+      dispatch(getOrdersThunk({ page, limit }))
 
       addToast('Order has been deleted', { transitionState: 'entered', appearance: 'success' })
     } else if (isRejected(deletedOrder)) {
@@ -143,9 +143,9 @@ const Orders = () => {
           count={count}
           isLoading={isLoading}
           page={page}
-          rowsPerPage={ordersPerPage}
+          rowsPerPage={limit}
           setPage={setPage}
-          setRowsPerPage={setOrdersPerPage}
+          setRowsPerPage={setLimit}
           rowsPerPageOptions={rowsPerPageOptions}
           labelRowsPerPage={labelRowsPerPage}
         />

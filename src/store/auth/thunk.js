@@ -8,6 +8,9 @@ export const loginThunk = createAsyncThunk(
   async (data, { rejectWithValue, dispatch }) => {
     try {
       const response = await userAPI.login(data)
+      if (response.redirect) {
+        return response
+      }
       localStorage.setItem('token', response.token)
       dispatch(actionLogin(response.user))
       return response.user
