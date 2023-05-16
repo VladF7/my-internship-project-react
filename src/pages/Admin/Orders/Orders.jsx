@@ -16,15 +16,16 @@ import MyTable from '../../../components/Table/MyTable'
 const Orders = () => {
   const [page, setPage] = useState(0)
   const [limit, setLimit] = useState(10)
+  const [sort, setSort] = useState('asc')
+  const [sortBy, setSortBy] = useState('id')
   const rowsPerPageOptions = [10, 25, 50]
   const labelRowsPerPage = 'Orders per page'
-
   const { orders, count, isLoading } = useSelector((state) => state.orders)
   const currency = 'USD'
 
   useEffect(() => {
-    dispatch(getOrdersThunk({ page, limit }))
-  }, [page, limit])
+    dispatch(getOrdersThunk({ page, limit, sort, sortBy }))
+  }, [page, limit, sort, sortBy])
 
   const dispatch = useDispatch()
 
@@ -35,7 +36,7 @@ const Orders = () => {
   const deleteOrder = async (id) => {
     const deletedOrder = await dispatch(deleteOrderThunk(id))
     if (isFulfilled(deletedOrder)) {
-      dispatch(getOrdersThunk({ page, limit }))
+      dispatch(getOrdersThunk({ page, limit, sort, sortBy }))
 
       addToast('Order has been deleted', { transitionState: 'entered', appearance: 'success' })
     } else if (isRejected(deletedOrder)) {
@@ -110,10 +111,10 @@ const Orders = () => {
     { id: 'masterName', label: 'Master name', width: '10%', align: 'center' },
     { id: 'city', label: 'City', width: '8.5%', align: 'center' },
     { id: 'startTime', label: 'Start time', width: '10%', align: 'center' },
-    { id: 'endTime', label: 'End time', width: '10%', align: 'center' },
+    { id: 'endTime', label: 'End time', width: '9.5%', align: 'center' },
     { id: 'price', label: `Price, ${currency}`, width: '8%', align: 'center' },
     { id: 'status', label: 'Status', width: '8%', align: 'center' },
-    { id: 'actions', label: 'Actions', width: '5%', align: 'center' }
+    { id: 'actions', label: 'Actions', width: '5%', align: 'center', disableSort: true }
   ]
   const rows = orders.map((order) =>
     createData(
@@ -148,6 +149,10 @@ const Orders = () => {
           setRowsPerPage={setLimit}
           rowsPerPageOptions={rowsPerPageOptions}
           labelRowsPerPage={labelRowsPerPage}
+          order={sort}
+          orderBy={sortBy}
+          setOrder={setSort}
+          setOrderBy={setSortBy}
         />
       </div>
     </div>

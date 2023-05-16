@@ -23,16 +23,17 @@ import { CircularProgress } from '@mui/material'
 const Masters = () => {
   const [page, setPage] = useState(0)
   const [limit, setLimit] = useState(10)
+  const [sort, setSort] = useState('asc')
+  const [sortBy, setSortBy] = useState('id')
   const rowsPerPageOptions = [10, 25, 50]
   const labelRowsPerPage = 'Masters per page'
 
   const { masters, count, isLoading, inProcess } = useSelector((state) => state.masters)
-
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(getMastersThunk({ page, limit }))
-  }, [page, limit])
+    dispatch(getMastersThunk({ page, limit, sort, sortBy }))
+  }, [page, limit, sort, sortBy])
 
   const navigate = useNavigate()
 
@@ -63,7 +64,7 @@ const Masters = () => {
   const deleteMaster = async (id) => {
     const deletedMaster = await dispatch(deleteMasterThunk(id))
     if (isFulfilled(deletedMaster)) {
-      dispatch(getMastersThunk({ page, limit }))
+      dispatch(getMastersThunk({ page, limit, sort, sortBy }))
 
       addToast('Master has been deleted', {
         transitionState: 'entered',
@@ -82,7 +83,7 @@ const Masters = () => {
       id,
       name,
       email,
-      rating: rating || '0.0',
+      rating: rating || '-',
       cities: cities.map((city, index, array) => {
         return index === array.length - 1 ? city.name : city.name + ', '
       }),
@@ -131,10 +132,10 @@ const Masters = () => {
     { id: 'name', label: 'Name', width: '12.5%', align: 'center' },
     { id: 'email', label: 'Email', width: '12.5%', align: 'center' },
     { id: 'rating', label: 'Rating', width: '12.5%', align: 'center' },
-    { id: 'cities', label: 'Cities', width: '12.5%', align: 'center' },
+    { id: 'cities', label: 'Cities', width: '12.5%', align: 'center', disableSort: true },
     { id: 'isEmailActivated', label: 'Confirm email', width: '12.5%', align: 'center' },
     { id: 'isActivated', label: 'Profile activated', width: '12.5%', align: 'center' },
-    { id: 'actions', label: 'Actions', width: '12.5%', align: 'center' }
+    { id: 'actions', label: 'Actions', width: '12.5%', align: 'center', disableSort: true }
   ]
 
   const rows = masters.map((master) =>
@@ -166,6 +167,10 @@ const Masters = () => {
           rowsPerPageOptions={rowsPerPageOptions}
           labelRowsPerPage={labelRowsPerPage}
           button={<MyLinkButton to='registration'>Add master</MyLinkButton>}
+          order={sort}
+          orderBy={sortBy}
+          setOrder={setSort}
+          setOrderBy={setSortBy}
         />
       </div>
     </div>
