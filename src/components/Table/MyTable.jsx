@@ -6,7 +6,8 @@ import {
   TableContainer,
   TableHead,
   TablePagination,
-  TableRow
+  TableRow,
+  TableSortLabel
 } from '@mui/material'
 import MySpan from '../Span/MySpan'
 import { ClockLoader } from 'react-spinners'
@@ -22,16 +23,25 @@ const MyTable = ({
   setRowsPerPage,
   rowsPerPageOptions,
   labelRowsPerPage,
-  button
+  button,
+  order,
+  orderBy,
+  setOrder,
+  setOrderBy
 }) => {
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
   }
-
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value)
     setPage(0)
   }
+  const handleRequestSort = (property) => {
+    const isAsc = orderBy === property && order === 'asc'
+    setOrder(isAsc ? 'desc' : 'asc')
+    setOrderBy(property)
+  }
+
   return (
     <Grid
       container
@@ -48,8 +58,23 @@ const MyTable = ({
           <TableHead>
             <TableRow>
               {columns.map((column) => (
-                <TableCell key={column.id} align={column.align} style={{ width: column.width }}>
-                  {column.label}
+                <TableCell
+                  key={column.id}
+                  sortDirection={orderBy === column.id ? order : false}
+                  align={column.align}
+                  style={{ width: column.width }}
+                >
+                  {column.disableSort ? (
+                    column.label
+                  ) : (
+                    <TableSortLabel
+                      active={orderBy === column.id}
+                      direction={orderBy === column.id ? order : 'asc'}
+                      onClick={() => handleRequestSort(column.id)}
+                    >
+                      {column.label}
+                    </TableSortLabel>
+                  )}
                 </TableCell>
               ))}
             </TableRow>

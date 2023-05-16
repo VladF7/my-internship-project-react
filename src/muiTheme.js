@@ -65,6 +65,27 @@ export const theme = createTheme({
           fontSize: '14px'
         }
       }
+    },
+    MuiTableSortLabel: {
+      styleOverrides: {
+        root: {
+          '&.Mui-active': {
+            color: 'lightsalmon'
+          },
+          ':hover': {
+            color: 'lightsalmon'
+          }
+        },
+        icon: {
+          color: 'lightsalmon'
+        },
+        iconDirectionAsc: {
+          fill: 'lightsalmon'
+        },
+        iconDirectionDesc: {
+          fill: 'lightsalmon'
+        }
+      }
     }
   }
 })
