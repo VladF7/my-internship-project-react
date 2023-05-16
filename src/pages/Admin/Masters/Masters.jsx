@@ -18,6 +18,7 @@ import {
 import { isFulfilled, isRejected } from '@reduxjs/toolkit'
 import DropDownMenu from '../../../components/DropDownMenu/DropDownMenu'
 import MyTable from '../../../components/Table/MyTable'
+import { CircularProgress } from '@mui/material'
 
 const Masters = () => {
   const [page, setPage] = useState(0)
@@ -25,7 +26,7 @@ const Masters = () => {
   const rowsPerPageOptions = [10, 25, 50]
   const labelRowsPerPage = 'Masters per page'
 
-  const { masters, count, isLoading } = useSelector((state) => state.masters)
+  const { masters, count, isLoading, inProcess } = useSelector((state) => state.masters)
 
   const dispatch = useDispatch()
 
@@ -82,18 +83,22 @@ const Masters = () => {
       name,
       email,
       rating: rating || '0.0',
-      cities: cities.map((city) => city.name + ', '),
+      cities: cities.map((city, index, array) => {
+        return index === array.length - 1 ? city.name : city.name + ', '
+      }),
       isEmailActivated: isEmailActivated ? 'True' : 'False',
       isActivated: isActivated ? 'True' : 'False',
       actions: (
         <DropDownMenu
           elements={[
             {
-              iconType: <GiConfirmed color='green' />,
+              iconType: (inProcess && (
+                <CircularProgress sx={{ color: 'green' }} size={'14px'} />
+              )) || <GiConfirmed color='green' />,
               action: () => activateMaster(id),
               label: 'Activate master',
               hidden: isActivated,
-              disabled: false
+              disabled: inProcess
             },
             {
               iconType: <FiEdit color='lightsalmon' />,

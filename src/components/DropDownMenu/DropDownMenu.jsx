@@ -47,7 +47,7 @@ const DropDownMenu = ({ elements }) => {
         {elements.map(
           (element) =>
             !element.hidden && (
-              <MenuItem key={element.label} onClick={element.action}>
+              <MenuItem disabled={element.disabled} key={element.label} onClick={element.action}>
                 <ListItemIcon>{element.iconType}</ListItemIcon>
                 <Typography variant='inherit' noWrap>
                   {element.label}
