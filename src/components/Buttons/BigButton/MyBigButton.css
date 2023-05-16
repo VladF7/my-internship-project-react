@@ -9,6 +9,8 @@
   text-transform: uppercase;
   font-size: 13px;
   cursor: pointer;
+  font-family: inherit;
+  box-shadow: 0.1em 0.1em 0.5em rgba(0, 0, 0, 0.3);
 }
 
 .backBigButton {
@@ -22,6 +24,8 @@
   text-transform: uppercase;
   font-size: 13px;
   cursor: pointer;
+  font-family: inherit;
+  box-shadow: 0.1em 0.1em 0.5em rgba(0, 0, 0, 0.3);
 }
 
 .bigButton:active {

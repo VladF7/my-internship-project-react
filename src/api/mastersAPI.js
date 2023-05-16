@@ -23,8 +23,13 @@ class MastersAPI {
     )
     return response
   }
-  async getMasters() {
-    const response = await request('/api/masters', 'GET', null, localStorage.getItem('token'))
+  async getMasters(requestData) {
+    const response = await request(
+      '/api/masters' + '?' + new URLSearchParams(requestData),
+      'GET',
+      null,
+      localStorage.getItem('token')
+    )
     return response
   }
   async getMasterById(id) {

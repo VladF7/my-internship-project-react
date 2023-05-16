@@ -7,7 +7,11 @@ const CitiesSelect = (props, ref) => {
     control: (baseStyles, state) => ({
       ...baseStyles,
       border: state.isFocused ? 0 : 0,
-      boxShadow: props.error ? '0 0 0 1.5px red' : state.isFocused ? '0 0 0 3px #4C7C54' : 0,
+      boxShadow: props.error
+        ? '0 0 0 1.5px red'
+        : state.isFocused
+        ? '0 0 0 3px #4C7C54'
+        : '0.1em 0.1em 0.5em rgba(0, 0, 0, 0.3)',
       '&:hover': {
         border: state.isFocused ? 0 : 0
       },

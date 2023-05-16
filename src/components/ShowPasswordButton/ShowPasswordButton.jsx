@@ -7,8 +7,8 @@ const ShowPasswordButton = ({ value, setValue, ...props }) => {
   }
   return (
     <button {...props} className='showPasswordButton' value={value} onClick={clickHandler}>
-      {(value && <MdOutlineVisibility size={'1.3em'} />) ||
-        (!value && <MdOutlineVisibilityOff size={'1.3em'} />)}
+      {(!value && <MdOutlineVisibility size={'1.3em'} />) ||
+        (value && <MdOutlineVisibilityOff size={'1.3em'} />)}
     </button>
   )
 }

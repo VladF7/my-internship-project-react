@@ -40,6 +40,8 @@ import { ToastProvider } from 'react-toast-notifications'
 import SuccessEmailConfirmPage from './pages/User/SuccessEmailConfirm/SuccessEmailConfirmPage'
 import AddCity from './pages/Admin/Cities/AddCity/AddCity'
 import { checkAuthThunk } from './store/auth/thunk'
+import { ThemeProvider } from '@emotion/react'
+import { theme } from './muiTheme'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -126,7 +128,9 @@ const App = () => {
         placement={'bottom-right'}
         transitionDuration={200}
       >
-        <RouterProvider router={router} />
+        <ThemeProvider theme={theme}>
+          <RouterProvider router={router} />
+        </ThemeProvider>
       </ToastProvider>
     </div>
   )

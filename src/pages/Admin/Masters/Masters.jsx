@@ -1,39 +1,48 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import mastersAPI from '../../../api/mastersAPI'
 import MyLinkButton from '../../../components/Buttons/BigButton/MyLinkButton'
-import MySpan from '../../../components/Span/MySpan'
 import './Masters.css'
 import AdminNavBar from '../../../components/NavBar/AdminNavBar/AdminNavBar'
 import { useToasts } from 'react-toast-notifications'
-import ThreeDotsMenu from '../../../components/ThreeDotsMenu/ThreeDotsMenu'
 import { GiConfirmed } from 'react-icons/gi'
 import { RiDeleteBin5Line } from 'react-icons/ri'
 import { MdLockReset } from 'react-icons/md'
 import { FiEdit } from 'react-icons/fi'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { deleteMasterThunk, getMastersThunk } from '../../../store/masters/thunk'
+import {
+  activateMasterThunk,
+  deleteMasterThunk,
+  getMastersThunk
+} from '../../../store/masters/thunk'
 import { isFulfilled, isRejected } from '@reduxjs/toolkit'
+import DropDownMenu from '../../../components/DropDownMenu/DropDownMenu'
+import MyTable from '../../../components/Table/MyTable'
 
 const Masters = () => {
-  const { isLoading, masters } = useSelector((state) => state.masters)
+  const [page, setPage] = useState(0)
+  const [limit, setLimit] = useState(10)
+  const rowsPerPageOptions = [10, 25, 50]
+  const labelRowsPerPage = 'Masters per page'
+
+  const { masters, count, isLoading } = useSelector((state) => state.masters)
 
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(getMastersThunk())
-  }, [])
+    dispatch(getMastersThunk({ page, limit }))
+  }, [page, limit])
 
   const navigate = useNavigate()
 
   const { addToast } = useToasts()
 
   const activateMaster = async (id) => {
-    const activateMaster = await mastersAPI.activateMaster(id)
-    if (!activateMaster) {
-      addToast('Master cannot be activated', { transitionState: 'entered', appearance: 'error' })
-    } else {
+    const activateMaster = await dispatch(activateMasterThunk(id))
+    if (isFulfilled(activateMaster)) {
       addToast('Master has been activated', { transitionState: 'entered', appearance: 'success' })
+    } else if (isRejected(activateMaster)) {
+      addToast('Master cannot be activated', { transitionState: 'entered', appearance: 'error' })
     }
   }
   const resetPassword = async (id) => {
@@ -53,6 +62,8 @@ const Masters = () => {
   const deleteMaster = async (id) => {
     const deletedMaster = await dispatch(deleteMasterThunk(id))
     if (isFulfilled(deletedMaster)) {
+      dispatch(getMastersThunk({ page, limit }))
+
       addToast('Master has been deleted', {
         transitionState: 'entered',
         appearance: 'success'
@@ -65,78 +76,92 @@ const Masters = () => {
     }
   }
 
+  const createData = (id, name, email, rating, cities, isEmailActivated, isActivated) => {
+    return {
+      id,
+      name,
+      email,
+      rating: rating || '0.0',
+      cities: cities.map((city) => city.name + ', '),
+      isEmailActivated: isEmailActivated ? 'True' : 'False',
+      isActivated: isActivated ? 'True' : 'False',
+      actions: (
+        <DropDownMenu
+          elements={[
+            {
+              iconType: <GiConfirmed color='green' />,
+              action: () => activateMaster(id),
+              label: 'Activate master',
+              hidden: isActivated,
+              disabled: false
+            },
+            {
+              iconType: <FiEdit color='lightsalmon' />,
+              action: () => goToEdit(id),
+              label: 'Edit master',
+              hidden: false,
+              disabled: false
+            },
+            {
+              iconType: <MdLockReset color='lightsalmon' />,
+              action: () => resetPassword(id),
+              label: 'Reset password',
+              hidden: false,
+              disabled: false
+            },
+            {
+              iconType: <RiDeleteBin5Line color='red' />,
+              action: () => deleteMaster(id),
+              label: 'Delete',
+              hidden: false,
+              disabled: false
+            }
+          ]}
+        />
+      )
+    }
+  }
+  const columns = [
+    { id: 'id', label: 'Master ID', width: '12.5%', align: 'center' },
+    { id: 'name', label: 'Name', width: '12.5%', align: 'center' },
+    { id: 'email', label: 'Email', width: '12.5%', align: 'center' },
+    { id: 'rating', label: 'Rating', width: '12.5%', align: 'center' },
+    { id: 'cities', label: 'Cities', width: '12.5%', align: 'center' },
+    { id: 'isEmailActivated', label: 'Confirm email', width: '12.5%', align: 'center' },
+    { id: 'isActivated', label: 'Profile activated', width: '12.5%', align: 'center' },
+    { id: 'actions', label: 'Actions', width: '12.5%', align: 'center' }
+  ]
+
+  const rows = masters.map((master) =>
+    createData(
+      master.id,
+      master.name,
+      master.user.email,
+      master.rating,
+      master.cities,
+      master.user.isEmailActivated,
+      master.isActivated
+    )
+  )
   return (
     <div className='adminPage'>
       <div className={'navBar'}>
         <AdminNavBar />
       </div>
       <div className='adminItem'>
-        {isLoading ? (
-          <MySpan>The list of masters is loading...</MySpan>
-        ) : (
-          <div className='masters'>
-            <ul className='list'>
-              {!masters.length ? (
-                <MySpan>The list of masters is empty</MySpan>
-              ) : (
-                masters.map((master) => {
-                  return (
-                    <li id={master.id} key={master.id} className='listItem'>
-                      <div className='itemInfo'>
-                        <MySpan>Name: {master.name},</MySpan>
-                        <MySpan>Rating: {master.rating ? master.rating : '0.0'},</MySpan>
-                        <MySpan>Cities: {master.cities.map((city) => city.name + ', ')}</MySpan>
-                        <MySpan>Email: {master.user.email},</MySpan>
-                        <MySpan>Email confirmed: {`${master.user.isEmailActivated}`},</MySpan>
-                        <MySpan>Profile activated: {`${master.isActivated}`}.</MySpan>
-                      </div>
-
-                      <div className='buttons'>
-                        <ThreeDotsMenu
-                          elements={[
-                            {
-                              iconType: <GiConfirmed color='green' />,
-                              action: () => activateMaster(master.id),
-                              label: 'Activate master',
-                              hidden: master.isActivated,
-                              disabled: false
-                            },
-                            {
-                              iconType: <FiEdit color='lightsalmon' />,
-                              action: () => goToEdit(master.id),
-                              label: 'Edit master',
-                              hidden: false,
-                              disabled: false
-                            },
-                            {
-                              iconType: <MdLockReset color='lightsalmon' />,
-                              action: () => resetPassword(master.id),
-                              label: 'Reset password',
-                              hidden: false,
-                              disabled: false
-                            },
-                            {
-                              iconType: <RiDeleteBin5Line color='red' />,
-                              action: () => deleteMaster(master.id),
-                              label: 'Delete',
-                              hidden: false,
-                              disabled: false
-                            }
-                          ]}
-                        />
-                      </div>
-                    </li>
-                  )
-                })
-              )}
-            </ul>
-          </div>
-        )}
-        {!isLoading && (
-          <div className='addButtonWrapper form'>
-            <MyLinkButton to='registration'>Add master</MyLinkButton>
-          </div>
-        )}
+        <MyTable
+          columns={columns}
+          rows={rows}
+          count={count}
+          isLoading={isLoading}
+          page={page}
+          rowsPerPage={limit}
+          setPage={setPage}
+          setRowsPerPage={setLimit}
+          rowsPerPageOptions={rowsPerPageOptions}
+          labelRowsPerPage={labelRowsPerPage}
+          button={<MyLinkButton to='registration'>Add master</MyLinkButton>}
+        />
       </div>
     </div>
   )
