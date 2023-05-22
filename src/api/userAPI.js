@@ -51,11 +51,7 @@ class UserAPI {
     const response = await request(`/api/users/` + '?' + new URLSearchParams(requestData), 'GET')
     return response
   }
-  async createUserCustomer(email, name) {
-    const requestData = {
-      email,
-      name
-    }
+  async createUserCustomer(requestData) {
     const response = await request(`/api/createUser`, 'POST', requestData)
     return response
   }

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { loginThunk, signUpThunk } from './thunk'
+import { createUserCustomerThunk, loginThunk, signUpThunk } from './thunk'
 
 const initialState = {
   currentUser: {},
@@ -31,6 +31,17 @@ export const loginSlice = createSlice({
       state.inProcess = false
     })
     builder.addCase(signUpThunk.rejected, (state, action) => {
+      state.inProcess = false
+      state.error = action.payload.message
+    })
+    builder.addCase(createUserCustomerThunk.pending, (state) => {
+      state.inProcess = true
+      state.error = null
+    })
+    builder.addCase(createUserCustomerThunk.fulfilled, (state) => {
+      state.inProcess = false
+    })
+    builder.addCase(createUserCustomerThunk.rejected, (state, action) => {
       state.inProcess = false
       state.error = action.payload.message
     })
