@@ -12,20 +12,36 @@ import { deleteOrderThunk, getOrdersThunk } from '../../../store/orders/thunk'
 import { isFulfilled, isRejected } from '@reduxjs/toolkit'
 import DropDownMenu from '../../../components/DropDownMenu/DropDownMenu'
 import MyTable from '../../../components/Table/MyTable'
+import OrdersFiltersForm from '../../../components/ReactHookForms/Filters/OrdersFiltersForm'
 
 const Orders = () => {
   const [page, setPage] = useState(0)
   const [limit, setLimit] = useState(10)
   const [sort, setSort] = useState('asc')
   const [sortBy, setSortBy] = useState('id')
+  const [filtersFields, setFiltersFields] = useState({
+    cities: [],
+    masters: [],
+    status: '',
+    minMaxDate: [],
+    minMaxPrice: []
+  })
+
   const rowsPerPageOptions = [10, 25, 50]
   const labelRowsPerPage = 'Orders per page'
-  const { orders, count, isLoading } = useSelector((state) => state.orders)
   const currency = 'USD'
 
+  const { orders, count, isLoading } = useSelector((state) => state.orders)
+
   useEffect(() => {
-    dispatch(getOrdersThunk({ page, limit, sort, sortBy }))
-  }, [page, limit, sort, sortBy])
+    dispatch(getOrdersThunk({ page, limit, sort, sortBy, filtersFields }))
+  }, [page, limit, sort, sortBy, filtersFields])
+
+  useEffect(() => {
+    if (count <= limit) {
+      setPage(0)
+    }
+  }, [count])
 
   const dispatch = useDispatch()
 
@@ -33,10 +49,14 @@ const Orders = () => {
 
   const { addToast } = useToasts()
 
+  const applyFilters = (filtersFields) => {
+    setFiltersFields(filtersFields)
+  }
+
   const deleteOrder = async (id) => {
     const deletedOrder = await dispatch(deleteOrderThunk(id))
     if (isFulfilled(deletedOrder)) {
-      dispatch(getOrdersThunk({ page, limit, sort, sortBy }))
+      dispatch(getOrdersThunk({ page, limit, sort, sortBy, filtersFields }))
 
       addToast('Order has been deleted', { transitionState: 'entered', appearance: 'success' })
     } else if (isRejected(deletedOrder)) {
@@ -143,7 +163,7 @@ const Orders = () => {
           rows={rows}
           count={count}
           isLoading={isLoading}
-          page={page}
+          page={count <= limit ? 0 : page}
           rowsPerPage={limit}
           setPage={setPage}
           setRowsPerPage={setLimit}
@@ -153,6 +173,7 @@ const Orders = () => {
           orderBy={sortBy}
           setOrder={setSort}
           setOrderBy={setSortBy}
+          filtersForm={<OrdersFiltersForm filtersFields={filtersFields} onSubmit={applyFilters} />}
         />
       </div>
     </div>

@@ -7,8 +7,11 @@ class OrdersAPI {
     return response
   }
   async getOrders(requestData) {
+    const queryParams = {
+      filters: encodeURIComponent(JSON.stringify(requestData))
+    }
     const response = await request(
-      '/api/orders' + '?' + new URLSearchParams(requestData),
+      '/api/orders' + '?' + new URLSearchParams(queryParams),
       'GET',
       null,
       localStorage.getItem('token')
@@ -81,6 +84,24 @@ class OrdersAPI {
   async getOrdersForCustomerById(customerId) {
     const response = await request(
       `/api/orders/customer/${customerId}`,
+      'GET',
+      null,
+      localStorage.getItem('token')
+    )
+    return response
+  }
+  async getMinMaxOrdersDate() {
+    const response = await request(
+      `/api/orders/minMaxDate`,
+      'GET',
+      null,
+      localStorage.getItem('token')
+    )
+    return response
+  }
+  async getMinMaxOrdersPrice() {
+    const response = await request(
+      `/api/orders/minMaxPrice`,
       'GET',
       null,
       localStorage.getItem('token')

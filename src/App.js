@@ -42,6 +42,8 @@ import AddCity from './pages/Admin/Cities/AddCity/AddCity'
 import { checkAuthThunk } from './store/auth/thunk'
 import { ThemeProvider } from '@emotion/react'
 import { theme } from './muiTheme'
+import { LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -129,7 +131,9 @@ const App = () => {
         transitionDuration={200}
       >
         <ThemeProvider theme={theme}>
-          <RouterProvider router={router} />
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <RouterProvider router={router} />
+          </LocalizationProvider>
         </ThemeProvider>
       </ToastProvider>
     </div>
