@@ -72,6 +72,15 @@ class MastersAPI {
     )
     return response
   }
+  async getMastersAll() {
+    const response = await request(
+      '/api/masters/list/all',
+      'GET',
+      null,
+      localStorage.getItem('token')
+    )
+    return response
+  }
 }
 
 const mastersAPI = new MastersAPI()

@@ -1,6 +1,13 @@
 import { createTheme } from '@mui/material'
-
 export const theme = createTheme({
+  typography: {
+    fontFamily: 'inherit'
+  },
+  palette: {
+    primary: {
+      main: '#ffa07a'
+    }
+  },
   components: {
     MuiTableContainer: {
       styleOverrides: {
@@ -16,8 +23,6 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           color: 'rgba(255, 255, 255, 0.7)',
-          fontFamily: 'inherit',
-          fontSize: '14px',
           borderColor: 'lightsalmon'
         },
         stickyHeader: {
@@ -84,6 +89,54 @@ export const theme = createTheme({
         },
         iconDirectionDesc: {
           fill: 'lightsalmon'
+        }
+      }
+    },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          color: 'rgba(255, 255, 255, 0.7)'
+        }
+      }
+    },
+    MuiIconButton: {
+      styleOverrides: {
+        root: {
+          color: 'lightsalmon'
+        }
+      }
+    },
+    MuiSlider: {
+      styleOverrides: {
+        thumb: {
+          backgroundColor: 'rgba(195,195,195)'
+        }
+      }
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          color: 'rgba(255, 255, 255, 0.9)',
+          '&:hover fieldset': {
+            border: '1px solid lightsalmon!important'
+          }
+        },
+        notchedOutline: {
+          borderColor: 'rgba(255, 255, 255, 0.3)'
+        }
+      }
+    },
+    MuiChip: {
+      styleOverrides: {
+        root: {
+          color: 'rgba(255, 255, 255, 0.9)'
+        }
+      }
+    },
+    MuiSelect: {
+      styleOverrides: {
+        icon: {
+          color: 'lightsalmon'
         }
       }
     }
