@@ -39,3 +39,14 @@ export const signUpThunk = createAsyncThunk('auth/signUp', async (data, { reject
     return rejectWithValue(error)
   }
 })
+export const createUserCustomerThunk = createAsyncThunk(
+  'auth/createUserCustomer',
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await userAPI.createUserCustomer(data)
+      return response
+    } catch (error) {
+      return rejectWithValue(error)
+    }
+  }
+)
