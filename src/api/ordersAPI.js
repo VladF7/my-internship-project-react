@@ -90,18 +90,18 @@ class OrdersAPI {
     )
     return response
   }
-  async getOrdersDateRange() {
+  async getMinMaxOrdersDate() {
     const response = await request(
-      `/api/orders/date/range`,
+      `/api/orders/minMaxDate`,
       'GET',
       null,
       localStorage.getItem('token')
     )
     return response
   }
-  async getOrdersPriceRange() {
+  async getMinMaxOrdersPrice() {
     const response = await request(
-      `/api/orders/price/range`,
+      `/api/orders/minMaxPrice`,
       'GET',
       null,
       localStorage.getItem('token')

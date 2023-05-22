@@ -23,8 +23,8 @@ const Orders = () => {
     cities: [],
     masters: [],
     status: '',
-    dateRange: [],
-    priceRange: []
+    minMaxDate: [],
+    minMaxPrice: []
   })
 
   const rowsPerPageOptions = [10, 25, 50]

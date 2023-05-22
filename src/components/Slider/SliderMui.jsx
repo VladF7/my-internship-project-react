@@ -46,14 +46,14 @@ const SliderMui = ({ value, onChange, options }) => {
   }
 
   const handleBlurInputOne = () => {
-    if (inputValue[0] < minValue || inputValue[0] === '') {
-      onChange([minValue, inputValue[1]])
-      setInputValue([minValue, inputValue[1]])
-      return
-    }
-    if (inputValue[0] > inputValue[1]) {
+    if (inputValue[0] > inputValue[1] || inputValue[0] === '') {
       onChange([value[0], inputValue[1]])
       setInputValue([value[0], inputValue[1]])
+      return
+    }
+    if (inputValue[0] < minValue) {
+      onChange([minValue, inputValue[1]])
+      setInputValue([minValue, inputValue[1]])
       return
     }
     onChange([Math.trunc(inputValue[0]), inputValue[1]])

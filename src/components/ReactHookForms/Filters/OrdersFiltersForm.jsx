@@ -3,7 +3,7 @@ import citiesAPI from '../../../api/citiesAPI'
 import statusesAPI from '../../../api/statuses.API'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button, FormControl, Grid } from '@mui/material'
 import mastersAPI from '../../../api/mastersAPI'
 import MultipleSelectMui from '../../Select/MultipleSelectMui'
@@ -17,8 +17,8 @@ const ordersFilterSchema = z.object({
   masters: z.array(z.number().int().positive()).optional(),
   cities: z.array(z.number().int().positive()).optional(),
   status: z.string().optional(),
-  dateRange: z.array(z.coerce.date().nullable()).optional(),
-  priceRange: z.array(z.number().int().positive())
+  minMaxDate: z.array(z.coerce.date().nullable()).optional(),
+  minMaxPrice: z.array(z.number().int().positive())
 })
 const OrdersFiltersForm = ({ onSubmit }) => {
   const {
@@ -33,11 +33,11 @@ const OrdersFiltersForm = ({ onSubmit }) => {
 
   const [isLoading, setIsLoading] = useState(true)
 
-  const [cities, setCities] = useState([])
-  const [masters, setMasters] = useState([])
-  const [statuses, setStatuses] = useState([])
-  const [dateRange, setDateRange] = useState([])
-  const [priceRange, setPriceRange] = useState([])
+  const [citiesOptions, setCitiesOptions] = useState([])
+  const [mastersOptions, setMastersOptions] = useState([])
+  const [statusesOptions, setStatusesOptions] = useState([])
+  const [minMaxDateOptions, setMinMaxDateOptions] = useState([])
+  const [minMaxPriceOptions, setMinMaxPriceOptions] = useState([])
 
   const [disableApplyFiltersButton, setDisableApplyFiltersButton] = useState(true)
   const [disableResetFiltersButton, setDisableResetFiltersButton] = useState(true)
@@ -47,16 +47,31 @@ const OrdersFiltersForm = ({ onSubmit }) => {
       citiesAPI.getCities(),
       mastersAPI.getMastersAll(),
       statusesAPI.getStatuses(),
-      ordersAPI.getOrdersDateRange(),
-      ordersAPI.getOrdersPriceRange()
+      ordersAPI.getMinMaxOrdersDate(),
+      ordersAPI.getMinMaxOrdersPrice()
     ])
       .then((result) => {
-        const [cities, masters, statuses, dateRange, priceRange] = result
-        setCities(cities)
-        setMasters(masters)
-        setStatuses(statuses)
-        setDateRange(dateRange)
-        setPriceRange(priceRange)
+        const [cities, masters, statuses, minMaxDate, minMaxPrice] = result
+        setCitiesOptions(
+          cities.map((city) => {
+            return { value: city.id, label: city.name }
+          })
+        )
+        setMastersOptions(
+          masters.map((master) => {
+            return { value: master.id, label: master.name }
+          })
+        )
+        setStatusesOptions(
+          statuses.map((status) => {
+            return { value: status, label: status }
+          })
+        )
+        setMinMaxDateOptions(minMaxDate.map((date) => new Date(date)))
+        setMinMaxPriceOptions([
+          Math.floor(formatValueToDecimal(minMaxPrice[0])),
+          Math.ceil(formatValueToDecimal(minMaxPrice[1]))
+        ])
       })
       .then(() => setIsLoading(false))
   }, [])
@@ -64,8 +79,8 @@ const OrdersFiltersForm = ({ onSubmit }) => {
   const citiesField = useWatch({ control, name: 'cities' })
   const mastersField = useWatch({ control, name: 'masters' })
   const statusField = useWatch({ control, name: 'status' })
-  const dateRangeField = useWatch({ control, name: 'dateRange' })
-  const priceRangeField = useWatch({ control, name: 'priceRange' })
+  const minMaxDateField = useWatch({ control, name: 'minMaxDate' })
+  const minMaxPriceField = useWatch({ control, name: 'minMaxPrice' })
 
   useEffect(() => {
     resetFilters()
@@ -77,58 +92,26 @@ const OrdersFiltersForm = ({ onSubmit }) => {
       !citiesField.length &&
       !mastersField.length &&
       !statusField &&
-      !dateRangeField.filter((date) => date !== null).length &&
-      priceRangeOptions.toString() === priceRangeField.toString()
+      !minMaxDateField.filter((date) => date !== null).length &&
+      minMaxPriceOptions.toString() === minMaxPriceField.toString()
     ) {
       setDisableApplyFiltersButton(true)
     } else {
       setDisableApplyFiltersButton(false)
     }
-  }, [citiesField, mastersField, statusField, dateRangeField, priceRangeField])
-
-  const citiesOptions = useMemo(() => {
-    if (isLoading) return []
-    return cities.map((city) => {
-      return { value: city.id, label: city.name }
-    })
-  }, [isLoading])
-
-  const mastersOptions = useMemo(() => {
-    if (isLoading) return []
-    return masters.map((master) => {
-      return { value: master.id, label: master.name }
-    })
-  }, [isLoading])
-
-  const statusOptions = useMemo(() => {
-    if (isLoading) return []
-    return statuses.map((status) => {
-      return { value: status, label: status }
-    })
-  }, [isLoading])
-
-  const dateRangesOptions = useMemo(() => {
-    if (isLoading) return []
-    return dateRange.map((date) => new Date(date))
-  }, [isLoading])
-
-  const priceRangeOptions = useMemo(() => {
-    if (isLoading) return []
-    const [minPrice, maxPrice] = priceRange.map((price) => formatValueToDecimal(price))
-    return [Math.floor(minPrice), Math.ceil(maxPrice)]
-  }, [isLoading])
+  }, [citiesField, mastersField, statusField, minMaxDateField, minMaxPriceField])
 
   const resetFilters = () => {
     reset({
       cities: [],
       masters: [],
       status: '',
-      dateRange: [null, null],
-      priceRange: priceRangeOptions
+      minMaxDate: [null, null],
+      minMaxPrice: minMaxPriceOptions
     })
   }
   const submit = (formData) => {
-    formData.priceRange = formData.priceRange.map((price) => formatValueToInteger(price))
+    formData.minMaxPrice = formData.minMaxPrice.map((price) => formatValueToInteger(price))
 
     setDisableApplyFiltersButton(true)
 
@@ -138,8 +121,8 @@ const OrdersFiltersForm = ({ onSubmit }) => {
       !citiesField.length &&
       !mastersField.length &&
       !statusField &&
-      !dateRangeField.filter((date) => date !== null).length &&
-      priceRangeOptions.toString() === priceRangeField.toString()
+      !minMaxDateField.filter((date) => date !== null).length &&
+      minMaxPriceOptions.toString() === minMaxPriceField.toString()
     ) {
       setDisableResetFiltersButton(true)
     } else {
@@ -165,7 +148,7 @@ const OrdersFiltersForm = ({ onSubmit }) => {
                     <MultipleSelectMui
                       value={value}
                       onChange={onChange}
-                      label={'Cities'}
+                      label={'Choose cities'}
                       options={citiesOptions}
                       error={!!errors?.cities}
                     />
@@ -180,8 +163,8 @@ const OrdersFiltersForm = ({ onSubmit }) => {
                     <SelectMui
                       value={value}
                       onChange={onChange}
-                      label={'Status'}
-                      options={statusOptions}
+                      label={'Choose status'}
+                      options={statusesOptions}
                       error={!!errors?.status}
                     />
                   )}
@@ -190,19 +173,19 @@ const OrdersFiltersForm = ({ onSubmit }) => {
             </Grid>
             <Grid item>
               <Controller
-                name='dateRange'
+                name='minMaxDate'
                 control={control}
                 render={({ field: { value, onChange } }) => (
-                  <RangeDatePicker value={value} options={dateRangesOptions} onChange={onChange} />
+                  <RangeDatePicker value={value} options={minMaxDateOptions} onChange={onChange} />
                 )}
               />
             </Grid>
             <Grid item>
               <Controller
-                name='priceRange'
+                name='minMaxPrice'
                 control={control}
                 render={({ field: { value, onChange } }) => (
-                  <SliderMui value={value} options={priceRangeOptions} onChange={onChange} />
+                  <SliderMui value={value} options={minMaxPriceOptions} onChange={onChange} />
                 )}
               />
             </Grid>
@@ -215,7 +198,7 @@ const OrdersFiltersForm = ({ onSubmit }) => {
                 <MultipleSelectMui
                   value={value}
                   onChange={onChange}
-                  label={'Masters'}
+                  label={'Choose masters'}
                   options={mastersOptions}
                   error={!!errors?.masters}
                 />
