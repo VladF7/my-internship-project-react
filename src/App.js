@@ -44,12 +44,14 @@ import { ThemeProvider } from '@emotion/react'
 import { theme } from './muiTheme'
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
+import { setClientTimeZone } from './store/timezone/slice'
 
 const App = () => {
   const dispatch = useDispatch()
   const { isLoading } = useSelector((state) => state.preloader)
   useEffect(() => {
     dispatch(checkAuthThunk())
+    dispatch(setClientTimeZone())
   }, [])
 
   const router = createBrowserRouter(

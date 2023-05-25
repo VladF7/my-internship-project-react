@@ -6,6 +6,7 @@ import citiesReducer from './cities/slice'
 import customersReducer from './customers/slice'
 import createOrderReducer from './createOrder/slice'
 import preloaderReducer from './preloader/slice'
+import timezoneReducer from './timezone/slice'
 
 export const store = configureStore({
   reducer: {
@@ -15,6 +16,7 @@ export const store = configureStore({
     masters: mastersReducer,
     cities: citiesReducer,
     customers: customersReducer,
-    createOrder: createOrderReducer
+    createOrder: createOrderReducer,
+    timezone: timezoneReducer
   }
 })
