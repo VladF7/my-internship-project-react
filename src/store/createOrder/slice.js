@@ -12,7 +12,8 @@ const initialState = {
     priceForHour: '',
     timeToFix: '',
     endTime: '',
-    masterId: ''
+    masterId: '',
+    images: []
   },
   error: null,
   isLoading: false,

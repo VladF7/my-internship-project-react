@@ -102,14 +102,14 @@ const Masters = () => {
               disabled: inProcess
             },
             {
-              iconType: <FiEdit color='lightsalmon' />,
+              iconType: <FiEdit color='rgba(35, 43, 85)' />,
               action: () => goToEdit(id),
               label: 'Edit master',
               hidden: false,
               disabled: false
             },
             {
-              iconType: <MdLockReset color='lightsalmon' />,
+              iconType: <MdLockReset color='rgba(35, 43, 85)' />,
               action: () => resetPassword(id),
               label: 'Reset password',
               hidden: false,

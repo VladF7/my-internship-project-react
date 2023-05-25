@@ -12,6 +12,7 @@ import { createOrderStepTwoThunk } from '../../../store/createOrder/thunk'
 import { isFulfilled, isRejected } from '@reduxjs/toolkit'
 import { useToasts } from 'react-toast-notifications'
 import { PulseLoader } from 'react-spinners'
+import ImageListMui from '../../../components/ImageList/ImageListMui'
 
 const ConfirmOrder = () => {
   const [isLoading, setIsLoading] = useState(true)
@@ -86,6 +87,15 @@ const ConfirmOrder = () => {
               <MySpan>
                 Total price: {formatValueToDecimal(data.price)} {currency}
               </MySpan>
+              <MySpan>Images:</MySpan>
+              <ImageListMui
+                images={data.images}
+                imageHeight={'100px'}
+                imageWidtht={'100%'}
+                imageBorderRadius={'5px'}
+                columns={5}
+                emptyImagesList={<MySpan>Order have not images</MySpan>}
+              />
             </div>
           )}
         </div>
