@@ -31,10 +31,11 @@ const Orders = () => {
   const labelRowsPerPage = 'Orders per page'
   const currency = 'USD'
 
+  const { timezoneOffset } = useSelector((state) => state.timezone)
   const { orders, count, isLoading } = useSelector((state) => state.orders)
 
   useEffect(() => {
-    dispatch(getOrdersThunk({ page, limit, sort, sortBy, filtersFields }))
+    dispatch(getOrdersThunk({ page, limit, sort, sortBy, filtersFields, timezoneOffset }))
   }, [page, limit, sort, sortBy, filtersFields])
 
   useEffect(() => {
@@ -56,7 +57,7 @@ const Orders = () => {
   const deleteOrder = async (id) => {
     const deletedOrder = await dispatch(deleteOrderThunk(id))
     if (isFulfilled(deletedOrder)) {
-      dispatch(getOrdersThunk({ page, limit, sort, sortBy, filtersFields }))
+      dispatch(getOrdersThunk({ page, limit, sort, sortBy, filtersFields, timezoneOffset }))
 
       addToast('Order has been deleted', { transitionState: 'entered', appearance: 'success' })
     } else if (isRejected(deletedOrder)) {
