@@ -9,6 +9,13 @@ import clocksAPI from '../../../api/clocksAPI'
 import MyBigButton from '../../Buttons/BigButton/MyBigButton'
 import { formatValueToDecimal } from '../../../helpers'
 import { format } from 'date-fns'
+import ImageUploader from '../../ImageUploader/ImageUploader'
+import { ClockLoader } from 'react-spinners'
+import { Box } from '@mui/material'
+
+const MAX_FILE_SIZE = 1000000
+const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/png']
+const MAX_FILES_COUNT = 5
 
 const addOrderSchema = z.object({
   name: z
@@ -30,7 +37,8 @@ const addOrderSchema = z.object({
       invalid_type_error: 'Required field'
     })
     .int()
-    .positive()
+    .positive(),
+  images: z.array(z.string().nonempty()).optional()
 })
 
 const AddOrderForm = ({
@@ -66,7 +74,6 @@ const AddOrderForm = ({
       })
 
       .then(() => setIsLoading(false))
-      .then(() => sessionStorage.clear())
   }, [])
   useEffect(() => {
     reset({
@@ -74,7 +81,8 @@ const AddOrderForm = ({
       email: formFields.email,
       startTime: formFields.startTime,
       cityId: formFields.cityId,
-      clockId: formFields.clockId
+      clockId: formFields.clockId,
+      images: formFields.images
     })
   }, [])
   useEffect(() => {
@@ -116,7 +124,14 @@ const AddOrderForm = ({
     return onSubmit({ ...formData, price, priceForHour, timeToFix })
   }
 
-  if (isLoading) return <div className='formWrapper'></div>
+  if (isLoading)
+    return (
+      <Box
+        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '500px' }}
+      >
+        <ClockLoader color='lightsalmon' />
+      </Box>
+    )
 
   return (
     <form className='formWrapper' onSubmit={handleSubmit(submit)}>
@@ -194,6 +209,21 @@ const AddOrderForm = ({
         {errors?.cityId?.message && (
           <div className='formRequiredField'>{errors?.cityId?.message}</div>
         )}
+      </div>
+      <div className='fieldWrapper'>
+        <Controller
+          name='images'
+          control={control}
+          render={({ field: { value, onChange } }) => (
+            <ImageUploader
+              value={value}
+              onChange={onChange}
+              accept={ACCEPTED_IMAGE_TYPES}
+              maxSize={MAX_FILE_SIZE}
+              filesCount={MAX_FILES_COUNT}
+            />
+          )}
+        />
       </div>
 
       <label className='priceLabel' style={{ visibility: !price && 'hidden' }}>

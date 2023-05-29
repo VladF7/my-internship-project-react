@@ -20,6 +20,7 @@ const EditOrder = () => {
   const [endTime, setEndTime] = useState('')
   const [currentPrice, setCurrentPrice] = useState('')
   const [status, setStatus] = useState()
+  const [images, setImages] = useState([])
 
   const { id } = useParams()
 
@@ -34,6 +35,7 @@ const EditOrder = () => {
         setEndTime(order.endTime)
         setStatus(order.status)
         setCurrentPrice(order.price)
+        order.images ? setImages(order.images.map((image) => image.url)) : setImages(order.images)
       })
       .then(() => setIsLoadnig(false))
   }, [id])
@@ -77,7 +79,8 @@ const EditOrder = () => {
               clockId,
               masterId,
               date,
-              status
+              status,
+              images
             }}
             inProcess={inProcess}
             currentOrderInfo={{ id, endTime, currentPrice }}

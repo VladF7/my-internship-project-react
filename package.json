@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@cloudinary/react": "^1.11.2",
+    "@cloudinary/url-gen": "^1.10.0",
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
     "@hookform/resolvers": "^3.1.0",
@@ -25,6 +27,8 @@
     "react-select": "^5.7.0",
     "react-simple-star-rating": "^5.1.7",
     "react-spinners": "^0.13.8",
+    "react-swipeable-views": "^0.14.0",
+    "react-swipeable-views-utils": "^0.14.0",
     "react-toast-notifications": "^2.5.1",
     "redux": "^4.2.1",
     "redux-devtools-extension": "^2.13.9",

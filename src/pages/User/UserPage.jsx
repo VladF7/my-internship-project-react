@@ -15,23 +15,13 @@ const UserForm = () => {
     (state) => state.auth.currentUser
   )
   const { inProcess } = useSelector((state) => state.createOrder)
-  const {
-    email: orderEmail,
-    name: orderName,
-    clockId: orderClockId,
-    cityId: orderCityId,
-    startTime: orderStartTime,
-    priceForHour: orderPriceForHour,
-    timeToFix: orderTimeToFix
-  } = useSelector((state) => state.createOrder.data)
+  const { email, name, clockId, cityId, startTime, priceForHour, timeToFix, images } = useSelector(
+    (state) => state.createOrder.data
+  )
 
-  const email = currentUserEmail || orderEmail || ''
-  const name = currentUserName || orderName || ''
-  const clockId = orderClockId || ''
-  const cityId = orderCityId || ''
-  const startTime = (orderStartTime && parse(orderStartTime, 'yyyy.MM.dd, HH:mm', new Date())) || ''
-  const priceForHour = orderPriceForHour || ''
-  const timeToFix = orderTimeToFix || ''
+  const emailField = currentUserEmail ? currentUserEmail : email
+  const nameField = currentUserName ? currentUserName : name
+  const startTimeField = startTime ? parse(startTime, 'yyyy.MM.dd, HH:mm', new Date()) : ''
 
   const [submitError, setSubmitError] = useState('')
   const dispatch = useDispatch()
@@ -91,7 +81,14 @@ const UserForm = () => {
     <div className='userPage'>
       <AddOrderForm
         onSubmit={(formData) => onSubmit(formData)}
-        formFields={{ name, email, clockId, cityId, startTime }}
+        formFields={{
+          name: nameField,
+          email: emailField,
+          clockId,
+          cityId,
+          startTime: startTimeField,
+          images
+        }}
         currentPriceInfo={{ priceForHour, timeToFix }}
         submitError={submitError}
         disableEmail={!!currentUserEmail}

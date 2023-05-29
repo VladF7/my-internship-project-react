@@ -15,6 +15,9 @@ import MySelect from '../../Select/MySelect'
 import { format } from 'date-fns'
 import ordersAPI from '../../../api/ordersAPI'
 import mastersAPI from '../../../api/mastersAPI'
+import ImageListMui from '../../ImageList/ImageListMui'
+import { Grid } from '@mui/material'
+import MySpan from '../../Span/MySpan'
 
 const editOrdderSchema = z.object({
   date: z.date({
@@ -67,8 +70,10 @@ const EditOrderForm = ({ formFields, onSubmit, currentOrderInfo, inProcess, load
   const [statuses, setStatuses] = useState([])
   const [masters, setMasters] = useState([])
   const [endTime, setEndTime] = useState(currentOrderInfo.endTime)
+  const [deletedImages, setDeletedImages] = useState([])
   const id = currentOrderInfo.id
   const currentPrice = currentOrderInfo.currentPrice
+  const orderImages = formFields.images
 
   useEffect(() => {
     Promise.all([clocksAPI.getClocks(), citiesAPI.getCities(), statusesAPI.getStatuses()])
@@ -88,7 +93,8 @@ const EditOrderForm = ({ formFields, onSubmit, currentOrderInfo, inProcess, load
         clockId: formFields.clockId,
         cityId: formFields.cityId,
         masterId: formFields.masterId,
-        status: formFields.status
+        status: formFields.status,
+        images: formFields.images
       })
     }
   }, [])
@@ -96,14 +102,17 @@ const EditOrderForm = ({ formFields, onSubmit, currentOrderInfo, inProcess, load
   const clockId = useWatch({ control, name: 'clockId' })
   const cityId = useWatch({ control, name: 'cityId' })
   const date = useWatch({ control, name: 'date' })
+  const images = useWatch({ control, name: 'images' })
 
   useEffect(() => {
     if (!date && !clockId) return
     getOrderEndTime(clockId || formFields.clockId, date || formFields.date)
   }, [date, clockId])
+
   useEffect(() => {
     getFreeMastersList(id, cityId || formFields.cityId, date || formFields.date, endTime)
   }, [endTime, cityId])
+
   useEffect(() => {
     if (isLoading) return
     if (!masters.length) {
@@ -116,6 +125,11 @@ const EditOrderForm = ({ formFields, onSubmit, currentOrderInfo, inProcess, load
       setValue('masterId', '')
     }
   }, [masters])
+
+  useEffect(() => {
+    if (isLoading) return
+    setDeletedImages(orderImages.filter((image) => images.indexOf(image) === -1))
+  }, [images])
 
   const timeToFix = useMemo(() => {
     if (isLoading) return
@@ -182,7 +196,7 @@ const EditOrderForm = ({ formFields, onSubmit, currentOrderInfo, inProcess, load
 
   const submit = (formData) => {
     const startTime = format(formData.date, 'yyyy.MM.dd, HH:mm')
-    return onSubmit({ ...formData, price, priceForHour, startTime, endTime })
+    return onSubmit({ ...formData, price, priceForHour, startTime, endTime, deletedImages })
   }
 
   if (isLoading) return <div className='formWrapper'></div>
@@ -282,6 +296,29 @@ const EditOrderForm = ({ formFields, onSubmit, currentOrderInfo, inProcess, load
         {errors?.status?.message && (
           <div className='formRequiredField'>{errors?.status?.message}</div>
         )}
+      </div>
+      <div className='fieldWrapper'>
+        <label className='formLabel'>Order images</label>
+        <Controller
+          name='images'
+          control={control}
+          render={({ field: { value, onChange } }) => (
+            <ImageListMui
+              images={value}
+              setImages={onChange}
+              imageHeight={'100px'}
+              imageWidtht={'100%'}
+              imageBorderRadius={'5px'}
+              columns={5}
+              showIconButtons
+              emptyImagesList={
+                <Grid container justifyContent={'center'}>
+                  <MySpan style={{ paddingBottom: '10px' }}>{`Order don't have images`}</MySpan>
+                </Grid>
+              }
+            />
+          )}
+        />
       </div>
 
       <div className='buttonBoxWrapper'>

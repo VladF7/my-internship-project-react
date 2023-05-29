@@ -79,7 +79,7 @@ const Customers = () => {
                         <DropDownMenu
                           elements={[
                             {
-                              iconType: <MdLockReset color='lightsalmon' />,
+                              iconType: <MdLockReset color='rgba(35, 43, 85)' />,
                               action: () => resetPassword(customer.id),
                               label: 'Reset password',
                               hidden: customer.user ? false : true,

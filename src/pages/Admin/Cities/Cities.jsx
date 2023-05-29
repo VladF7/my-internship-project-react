@@ -73,7 +73,7 @@ const Cities = () => {
                         <DropDownMenu
                           elements={[
                             {
-                              iconType: <FiEdit color='lightsalmon' />,
+                              iconType: <FiEdit color='rgba(35, 43, 85)' />,
                               action: () => goToEdit(city.id),
                               label: 'Edit city',
                               hidden: false,

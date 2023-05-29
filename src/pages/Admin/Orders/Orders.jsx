@@ -13,6 +13,21 @@ import { isFulfilled, isRejected } from '@reduxjs/toolkit'
 import DropDownMenu from '../../../components/DropDownMenu/DropDownMenu'
 import MyTable from '../../../components/Table/MyTable'
 import OrdersFiltersForm from '../../../components/ReactHookForms/Filters/OrdersFiltersForm'
+import { Box, Modal } from '@mui/material'
+import ImageSlider from '../../../components/ImagesSlider/ImageSlider'
+import { MdOutlinePhotoSizeSelectActual } from 'react-icons/md'
+
+const modalStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'rgba(248,248,255, 0.65)',
+  boxShadow: 24,
+  borderRadius: '5px',
+  p: '15px'
+}
 
 const Orders = () => {
   const [page, setPage] = useState(0)
@@ -26,6 +41,8 @@ const Orders = () => {
     minMaxDate: [],
     minMaxPrice: []
   })
+  const [open, setOpen] = useState(false)
+  const [sliderImages, setSliderImages] = useState([])
 
   const rowsPerPageOptions = [10, 25, 50]
   const labelRowsPerPage = 'Orders per page'
@@ -76,6 +93,14 @@ const Orders = () => {
     }
   }
 
+  const handleOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
+
+  const showImageSlider = (images) => {
+    setSliderImages(images)
+    handleOpen()
+  }
+
   const createData = (
     id,
     name,
@@ -87,7 +112,8 @@ const Orders = () => {
     startTime,
     endTime,
     price,
-    status
+    status,
+    images
   ) => {
     return {
       id,
@@ -101,11 +127,19 @@ const Orders = () => {
       endTime,
       price: formatValueToDecimal(price),
       status,
+      images,
       actions: (
         <DropDownMenu
           elements={[
             {
-              iconType: <FiEdit color='lightsalmon' />,
+              iconType: <MdOutlinePhotoSizeSelectActual color='rgba(35, 43, 85)' />,
+              action: () => showImageSlider(images),
+              label: 'Show preview',
+              hidden: !images?.length ? true : false,
+              disabled: false
+            },
+            {
+              iconType: <FiEdit color='rgba(35, 43, 85)' />,
               action: () => goToEdit(id, startTime),
               label: 'Edit order',
               hidden: format(new Date(), 'yyyy.MM.dd, HH:mm') < startTime ? false : true,
@@ -149,7 +183,8 @@ const Orders = () => {
       order.startTime,
       order.endTime,
       order.price,
-      order.status
+      order.status,
+      order.images
     )
   )
 
@@ -159,6 +194,17 @@ const Orders = () => {
         <AdminNavBar />
       </div>
       <div className='adminItem'>
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby='modal-modal-title'
+          aria-describedby='modal-modal-description'
+        >
+          <Box sx={modalStyle}>
+            <ImageSlider images={sliderImages} />
+          </Box>
+        </Modal>
+
         <MyTable
           columns={columns}
           rows={rows}

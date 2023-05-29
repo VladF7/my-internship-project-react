@@ -21,7 +21,8 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
-  height: calc(100% - 70px);
+  min-height: calc(100% - 70px);
+  overflow-y: auto;
 }
 .active {
   padding-bottom: 10px;
