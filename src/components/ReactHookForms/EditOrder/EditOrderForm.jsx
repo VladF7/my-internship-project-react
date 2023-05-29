@@ -128,7 +128,7 @@ const EditOrderForm = ({ formFields, onSubmit, currentOrderInfo, inProcess, load
 
   useEffect(() => {
     if (isLoading) return
-    setDeletedImages(orderImages.filter((image) => images.indexOf(image) == -1))
+    setDeletedImages(orderImages.filter((image) => images.indexOf(image) === -1))
   }, [images])
 
   const timeToFix = useMemo(() => {
