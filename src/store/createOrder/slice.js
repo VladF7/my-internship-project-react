@@ -28,7 +28,19 @@ export const createOrderDataSlice = createSlice({
       state.data.name = action.payload
     },
     clearCreateOrderData(state) {
-      state.data = {}
+      state.data = {
+        name: '',
+        email: '',
+        startTime: '',
+        clockId: '',
+        cityId: '',
+        price: '',
+        priceForHour: '',
+        timeToFix: '',
+        endTime: '',
+        masterId: '',
+        images: []
+      }
     },
     addMasterIdToCreateOrderData(state, action) {
       state.data.masterId = action.payload
