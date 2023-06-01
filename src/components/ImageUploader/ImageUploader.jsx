@@ -7,31 +7,31 @@ const ImageUploader = ({ value, onChange, accept, maxSize, filesCount }) => {
   const [error, setError] = useState('')
   useEffect(() => {
     onChange(selectedImages)
-    setError('')
   }, [selectedImages])
 
   const handleImageChange = (event) => {
     const files = Array.from(event.target.files)
-
-    if (files.length + selectedImages.length > filesCount) {
-      setError('Maximal count of images 5')
-      return
-    }
 
     const newImages = []
 
     files.forEach((file) => {
       if (file.size <= maxSize) {
         const reader = new FileReader()
+        reader.readAsDataURL(file)
         reader.onload = (e) => {
           if (selectedImages.includes(e.target.result)) {
             setError('Image wiht that name has been uploaded')
             return
           }
           newImages.push(e.target.result)
+
+          if (newImages.length + selectedImages.length > filesCount) {
+            setError('Maximal count of images 5')
+            return
+          }
+
           setSelectedImages([...selectedImages, ...newImages])
         }
-        reader.readAsDataURL(file)
       } else {
         setError('Image size must not exceed 1 MB')
       }
