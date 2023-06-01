@@ -45,6 +45,9 @@ import { theme } from './muiTheme'
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { setClientTimeZone } from './store/timezone/slice'
+import { PayPalScriptProvider } from '@paypal/react-paypal-js'
+import PaymentCanceled from './pages/User/PaymentCanceled/PaymentCanceled'
+import PaymentCompleted from './pages/User/PaymentCompleted/PaymentCompleted'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -53,6 +56,14 @@ const App = () => {
     dispatch(checkAuthThunk())
     dispatch(setClientTimeZone())
   }, [])
+
+  const initialOptions = {
+    'client-id': 'ATFjN893Syw_OxXmoY5FmtEwR74JLI5rtB0p71YBe95yKl-zHCTctmjcbkGrglI5Dx59e1ejLPGzwfPs',
+    currency: 'USD',
+    intent: 'capture',
+    locale: 'en_US',
+    components: 'buttons'
+  }
 
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -63,6 +74,8 @@ const App = () => {
 
         <Route path='/user/changeName' element={<ChangeNamePage />} />
 
+        <Route path='/user/paymentCompleted' element={<PaymentCompleted />} />
+        <Route path='/user/paymentCanceled' element={<PaymentCanceled />} />
         <Route path='/user/confirmEmail' element={<ConfirmEmailPage />} />
         <Route path='/user/successEmailConfirm' element={<SuccessEmailConfirmPage />} />
         <Route path='/user/emailConfirmed' element={<EmailConfirmedPage />} />
@@ -134,7 +147,9 @@ const App = () => {
       >
         <ThemeProvider theme={theme}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <RouterProvider router={router} />
+            <PayPalScriptProvider options={initialOptions}>
+              <RouterProvider router={router} />
+            </PayPalScriptProvider>
           </LocalizationProvider>
         </ThemeProvider>
       </ToastProvider>

@@ -13,6 +13,7 @@ import { isFulfilled, isRejected } from '@reduxjs/toolkit'
 import { useToasts } from 'react-toast-notifications'
 import { PulseLoader } from 'react-spinners'
 import ImageListMui from '../../../components/ImageList/ImageListMui'
+import PayPalPayment from '../../../components/PayPalPayment/PayPalPayment'
 
 const ConfirmOrder = () => {
   const [isLoading, setIsLoading] = useState(true)
@@ -61,6 +62,17 @@ const ConfirmOrder = () => {
       })
     }
   }
+  const createOrderForPayment = async () => {
+    const newOrder = await dispatch(createOrderStepTwoThunk(data))
+    if (isFulfilled(newOrder)) {
+      return newOrder.payload.id
+    } else if (isRejected(newOrder)) {
+      addToast('Order cannot be created', {
+        transitionState: 'entered',
+        appearance: 'error'
+      })
+    }
+  }
 
   return (
     <div className='userPage'>
@@ -101,16 +113,20 @@ const ConfirmOrder = () => {
         </div>
         <div className='buttonBoxWrapper'>
           <div className='buttonBox'>
-            <MyBigButton onClick={(e) => goBack(e)} className='backBigButton'>
-              Back
-            </MyBigButton>
+            <PayPalPayment
+              cost={formatValueToDecimal(data.price)}
+              createOrderForPayment={createOrderForPayment}
+            />
           </div>
           <div className='buttonBox'>
             <MyBigButton disabled={inProcess}>
-              {(inProcess && loader) || 'Create order'}
+              {(inProcess && loader) || 'Create order and pay later'}
             </MyBigButton>
           </div>
         </div>
+        <MyBigButton onClick={(e) => goBack(e)} className='backBigButton'>
+          Back
+        </MyBigButton>
       </form>
     </div>
   )
