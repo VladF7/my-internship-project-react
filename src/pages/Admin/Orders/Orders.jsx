@@ -55,12 +55,6 @@ const Orders = () => {
     dispatch(getOrdersThunk({ page, limit, sort, sortBy, filtersFields, timezoneOffset }))
   }, [page, limit, sort, sortBy, filtersFields])
 
-  useEffect(() => {
-    if (count <= limit) {
-      setPage(0)
-    }
-  }, [count])
-
   const dispatch = useDispatch()
 
   const navigate = useNavigate()
@@ -69,6 +63,7 @@ const Orders = () => {
 
   const applyFilters = (filtersFields) => {
     setFiltersFields(filtersFields)
+    setPage(0)
   }
 
   const deleteOrder = async (id) => {
@@ -210,7 +205,7 @@ const Orders = () => {
           rows={rows}
           count={count}
           isLoading={isLoading}
-          page={count <= limit ? 0 : page}
+          page={page}
           rowsPerPage={limit}
           setPage={setPage}
           setRowsPerPage={setLimit}
