@@ -12,12 +12,14 @@ const ImageListMui = ({
   columns,
   showIconButtons,
   iconButton,
-  emptyImagesList
+  emptyImagesList,
+  changeErrorMessage
 }) => {
   const handleRemoveImage = (index) => {
     const updatedImages = [...images]
     updatedImages.splice(index, 1)
     setImages(updatedImages)
+    changeErrorMessage && changeErrorMessage()
   }
 
   return (

@@ -23,7 +23,7 @@ import { CircularProgress } from '@mui/material'
 const Masters = () => {
   const [page, setPage] = useState(0)
   const [limit, setLimit] = useState(10)
-  const [sort, setSort] = useState('asc')
+  const [sort, setSort] = useState('desc')
   const [sortBy, setSortBy] = useState('id')
   const rowsPerPageOptions = [10, 25, 50]
   const labelRowsPerPage = 'Masters per page'
