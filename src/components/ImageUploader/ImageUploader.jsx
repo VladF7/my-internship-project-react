@@ -92,6 +92,7 @@ const ImageUploader = ({ value, onChange, accept, maxSize, filesCount }) => {
           columns={5}
           showIconButtons
           emptyImagesList={''}
+          changeErrorMessage={() => setError('')}
         />
       </Grid>
     </Grid>
