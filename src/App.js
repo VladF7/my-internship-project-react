@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import {
   Route,
   RouterProvider,
@@ -48,6 +49,7 @@ import { setClientTimeZone } from './store/timezone/slice'
 import { PayPalScriptProvider } from '@paypal/react-paypal-js'
 import PaymentCanceled from './pages/User/PaymentCanceled/PaymentCanceled'
 import PaymentCompleted from './pages/User/PaymentCompleted/PaymentCompleted'
+import { GoogleOAuthProvider } from '@react-oauth/google'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -58,7 +60,7 @@ const App = () => {
   }, [])
 
   const initialOptions = {
-    'client-id': 'ATFjN893Syw_OxXmoY5FmtEwR74JLI5rtB0p71YBe95yKl-zHCTctmjcbkGrglI5Dx59e1ejLPGzwfPs',
+    'client-id': process.env.REACT_APP_CLOUDINARY_CLIENT_ID,
     currency: 'USD',
     intent: 'capture',
     locale: 'en_US',
@@ -148,7 +150,9 @@ const App = () => {
         <ThemeProvider theme={theme}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <PayPalScriptProvider options={initialOptions}>
-              <RouterProvider router={router} />
+              <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
+                <RouterProvider router={router} />
+              </GoogleOAuthProvider>
             </PayPalScriptProvider>
           </LocalizationProvider>
         </ThemeProvider>

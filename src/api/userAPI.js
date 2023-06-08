@@ -55,6 +55,13 @@ class UserAPI {
     const response = await request(`/api/createUser`, 'POST', requestData)
     return response
   }
+  async googleLogin(accessToken) {
+    const requestData = {
+      accessToken
+    }
+    const response = await request(`/api/login/google`, 'POST', requestData)
+    return response
+  }
 }
 
 const userAPI = new UserAPI()

@@ -1,10 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { createUserCustomerThunk, loginThunk, signUpThunk } from './thunk'
+import { createUserCustomerThunk, googleLoginThunk, loginThunk, signUpThunk } from './thunk'
 
 const initialState = {
   currentUser: {},
   isAuth: false,
   inProcess: false,
+  inProcessGoogleLogin: false,
   error: null
 }
 
@@ -43,6 +44,17 @@ export const loginSlice = createSlice({
     })
     builder.addCase(createUserCustomerThunk.rejected, (state, action) => {
       state.inProcess = false
+      state.error = action.payload.message
+    })
+    builder.addCase(googleLoginThunk.pending, (state) => {
+      state.inProcessGoogleLogin = true
+      state.error = null
+    })
+    builder.addCase(googleLoginThunk.fulfilled, (state) => {
+      state.inProcessGoogleLogin = false
+    })
+    builder.addCase(googleLoginThunk.rejected, (state, action) => {
+      state.inProcessGoogleLogin = false
       state.error = action.payload.message
     })
   },
