@@ -139,6 +139,16 @@ export const theme = createTheme({
           color: 'lightsalmon'
         }
       }
+    },
+    MuiAutocomplete: {
+      styleOverrides: {
+        input: {
+          width: '85%!important'
+        },
+        option: {
+          fontSize: '14px'
+        }
+      }
     }
   }
 })

@@ -76,6 +76,18 @@ class MastersAPI {
     const response = await request('/api/masters/all', 'GET', null, localStorage.getItem('token'))
     return response
   }
+  async getMastersByName(name) {
+    const requestData = {
+      name
+    }
+    const response = await request(
+      '/api/masters/name' + '?' + new URLSearchParams(requestData),
+      'GET',
+      null,
+      localStorage.getItem('token')
+    )
+    return response
+  }
 }
 
 const mastersAPI = new MastersAPI()

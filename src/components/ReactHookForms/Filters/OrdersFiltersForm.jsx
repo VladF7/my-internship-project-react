@@ -5,16 +5,19 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useState } from 'react'
 import { Button, FormControl, Grid } from '@mui/material'
-import mastersAPI from '../../../api/mastersAPI'
 import MultipleSelectMui from '../../Select/MultipleSelectMui'
 import SelectMui from '../../Select/SelectMui'
 import ordersAPI from '../../../api/ordersAPI'
 import RangeDatePicker from '../../DatePicker/RangeDatePicker'
 import SliderMui from '../../Slider/SliderMui'
 import { formatValueToDecimal, formatValueToInteger } from '../../../helpers'
+import mastersAPI from '../../../api/mastersAPI'
+import AutocompleteSearchSelect from '../../AutocompleteSearchSelect/AutocompleteSearchSelect'
 
 const ordersFilterSchema = z.object({
-  masters: z.array(z.number().int().positive()).optional(),
+  masters: z
+    .array(z.object({ id: z.number().int().positive(), name: z.string().nonempty() }))
+    .optional(),
   cities: z.array(z.number().int().positive()).optional(),
   status: z.string().optional(),
   minMaxDate: z.array(z.coerce.date().nullable()).optional(),
@@ -34,7 +37,6 @@ const OrdersFiltersForm = ({ onSubmit }) => {
   const [isLoading, setIsLoading] = useState(true)
 
   const [citiesOptions, setCitiesOptions] = useState([])
-  const [mastersOptions, setMastersOptions] = useState([])
   const [statusesOptions, setStatusesOptions] = useState([])
   const [minMaxDateOptions, setMinMaxDateOptions] = useState([])
   const [minMaxPriceOptions, setMinMaxPriceOptions] = useState([])
@@ -45,21 +47,15 @@ const OrdersFiltersForm = ({ onSubmit }) => {
   useEffect(() => {
     Promise.all([
       citiesAPI.getCities(),
-      mastersAPI.getMastersAll(),
       statusesAPI.getStatuses(),
       ordersAPI.getMinMaxOrdersDate(),
       ordersAPI.getMinMaxOrdersPrice()
     ])
       .then((result) => {
-        const [cities, masters, statuses, minMaxDate, minMaxPrice] = result
+        const [cities, statuses, minMaxDate, minMaxPrice] = result
         setCitiesOptions(
           cities.map((city) => {
             return { value: city.id, label: city.name }
-          })
-        )
-        setMastersOptions(
-          masters.map((master) => {
-            return { value: master.id, label: master.name }
           })
         )
         setStatusesOptions(
@@ -111,6 +107,7 @@ const OrdersFiltersForm = ({ onSubmit }) => {
     })
   }
   const submit = (formData) => {
+    formData.masters = formData.masters.map((master) => master.id)
     formData.minMaxPrice = formData.minMaxPrice.map((price) => formatValueToInteger(price))
 
     setDisableApplyFiltersButton(true)
@@ -195,11 +192,13 @@ const OrdersFiltersForm = ({ onSubmit }) => {
               name='masters'
               control={control}
               render={({ field: { value, onChange } }) => (
-                <MultipleSelectMui
+                <AutocompleteSearchSelect
                   value={value}
                   onChange={onChange}
+                  getOptions={mastersAPI.getMastersByName}
+                  loadingText={'Masters list is loading...'}
                   label={'Choose masters'}
-                  options={mastersOptions}
+                  placeholder={'Enter master name'}
                   error={!!errors?.masters}
                 />
               )}
