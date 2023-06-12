@@ -50,3 +50,19 @@ export const createUserCustomerThunk = createAsyncThunk(
     }
   }
 )
+export const googleLoginThunk = createAsyncThunk(
+  'auth/login/google',
+  async (data, { rejectWithValue, dispatch }) => {
+    try {
+      const response = await userAPI.googleLogin(data)
+      if (response.redirect) {
+        return response
+      }
+      localStorage.setItem('token', response.token)
+      dispatch(actionLogin(response.user))
+      return response.user
+    } catch (error) {
+      return rejectWithValue(error)
+    }
+  }
+)
