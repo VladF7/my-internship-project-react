@@ -65,7 +65,7 @@ const App = () => {
   }, [])
 
   const initialOptions = {
-    'client-id': process.env.REACT_APP_CLOUDINARY_CLIENT_ID,
+    'client-id': process.env.REACT_APP_PAYPAL_CLIENT_ID,
     currency: 'USD',
     intent: 'capture',
     locale: 'en_US',
@@ -157,9 +157,9 @@ const App = () => {
           <JoyCssVarsProvider theme={joyTheme}>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <PayPalScriptProvider options={initialOptions}>
-                 <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
-                <RouterProvider router={router} />
-              </GoogleOAuthProvider>
+                <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
+                  <RouterProvider router={router} />
+                </GoogleOAuthProvider>
               </PayPalScriptProvider>
             </LocalizationProvider>
           </JoyCssVarsProvider>
