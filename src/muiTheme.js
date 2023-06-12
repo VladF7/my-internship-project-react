@@ -1,5 +1,19 @@
-import { createTheme } from '@mui/material'
-export const theme = createTheme({
+import { experimental_extendTheme as materialExtendTheme } from '@mui/material/styles'
+import { extendTheme } from '@mui/joy'
+
+export const joyTheme = extendTheme({
+  colorSchemes: {
+    light: {
+      palette: {
+        primary: {
+          500: '#ffa07a'
+        }
+      }
+    }
+  }
+})
+
+export const theme = materialExtendTheme({
   typography: {
     fontFamily: 'inherit'
   },
