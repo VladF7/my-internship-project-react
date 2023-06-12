@@ -1,21 +1,25 @@
 import { useEffect, useState } from 'react'
 import './LoginPage.css'
 import { useDispatch, useSelector } from 'react-redux'
-import { loginThunk } from '../../store/auth/thunk'
+import { googleLoginThunk, loginThunk } from '../../store/auth/thunk'
 import LoginForm from '../../components/ReactHookForms/Login/LoginForm'
 import { PulseLoader } from 'react-spinners'
 import { isFulfilled, isRejected } from '@reduxjs/toolkit'
 import { useNavigate } from 'react-router-dom'
+import { useToasts } from 'react-toast-notifications'
+import GoogleLogin from '../../components/GoogleLogin/GoogleLogin'
 
 const LoginPage = () => {
   const [submitError, setSubmitError] = useState('')
 
-  const { inProcess } = useSelector((state) => state.auth)
+  const { inProcess, inProcessGoogleLogin } = useSelector((state) => state.auth)
   useEffect(() => {}, [])
 
   const dispatch = useDispatch()
 
   const navigate = useNavigate()
+
+  const { addToast } = useToasts()
 
   const redirectPath = {
     awaitApprove: 'master/awaitApprove',
@@ -40,6 +44,22 @@ const LoginPage = () => {
     }
   }
 
+  const googleLogin = async (accessToken) => {
+    const successLogin = await dispatch(googleLoginThunk(accessToken))
+    if (isFulfilled(successLogin)) {
+      if (successLogin.payload.redirect) {
+        navigate(`/${redirectPath[successLogin.payload.redirectTo]}`)
+      } else {
+        navigate(`/${loginPath[successLogin.payload.role]}`, { replace: true })
+      }
+    } else if (isRejected(successLogin)) {
+      addToast('Something went wrong', {
+        transitionState: 'entered',
+        appearance: 'error'
+      })
+    }
+  }
+
   return (
     <div className='loginPage'>
       <LoginForm
@@ -47,6 +67,12 @@ const LoginPage = () => {
         submitError={submitError}
         inProcess={inProcess}
         loader={<PulseLoader color='lightsalmon' size='10px' />}
+      />
+      <GoogleLogin
+        inProcess={inProcessGoogleLogin}
+        loader={<PulseLoader color='lightsalmon' size='10px' />}
+        onLogin={googleLogin}
+        label={'Continue with google'}
       />
     </div>
   )

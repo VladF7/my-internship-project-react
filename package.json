@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@auth0/auth0-react": "^2.1.0",
     "@cloudinary/react": "^1.11.2",
     "@cloudinary/url-gen": "^1.10.0",
     "@emotion/react": "^11.11.0",
@@ -11,6 +12,7 @@
     "@mui/material": "^5.13.0",
     "@mui/x-date-pickers": "^6.4.0",
     "@paypal/react-paypal-js": "^7.8.3",
+    "@react-oauth/google": "^0.11.0",
     "@reduxjs/toolkit": "^1.9.5",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -28,6 +30,7 @@
     "react-router-dom": "^6.7.0",
     "react-scripts": "5.0.1",
     "react-select": "^5.7.0",
+    "react-simple-oauth2-login": "^0.5.4",
     "react-simple-star-rating": "^5.1.7",
     "react-spinners": "^0.13.8",
     "react-swipeable-views": "^0.14.0",
