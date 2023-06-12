@@ -4,13 +4,14 @@ import '../Admin/AdminPage.css'
 import { useEffect, useState } from 'react'
 import MySpan from '../../components/Span/MySpan'
 import { formatValueToDecimal } from '../../helpers'
-import { Rating } from 'react-simple-star-rating'
 import ordersAPI from '../../api/ordersAPI'
 import { useToasts } from 'react-toast-notifications'
+import FeedbackModal from '../../components/Modal/FeedbackModal'
+import { Box, Rating } from '@mui/material'
 
 const CustomerPage = () => {
   const [orders, setOrders] = useState([])
-  const [orderId, setOrderId] = useState('')
+  const [feedbackToken, setFeedbackToken] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const id = useSelector((state) => state.auth.currentUser.customerId)
   const currency = 'USD'
@@ -22,21 +23,21 @@ const CustomerPage = () => {
       .getOrdersForCustomerById(id)
       .then((orders) => setOrders(orders))
       .then(() => setIsLoading(false))
-  }, [orderId])
+  }, [feedbackToken])
 
-  const handleRating = async (id, rate) => {
-    const setRating = await ordersAPI.setRating(id, Number(rate))
-    if (!setRating) {
-      addToast('Rating cannot be set', {
-        transitionState: 'entered',
-        appearance: 'error'
-      })
-    } else {
-      addToast('Rating has been set', {
+  const submit = async (feedbackToken, formData) => {
+    try {
+      await ordersAPI.setFeedback(feedbackToken, formData)
+      addToast('Feedback has been send', {
         transitionState: 'entered',
         appearance: 'success'
       })
-      setOrderId(id)
+      setFeedbackToken(feedbackToken)
+    } catch (error) {
+      addToast('Feedback can not be send', {
+        transitionState: 'entered',
+        appearance: 'error'
+      })
     }
   }
 
@@ -63,23 +64,31 @@ const CustomerPage = () => {
                 <MySpan>City: {order.city.name},</MySpan>
                 <MySpan>Order start time: {order.startTime},</MySpan>
                 <MySpan>Order end time: {order.endTime}</MySpan>
-                <MySpan>Order price: {formatValueToDecimal(order.price)} {currency}</MySpan>
+                <MySpan>
+                  Order price: {formatValueToDecimal(order.price)} {currency}
+                </MySpan>
                 <MySpan>Order status: {order.status}</MySpan>
-                {order.status === 'Completed' && (
-                  <MySpan style={{ position: 'relative' }}>
-                    Order rating:{' '}
-                    {order.rating ? (
-                      order.rating
-                    ) : (
-                      <Rating
-                        style={{ disabled: 'true', position: 'absolute', bottom: '-3px' }}
-                        size={20}
-                        fillColor='lightsalmon'
-                        onClick={(rate) => handleRating(order.id, rate)}
-                      />
-                    )}
-                  </MySpan>
-                )}
+                {order.status === 'Completed' &&
+                  (order.rating ? (
+                    <>
+                      <Box display={'flex'} alignItems={'center'}>
+                        <MySpan>Order rating: </MySpan>
+                        <Rating
+                          sx={{ pl: '3px', color: 'lightsalmon' }}
+                          readOnly
+                          name='read-only'
+                          value={order.rating}
+                        />
+                      </Box>
+                      {order.comment && <MySpan>Order comment: {order.comment}</MySpan>}
+                    </>
+                  ) : (
+                    <FeedbackModal
+                      onSubmit={(formData) => {
+                        submit(order.feedbackToken, formData)
+                      }}
+                    />
+                  ))}
               </div>
             </li>
           )

@@ -41,14 +41,19 @@ import { ToastProvider } from 'react-toast-notifications'
 import SuccessEmailConfirmPage from './pages/User/SuccessEmailConfirm/SuccessEmailConfirmPage'
 import AddCity from './pages/Admin/Cities/AddCity/AddCity'
 import { checkAuthThunk } from './store/auth/thunk'
-import { ThemeProvider } from '@emotion/react'
-import { theme } from './muiTheme'
+import { joyTheme, theme } from './muiTheme'
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { setClientTimeZone } from './store/timezone/slice'
 import { PayPalScriptProvider } from '@paypal/react-paypal-js'
 import PaymentCanceled from './pages/User/PaymentCanceled/PaymentCanceled'
 import PaymentCompleted from './pages/User/PaymentCompleted/PaymentCompleted'
+import Feedback from './pages/User/Feedback/Feedback'
+import {
+  Experimental_CssVarsProvider as MaterialCssVarsProvider,
+  THEME_ID as MATERIAL_THEME_ID
+} from '@mui/material/styles'
+import { CssVarsProvider as JoyCssVarsProvider } from '@mui/joy/styles'
 import { GoogleOAuthProvider } from '@react-oauth/google'
 
 const App = () => {
@@ -76,6 +81,7 @@ const App = () => {
 
         <Route path='/user/changeName' element={<ChangeNamePage />} />
 
+        <Route path='/user/feedback/:feedbackToken' element={<Feedback />} />
         <Route path='/user/paymentCompleted' element={<PaymentCompleted />} />
         <Route path='/user/paymentCanceled' element={<PaymentCanceled />} />
         <Route path='/user/confirmEmail' element={<ConfirmEmailPage />} />
@@ -147,15 +153,17 @@ const App = () => {
         placement={'bottom-right'}
         transitionDuration={200}
       >
-        <ThemeProvider theme={theme}>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <PayPalScriptProvider options={initialOptions}>
-              <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
+        <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: theme }}>
+          <JoyCssVarsProvider theme={joyTheme}>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <PayPalScriptProvider options={initialOptions}>
+                 <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
                 <RouterProvider router={router} />
               </GoogleOAuthProvider>
-            </PayPalScriptProvider>
-          </LocalizationProvider>
-        </ThemeProvider>
+              </PayPalScriptProvider>
+            </LocalizationProvider>
+          </JoyCssVarsProvider>
+        </MaterialCssVarsProvider>
       </ToastProvider>
     </div>
   )

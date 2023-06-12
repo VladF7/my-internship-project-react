@@ -68,7 +68,7 @@ const MasterPage = () => {
                 </MySpan>
                 <MySpan>Order status: {order.status}</MySpan>
               </div>
-              {order.status === 'Confirmed' && (
+              {(order.status === 'Await Payment' || order.status === 'Payment Success') && (
                 <div className='buttons'>
                   <MySmallButton
                     style={{ background: 'green' }}

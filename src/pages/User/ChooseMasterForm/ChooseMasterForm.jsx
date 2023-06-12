@@ -3,13 +3,13 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import mastersAPI from '../../../api/mastersAPI'
 import MyBigButton from '../../../components/Buttons/BigButton/MyBigButton'
-import MyError from '../../../components/Error/MyError'
-import MyLabel from '../../../components/Label/MyLabel'
 import MySpan from '../../../components/Span/MySpan'
 import '../../../components/SizeSelector/MySizeSelector.css'
 import { useToasts } from 'react-toast-notifications'
 import { useDispatch, useSelector } from 'react-redux'
 import { addMasterIdToCreateOrderData } from '../../../store/createOrder/slice'
+import ReviewsModal from '../../../components/Modal/ReviewsModal'
+import ChooseMasterList from '../../../components/List/ChooseMasterList'
 
 const ChooseMasterForm = () => {
   const {
@@ -22,8 +22,9 @@ const ChooseMasterForm = () => {
 
   const [freeMastersList, setFreeMastersList] = useState([])
   const [masterId, setMasterId] = useState(currentMasterId || '')
-  const [masterIdError, setMasterIdError] = useState('')
   const [isLoading, setIsLoading] = useState(true)
+  const [reviews, setReviews] = useState([])
+  const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
     mastersAPI
@@ -38,10 +39,11 @@ const ChooseMasterForm = () => {
 
   const { addToast } = useToasts()
 
-  const getMasterId = (masterId) => {
-    setMasterId(Number(masterId))
-    setMasterIdError('')
+  const openModal = (revievs) => {
+    setReviews(revievs)
+    setIsOpen(true)
   }
+
   const goBack = (e) => {
     e.preventDefault()
     navigate('/')
@@ -59,38 +61,24 @@ const ChooseMasterForm = () => {
 
   return (
     <div className='userPage'>
+      <ReviewsModal items={reviews} setIsOpen={setIsOpen} isOpen={isOpen} />
       <form className='userForm' onSubmit={(e) => onSubmit(e)}>
         <div className='content'>
-          <fieldset className='mastersFieldset'>
-            <MyError>{masterIdError}</MyError>
-            <legend className='legend'>Choose master</legend>
-            {isLoading ? (
-              <MySpan>Free masters are loading, please wait...</MySpan>
-            ) : !freeMastersList.length ? (
-              <MySpan>
-                Sorry, there are no free masers at the moment, please select another time
-              </MySpan>
-            ) : (
-              freeMastersList.map((master) => {
-                return (
-                  <div className='masterItem' key={master.id}>
-                    <input
-                      className='input'
-                      onChange={(e) => getMasterId(e.target.value)}
-                      type='radio'
-                      id={master.id}
-                      name='masterId'
-                      value={master.id}
-                      defaultChecked={master.id === masterId ? true : false}
-                    />
-                    <MyLabel htmlFor={master.id}>
-                      Name: {master.name}, rating: {master.rating ? master.rating : '0.0'}
-                    </MyLabel>
-                  </div>
-                )
-              })
-            )}
-          </fieldset>
+          <legend className='legend'>Choose master</legend>
+          {isLoading ? (
+            <MySpan>Free masters are loading, please wait...</MySpan>
+          ) : !freeMastersList.length ? (
+            <MySpan>
+              Sorry, there are no free masers at the moment, please select another time
+            </MySpan>
+          ) : (
+            <ChooseMasterList
+              value={masterId}
+              onChange={setMasterId}
+              items={freeMastersList}
+              itemAction={openModal}
+            />
+          )}
         </div>
         <div className='buttonBoxWrapper'>
           <div className='buttonBox'>
