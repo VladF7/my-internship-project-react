@@ -55,6 +55,7 @@ import {
 } from '@mui/material/styles'
 import { CssVarsProvider as JoyCssVarsProvider } from '@mui/joy/styles'
 import { GoogleOAuthProvider } from '@react-oauth/google'
+import Statistics from './pages/Admin/Statistic/Statistics'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -129,6 +130,11 @@ const App = () => {
         <Route
           path='/admin/customers/registration'
           element={<RequireAuth role='Admin' page={<AddCustomer />} />}
+        />
+
+        <Route
+          path='/admin/statistics'
+          element={<RequireAuth role='Admin' page={<Statistics />} />}
         />
 
         <Route path='*' element={<Navigate to='/' replace />} />

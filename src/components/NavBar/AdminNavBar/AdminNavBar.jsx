@@ -6,7 +6,8 @@ const AdminNavBar = ({ props }) => {
     { name: 'Orders', path: '/admin/orders' },
     { name: 'Masters', path: '/admin/masters' },
     { name: 'Cities', path: '/admin/cities' },
-    { name: 'Customers', path: '/admin/customers' }
+    { name: 'Customers', path: '/admin/customers' },
+    { name: 'Statistics', path: '/admin/statistics' }
   ]
   return (
     <nav>

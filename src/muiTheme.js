@@ -163,6 +163,23 @@ export const theme = materialExtendTheme({
           fontSize: '14px'
         }
       }
+    },
+    MuiListItemButton: {
+      styleOverrides: {
+        root: {
+          fontSize: '13px',
+          '&.Mui-selected': {
+            backgroundColor: 'rgb(255, 160, 122 ,0.4)',
+            borderRadius: '5px',
+            '&:hover': {
+              backgroundColor: 'rgb(255, 160, 122 ,0.4)'
+            }
+          },
+          ':hover': {
+            borderRadius: '5px'
+          }
+        }
+      }
     }
   }
 })
