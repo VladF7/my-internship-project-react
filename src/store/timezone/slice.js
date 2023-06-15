@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
   timezone: '',
-  timeZoneOffset: ''
+  timezoneOffset: ''
 }
 
 export const timezoneSlice = createSlice({

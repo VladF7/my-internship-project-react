@@ -93,7 +93,7 @@ const MyTable = ({
         </Grid>
       )}
 
-      <Grid item xs={12} height={filtersForm ? '80%' : '90%'}>
+      <Grid item xs={12} height={filtersForm ? '80%' : '89%'}>
         <TableContainer sx={{ height: '100%', position: 'relative' }}>
           <Table size='medium' stickyHeader aria-label='sticky table'>
             <TableHead>
@@ -170,12 +170,12 @@ const MyTable = ({
           </Table>
         </TableContainer>
       </Grid>
-      <Grid item xs={12} paddingBottom={'10px'}>
+      <Grid item xs={12}>
         <Grid container direction='row' justifyContent={'space-evenly'} alignItems={'center'}>
           <Grid item xs={4}>
             <div style={{ width: '100%' }}>{button}</div>
           </Grid>
-          <Grid item xs={5}>
+          <Grid item>
             <TablePagination
               showFirstButton
               showLastButton
