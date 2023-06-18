@@ -15,6 +15,7 @@ import {
 import MySpan from '../Span/MySpan'
 import { ClockLoader } from 'react-spinners'
 import { useState } from 'react'
+import ExportToExcel from '../ExcelExport.jsx/ExcelExport'
 
 const MyTable = ({
   columns,
@@ -32,7 +33,9 @@ const MyTable = ({
   orderBy,
   setOrder,
   setOrderBy,
-  filtersForm
+  filtersForm,
+  getExportTableData,
+  exportFileName
 }) => {
   const [showFilters, setShowFilters] = useState(false)
 
@@ -64,23 +67,31 @@ const MyTable = ({
     >
       {filtersForm && (
         <Grid item xs={12} position={'relative'}>
-          <Button
-            variant='outlined'
-            sx={{
-              marginLeft: '8px',
-              backgroundColor: 'rgb(255, 160, 122 ,0.4)',
-              borderColor: 'rgb(255, 160, 122)',
-              color: 'rgba(255,255,255, 0.9)',
-              ':hover': {
-                backgroundColor: 'rgb(255, 160, 122,0.6)',
-                borderColor: 'rgb(255, 160, 122)'
-              }
-            }}
-            onClick={() => filterMenuButtonHandler()}
-          >
-            {showFilters ? 'Close filter menu' : 'Open filter menu'}
-          </Button>
-
+          <Grid container columnSpacing={2}>
+            <Grid item>
+              <Button
+                variant='outlined'
+                sx={{
+                  backgroundColor: 'rgb(255, 160, 122 ,0.4)',
+                  borderColor: 'rgb(255, 160, 122)',
+                  color: 'rgba(255,255,255, 0.9)',
+                  ':hover': {
+                    backgroundColor: 'rgb(255, 160, 122,0.6)',
+                    borderColor: 'rgb(255, 160, 122)'
+                  }
+                }}
+                onClick={() => filterMenuButtonHandler()}
+              >
+                {showFilters ? 'Close filter menu' : 'Open filter menu'}
+              </Button>
+            </Grid>
+            <Grid item>
+              <ExportToExcel
+                getExportTableData={getExportTableData}
+                exportFileName={exportFileName}
+              />
+            </Grid>
+          </Grid>
           <Collapse in={showFilters}>
             <Box
               sx={{

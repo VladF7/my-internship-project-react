@@ -16,6 +16,7 @@ import OrdersFiltersForm from '../../../components/ReactHookForms/Filters/Orders
 import { Box, Modal } from '@mui/material'
 import ImageSlider from '../../../components/ImagesSlider/ImageSlider'
 import { MdOutlinePhotoSizeSelectActual } from 'react-icons/md'
+import ordersAPI from '../../../api/ordersAPI'
 
 const modalStyle = {
   position: 'absolute',
@@ -50,7 +51,6 @@ const Orders = () => {
 
   const { timezoneOffset } = useSelector((state) => state.timezone)
   const { orders, count, isLoading } = useSelector((state) => state.orders)
-
   useEffect(() => {
     dispatch(getOrdersThunk({ page, limit, sort, sortBy, filtersFields, timezoneOffset }))
   }, [page, limit, sort, sortBy, filtersFields])
@@ -74,6 +74,32 @@ const Orders = () => {
       addToast('Order has been deleted', { transitionState: 'entered', appearance: 'success' })
     } else if (isRejected(deletedOrder)) {
       addToast('Order cannot be deleted', { transitionState: 'entered', appearance: 'error' })
+    }
+  }
+  const getOrdersTableData = async (sort, sortBy, filtersFields, timezoneOffset) => {
+    try {
+      const tableData = await ordersAPI.getOrdersTableData({
+        sort,
+        sortBy,
+        filtersFields,
+        timezoneOffset
+      })
+      const customHeadings = tableData.map((order) => ({
+        'Order ID': order.id,
+        'Customer name': order.customer.name,
+        Email: order.customer.email,
+        'Clock size': order.clock.size,
+        'Time to fix': order.clock.timeToFix,
+        'Master name': order.master.name,
+        City: order.city.name,
+        'Start time': order.startTime,
+        'End time': order.endTime,
+        Status: order.status,
+        Price: order.price
+      }))
+      return customHeadings
+    } catch (error) {
+      addToast('Table cannot be exported', { transitionState: 'entered', appearance: 'error' })
     }
   }
 
@@ -216,6 +242,8 @@ const Orders = () => {
           setOrder={setSort}
           setOrderBy={setSortBy}
           filtersForm={<OrdersFiltersForm filtersFields={filtersFields} onSubmit={applyFilters} />}
+          getExportTableData={() => getOrdersTableData(sort, sortBy, filtersFields, timezoneOffset)}
+          exportFileName={'Orders'}
         />
       </div>
     </div>
