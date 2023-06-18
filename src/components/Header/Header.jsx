@@ -1,8 +1,9 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { ClockLoader } from 'react-spinners'
 import { actionLogout } from '../../store/auth/slice'
 import NavBar from '../NavBar/NavBar'
 import './Header.css'
+import logo from '../../logo/clock_logo.png'
+import { Logo } from '../Logo/Logo'
 
 const Header = () => {
   const isAuth = useSelector((state) => state.auth.isAuth)
@@ -33,7 +34,14 @@ const Header = () => {
   return (
     <div className={'header'}>
       <div>
-        <ClockLoader size='50px' color='lightsalmon' speedMultiplier='0.2' />
+        <Logo
+          src={logo}
+          alt={'Logo'}
+          width={'70px'}
+          height={'60px'}
+          color={'lightsalmon'}
+          dropShadow
+        />
       </div>
       <div className={'title'}>Clockwise Clockware</div>
       <div className='linksWrapper'>
