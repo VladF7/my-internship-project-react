@@ -85,7 +85,7 @@ const ChooseMasterList = ({ value, onChange, items, itemAction }) => {
                       component='span'
                       variant='body2'
                     >
-                      {item.rating ? ` — ${item.rating}` : ' - no rating'}
+                      {item.rating !== '0' ? ` — ${item.rating}` : ' - no rating'}
                     </Typography>
                   </div>
                 </Grid>

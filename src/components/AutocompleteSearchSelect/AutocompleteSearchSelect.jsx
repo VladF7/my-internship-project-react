@@ -52,6 +52,7 @@ const AutocompleteSearchSelect = ({
         loading={isLoading}
         loadingText={loadingText}
         isOptionEqualToValue={(option, value) => option.id === value.id}
+        filterOptions={(options) => options}
         filterSelectedOptions
         blurOnSelect
         renderOption={(props, option, { inputValue }) => {
