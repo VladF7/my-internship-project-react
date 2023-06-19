@@ -234,11 +234,11 @@ const OrdersFiltersForm = ({ onSubmit }) => {
                 type='submit'
                 sx={{
                   backgroundColor: 'rgb(128,128,128, 0.4)',
-                  borderColor: 'rgb(128,128,128 )',
+                  borderColor: 'rgb(255,255,255, 0.4)',
                   color: 'rgba(255,255,255, 0.9)',
                   ':hover': {
-                    backgroundColor: 'rgb(128,128,128, 0.6)',
-                    borderColor: 'rgb(128,128,128)'
+                    backgroundColor: 'rgb(128,128,128, 0.7)',
+                    borderColor: 'rgb(255,255,255, 0.4)'
                   }
                 }}
                 onClick={() => resetFilters()}
