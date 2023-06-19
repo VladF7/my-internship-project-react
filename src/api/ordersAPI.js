@@ -104,18 +104,6 @@ class OrdersAPI {
     const response = await request(`/api/orders/feedback/${feedbackToken}`, 'GET')
     return response
   }
-  async getOrdersTableData(requestData) {
-    const queryParams = {
-      filters: encodeURIComponent(JSON.stringify(requestData))
-    }
-    const response = await request(
-      '/api/orders/table' + '?' + new URLSearchParams(queryParams),
-      'GET',
-      null,
-      localStorage.getItem('token')
-    )
-    return response
-  }
 }
 
 const ordersAPI = new OrdersAPI()

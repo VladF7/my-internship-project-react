@@ -78,13 +78,15 @@ const Orders = () => {
   }
   const getOrdersTableData = async (sort, sortBy, filtersFields, timezoneOffset) => {
     try {
-      const tableData = await ordersAPI.getOrdersTableData({
+      const tableData = await ordersAPI.getOrders({
+        page: 0,
+        limit: count,
         sort,
         sortBy,
         filtersFields,
         timezoneOffset
       })
-      const customHeadings = tableData.map((order) => ({
+      const customHeadings = tableData.rows.map((order) => ({
         'Order ID': order.id,
         'Customer name': order.customer.name,
         Email: order.customer.email,
