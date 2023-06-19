@@ -4,13 +4,14 @@ import { z } from 'zod'
 import Textarea from '@mui/joy/Textarea'
 import { Rating, Typography } from '@mui/material'
 import MyBigButton from '../../Buttons/BigButton/MyBigButton'
+import StarIcon from '@mui/icons-material/Star'
 
 const addFeedbackFormSchema = z.object({
   comment: z.string().max(256, { message: 'String must contain at most 256 characters' }),
   rating: z
     .number({
-      required_error: 'Rating is require',
-      invalid_type_error: 'Rating is require'
+      required_error: 'Rating is required',
+      invalid_type_error: 'Rating is required'
     })
     .int()
     .positive()
@@ -51,7 +52,7 @@ const AddFeedbackForm = ({ onSubmit, goBack }) => {
               onChange={(e) => onChange(e.target.value.trim())}
               endDecorator={
                 <Typography level='body1' sx={{ ml: 'auto', fontSize: '14px' }}>
-                  {value.length} character(s) from 256
+                  {value.length}/256
                 </Typography>
               }
             />
@@ -74,6 +75,7 @@ const AddFeedbackForm = ({ onSubmit, goBack }) => {
               onChange={(event, newValue) => {
                 onChange(newValue)
               }}
+              emptyIcon={<StarIcon sx={{ color: 'rgb(255,255,255, 0.7)' }} fontSize='inherit' />}
             />
           )}
         />

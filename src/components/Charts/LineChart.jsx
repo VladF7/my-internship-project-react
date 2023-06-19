@@ -61,6 +61,7 @@ const LineChart = ({ labels, data, titleText, label }) => {
       {
         label: label,
         data: data,
+        spanGaps: true,
         borderColor: 'rgb(255, 160, 122)',
         backgroundColor: 'rgb(255, 160, 122, 0.2)',
         borderWidth: 2,
@@ -69,7 +70,7 @@ const LineChart = ({ labels, data, titleText, label }) => {
       }
     ]
   }
-  return <Line width={'100%'} height={'45%'} data={chartData} options={options} />
+  return <Line width={'100%'} height={'39%'} data={chartData} options={options} />
 }
 
 export default LineChart

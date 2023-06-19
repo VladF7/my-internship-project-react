@@ -9,6 +9,7 @@ import { Box, Button, Collapse, FormControl, Grid } from '@mui/material'
 import { useSelector } from 'react-redux'
 import LineChart from '../../../../components/Charts/LineChart'
 import MyClockLoader from '../../../../components/Loader/MyClockLoader'
+import { format } from 'date-fns'
 
 Chart.register(CategoryScale)
 const buttonStyle = {
@@ -19,6 +20,18 @@ const buttonStyle = {
     backgroundColor: 'rgb(255, 160, 122,0.6)',
     borderColor: 'rgb(255, 160, 122)'
   }
+}
+
+function getDatesInRange(startDate, endDate) {
+  const dates = []
+  const currentDate = new Date(startDate)
+
+  while (currentDate <= endDate) {
+    dates.push(format(new Date(currentDate), 'dd/MM/yy'))
+    currentDate.setDate(currentDate.getDate() + 1)
+  }
+
+  return dates
 }
 
 const OrdersByDateChart = () => {
@@ -33,6 +46,7 @@ const OrdersByDateChart = () => {
   const [minMaxDate, setMinMaxDate] = useState([null, null])
   const [isLoading, setIsLoading] = useState(true)
   const [showFilters, setShowFilters] = useState(false)
+  const [datesInRange, setDatesInRange] = useState([])
 
   useEffect(() => {
     ordersAPI
@@ -51,15 +65,24 @@ const OrdersByDateChart = () => {
   useEffect(() => {
     if (isLoading) return
     setFiltersFields({ ...filtersFields, minMaxDate: minMaxDate })
+    setDatesInRange(getDatesInRange(minMaxDate[0], minMaxDate[1]))
   }, [minMaxDate])
 
   useEffect(() => {
     if (isLoading) return
-    statisticsAPI
-      .getNumberOfOrdersByDate(filtersFields, timezone)
-      .then((chartData) => setChartData(chartData))
+    statisticsAPI.getNumberOfOrdersByDate(filtersFields, timezone).then((response) => {
+      const chartData = []
+      datesInRange.forEach((date) => {
+        const dataEntry = response.find((entry) => entry.date === date)
+        if (dataEntry) {
+          chartData.push(dataEntry.orderCount)
+        } else {
+          chartData.push(null)
+        }
+      })
+      setChartData(chartData)
+    })
   }, [filtersFields])
-
   const filterMenuButtonHandler = () => {
     setShowFilters(!showFilters)
   }
@@ -115,12 +138,12 @@ const OrdersByDateChart = () => {
           </Grid>
         </Grid>
       </Grid>
-      <Grid item display={'flex'} justifyContent={'center'} height={'75%'} xs>
+      <Grid item display={'flex'} justifyContent={'center'} xs>
         <LineChart
           titleText={'Line chart number of orders by dates'}
           label={' # count of orders'}
-          labels={chartData.map((data) => data.date)}
-          data={chartData.map((data) => data.orderCount)}
+          labels={datesInRange}
+          data={chartData}
         />
       </Grid>
     </Grid>
