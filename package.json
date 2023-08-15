@@ -20,6 +20,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "autosuggest-highlight": "^3.3.4",
+    "axios": "^1.4.0",
     "chart.js": "^4.3.0",
     "date-fns": "^2.29.3",
     "file-saver": "^2.0.5",
@@ -51,6 +52,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "typecheck": "tsc",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -73,8 +75,15 @@
     ]
   },
   "devDependencies": {
+    "@types/autosuggest-highlight": "^3.2.0",
+    "@types/file-saver": "^2.0.5",
+    "@types/react": "^18.2.16",
+    "@types/react-datepicker": "^4.15.0",
+    "@types/react-dom": "^18.2.7",
+    "@types/react-swipeable-views-utils": "^0.13.4",
     "eslint": "^8.36.0",
     "eslint-config-prettier": "^8.8.0",
-    "eslint-plugin-react": "^7.32.2"
+    "eslint-plugin-react": "^7.32.2",
+    "typescript": "^5.1.6"
   }
 }
